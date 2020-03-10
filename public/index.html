@@ -11,15 +11,78 @@
   <p>
     open console to see connection.
   </p>
+  <div class="buttons">
+    <button id="stats">Stats</button>
+    <button id="status">Status</button>
+    <button id="mounts">Mounts</button>
+    <button id="rescan">Rescan</button>
+    <button id="update">Update</button>
+    <button id="artists">Artists</button>
+    <button id="albums">Albums</button>
+  </div>
+  <div id="output"></div>
 
 <script>
 document.addEventListener("DOMContentLoaded", function(){
+
   var server = new ServerEventsDispatcher('ws://localhost:8080')
-  server.bind('pushStatus', function(status){
-    console.log(status)
+
+  server.bind('pushStatus', function(data){
+    document.querySelector('#output').innerText = JSON.stringify(data)
   })
+  server.bind('pushMounts', function(data){
+    document.querySelector('#output').innerText = JSON.stringify(data)
+  })
+  server.bind('pushStats', function(data){
+    document.querySelector('#output').innerText = JSON.stringify(data)
+  })
+  server.bind('pushList', function(data){
+    document.querySelector('#output').innerText = JSON.stringify(data)
+  })
+  server.bind('pushArtists', function(data){
+    document.querySelector('#output').innerText = JSON.stringify(data)
+  })
+  server.bind('pushAlbums', function(data){
+    document.querySelector('#output').innerText = JSON.stringify(data)
+  })
+
+  server.bind('notification', function(data){
+    document.querySelector('#output').innerText = JSON.stringify(data)
+  })
+
   server.bind('open', () => {
-    server.send('getStatus')
+    //server.send('getStatus')
+
+    //server.send('addMount', {
+    //  type: 'nfs',
+    //  host: '192.168.68.2',
+    //  path: '/export/musichd'
+    //})
+  })
+
+  document.querySelector('.buttons #stats').addEventListener('click', () => {
+    server.send('getStats');
+  })
+  document.querySelector('.buttons #status').addEventListener('click', () => {
+    server.send('getStatus');
+  })
+  document.querySelector('.buttons #mounts').addEventListener('click', () => {
+    server.send('getMounts');
+  })
+  document.querySelector('.buttons #rescan').addEventListener('click', () => {
+    server.send('rescanDB');
+  })
+  document.querySelector('.buttons #update').addEventListener('click', () => {
+    server.send('updateDB');
+  })
+  //document.querySelector('.buttons #list').addEventListener('click', () => {
+  //  server.send('getList', 'artist')
+  //})
+  document.querySelector('.buttons #artists').addEventListener('click', () => {
+    server.send('getArtists')
+  })
+  document.querySelector('.buttons #albums').addEventListener('click', () => {
+    server.send('getAlbums')
   })
 });
 </script>

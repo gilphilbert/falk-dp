@@ -18,6 +18,12 @@ var mpdui = {
       .then(callback)
     })
   },
+  stats: (callback) => {
+    mpdui._connect((mpdclient) => {
+      mpdclient.api.status.stats()
+      .then(callback)
+    })
+  },
   mounts: {
     list: (callback) => {
       mpdui._connect((mpdclient) => {
@@ -25,21 +31,34 @@ var mpdui = {
         .then(callback)
       })  
     },
-    mount: (data, callback) => {
+    add: (data, callback) => {
       mpdui._connect((mpdclient) => {
-        mpdclient.mounts.mount(data)
+        mpdclient.api.mounts.mount(data[0], data[1])
         .then(callback)
       })
     }
-  }
-}
+  },
+  db: {
+    rescan: (callback) => {
+      mpdui._connect((mpdclient) => {
+        mpdclient.api.db.rescan()
+        .then(callback)
+      })
+    },
+    update: (callback) => {
+      mpdui._connect((mpdclient) => {
+        mpdclient.api.db.update()
+        .then(callback)
+      })
+    },
+    list: (data, callback) => {
+      mpdui._connect((mpdclient) => {
+        mpdclient.api.db.list(data)
+        .then(callback)
+      })
 
-function formatMessage(event_name, data) {
-  var str = JSON.stringify({
-    type: event_name,
-    data: data
-  })
-  return str
+    }
+  }
 }
 
 var Dispatcher = function (ws) {
@@ -81,9 +100,61 @@ wss.on('connection', function (ws) {
     })
   })
 
+  disp.bind('getStats', function() {
+    mpdui.stats((d) => {
+      disp.send('pushStats', d)
+    })
+  })
+
+  disp.bind('rescanDB', function() {
+    mpdui.db.rescan((d) => {
+      disp.send('notification', d)
+    })
+  })
+
+  disp.bind('updateDB', function() {
+    mpdui.db.update((d) => {
+      disp.send('notification', d)
+    })
+  })
+
+  disp.bind('getArtists', function() {
+    mpdui.db.list('artist', (d) => {
+      mod = d.map(i => i.artist)
+      disp.send('pushArtists', mod)
+    })
+  })
+
+  disp.bind('getAlbums', function() {
+    mpdui.db.list('album', (d) => {
+      mod = d.map(i => i.album)
+      disp.send('pushAlbums', mod)
+    })
+  })
+
+  disp.bind('getList', function(data) {
+    mpdui.db.list(data, (d) => {
+      disp.send('pushList', d)
+    })
+  })
+
   disp.bind('getMounts', function() {
     mpdui.mounts.list((d) => {
       disp.send('pushMounts', d)
+    })
+  })
+
+  disp.bind('addMount', function (data) {
+    var type = data.type
+	host = data.host
+	path = data.path
+	point = data.path.substr(data.path.lastIndexOf('/')+1, data.path.length)
+    var str = type + "://" + host + path
+    var payload = [ point, str ]
+    mpdui.mounts.add(payload, () => {
+      mpdui.mounts.list((d) => {
+        disp.send('pushMounts', d)
+      })
     })
   })
 /*
