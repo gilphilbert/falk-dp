@@ -34,13 +34,6 @@ var mpdui = {
   }
 }
 
-//wss.on('connection', function (ws) {
-//  console.log('connected')
-//  ws.addEventListener('getStatus', () => {
-//    console.log('got request');
-//  })
-//})
-
 function formatMessage(event_name, data) {
   var str = JSON.stringify({
     type: event_name,
@@ -49,30 +42,54 @@ function formatMessage(event_name, data) {
   return str
 }
 
+var Dispatcher = function (ws) {
+  var callbacks = {}
+
+  this.bind = function(event_name, callback){
+    callbacks[event_name] = callbacks[event_name] || [];
+    callbacks[event_name].push(callback);
+    return this;// chainable
+  }
+
+  this.send = (event_name, event_data) => {
+    var payload = JSON.stringify({event:event_name, data: event_data});
+    ws.send( payload ); // <= send JSON data to socket server
+    return this;
+  }
+
+  // dispatch to the right handlers
+  ws.on('message', (evt) => {
+    var json = JSON.parse(evt)
+    dispatch(json.event, json.data)
+  })
+
+  var dispatch = function(event_name, message){
+    var chain = callbacks[event_name];
+    if(typeof chain == 'undefined') return; // no callbacks for this event
+    for(var i = 0; i < chain.length; i++){
+      chain[i]( message )
+    }
+  }
+}
+
 wss.on('connection', function (ws) {
-  ws.on('message', function (message) {
-    var msg = JSON.parse(message)
-    var type = msg.type
-    var data = msg.data
-    switch(type) {
-      case 'getStatus':
-        mpdui.status((d) => {
-          ws.send(formatMessage('pushStatus', d))
-	})
-        break
-      case 'getMounts':
-        mpdui.mounts.list((d) => {
-          ws.send(formatMessage('pushMounts', d))
-	})
-        break
-      case 'addMount':
+  var disp = new Dispatcher(ws)
+
+  disp.bind('getStatus', function() {
+    mpdui.status((d) => {
+      disp.send('pushStatus', d)
+    })
+  })
+
+  disp.bind('getMounts', function() {
+    mpdui.mounts.list((d) => {
+      disp.send('pushMounts', d)
+    })
+  })
+/*
         mpdui.mounts.add(data, (d) => {
           ws.send(formatMessage('mounts', d))
 	})
-        break
-      default:
-        console.log('received: %s', message)
-    }
-  })
+*/
 })
 

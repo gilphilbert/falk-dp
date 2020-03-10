@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang='en'>
 <head>
-  <script src="/js/websocketevent.js" />
+  <script src="/js/websocketevent.js"></script>
 </head>
 
 <body>
@@ -11,12 +11,17 @@
   <p>
     open console to see connection.
   </p>
+
 <script>
 document.addEventListener("DOMContentLoaded", function(){
   var server = new ServerEventsDispatcher('ws://localhost:8080')
-  server.bind('status', function(status){
+  server.bind('pushStatus', function(status){
     console.log(status)
   })
-  server.send('status')
+  server.bind('open', () => {
+    server.send('getStatus')
+  })
 });
 </script>
+</body>
+</html>

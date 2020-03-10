@@ -7,19 +7,19 @@ var ServerEventsDispatcher = function(url){
     callbacks[event_name] = callbacks[event_name] || [];
     callbacks[event_name].push(callback);
     return this;// chainable
-  };
+  }
 
   this.send = function(event_name, event_data){
-    var payload = JSON.stringify({type:event_name, data: event_data});
+    var payload = JSON.stringify({event:event_name, data: event_data});
     conn.send( payload ); // <= send JSON data to socket server
     return this;
-  };
+  }
 
   // dispatch to the right handlers
   conn.onmessage = function(evt){
     var json = JSON.parse(evt.data)
-    dispatch(json.type, json.data)
-  };
+    dispatch(json.event, json.data)
+  }
 
   conn.onclose = function(){dispatch('close',null)}
   conn.onopen = function(){dispatch('open',null)}
@@ -31,4 +31,4 @@ var ServerEventsDispatcher = function(url){
       chain[i]( message )
     }
   }
-};
+}
