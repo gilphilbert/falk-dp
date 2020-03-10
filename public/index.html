@@ -145,7 +145,11 @@ document.addEventListener("DOMContentLoaded", function(){
 
   // ONLOAD ==== //
   server.bind('open', () => {
+    console.log('connected')
     server.send('getStatus')
+  })
+  server.bind('close', () => {
+    console.log('disconnected')
   })
 
   // pretty print

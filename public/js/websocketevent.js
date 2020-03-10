@@ -10,6 +10,7 @@ var ServerEventsDispatcher = function(url){
   }
 
   this.send = function(event_name, event_data){
+console.log('sending request: ' + event_name)
     var payload = JSON.stringify({event:event_name, data: event_data});
     conn.send( payload ); // <= send JSON data to socket server
     return this;
