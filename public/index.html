@@ -11,6 +11,13 @@
   <link rel="manifest" href="/icons/site.webmanifest">
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css"> 
+  <style>
+    .string { color: green; }
+    .num { color: darkorange; }
+    .boolean { color: blue; }
+    .null { color: magenta; }
+    .key { color: red; }
+  </style>
   <script src="/js/websocketevent.js"></script>
 </head>
 
@@ -22,14 +29,14 @@
       <div>
     </div>
   </section>
-  <section>
+  <section class="section">
     <div class="container">
       <div class="columns buttons">
         <div class="column">
           <div class="box">
             <h4 class="title">Basics</h4>
-            <button class="button is-small is-rounded" id="stats">Stats</button>
             <button class="button is-small is-rounded" id="status">Status</button>
+            <button class="button is-small is-rounded" id="stats">Stats</button>
 	  </div>
 	</div>
         <div class="column">
@@ -57,8 +64,13 @@
       </div> <!-- columns -->
     </div>
   </section>
-  <div id="output"></div>
-  </div>
+  <section class="section">
+    <div class="container">
+      <div class="box is-paddingless">
+        <pre id="output"></pre>
+      </div>
+    </div>
+  </section>
 
 <script>
 document.addEventListener("DOMContentLoaded", function(){
@@ -66,39 +78,23 @@ document.addEventListener("DOMContentLoaded", function(){
   var host = window.location.hostname
   var server = new ServerEventsDispatcher('ws://' + host + ':8080')
 
-  server.bind('pushStatus', function(data){
-    document.querySelector('#output').innerText = JSON.stringify(data)
-  })
-  server.bind('pushMounts', function(data){
-    document.querySelector('#output').innerText = JSON.stringify(data)
-  })
+  // BASICS === //
   server.bind('pushStats', function(data){
-    document.querySelector('#output').innerText = JSON.stringify(data)
+    output(data)
   })
-  server.bind('pushList', function(data){
-    document.querySelector('#output').innerText = JSON.stringify(data)
+  server.bind('pushStatus', function(data){
+    output(data)
   })
-  server.bind('pushArtists', function(data){
-    document.querySelector('#output').innerText = JSON.stringify(data)
-  })
-  server.bind('pushAlbums', function(data){
-    document.querySelector('#output').innerText = JSON.stringify(data)
-  })
-
-  server.bind('notification', function(data){
-    document.querySelector('#output').innerText = JSON.stringify(data)
-  })
-
-  server.bind('open', () => {
-    //server.send('getStatus')
-
-  })
-
   document.querySelector('.buttons #stats').addEventListener('click', () => {
     server.send('getStats');
   })
   document.querySelector('.buttons #status').addEventListener('click', () => {
     server.send('getStatus');
+  })
+
+  // MOUNTS === //
+  server.bind('pushMounts', function(data){
+    output(data)
   })
   document.querySelector('.buttons #mounts').addEventListener('click', () => {
     server.send('getMounts');
@@ -110,24 +106,71 @@ document.addEventListener("DOMContentLoaded", function(){
       path: '/export/musichd'
     })
   })
-  document.querySelector('.buttons #mounthd').addEventListener('click', () => {
+  document.querySelector('.buttons #umounthd').addEventListener('click', () => {
     server.send('unmount', { point: 'musichd' })
   })
+
+  // DBMAINT ===== //
   document.querySelector('.buttons #rescan').addEventListener('click', () => {
     server.send('rescanDB');
   })
   document.querySelector('.buttons #update').addEventListener('click', () => {
     server.send('updateDB');
   })
-  //document.querySelector('.buttons #list').addEventListener('click', () => {
-  //  server.send('getList', 'artist')
-  //})
+
+  // LIST ==== //
+  server.bind('pushList', function(data){
+    document.querySelector('#output').innerText = JSON.stringify(data)
+  })
+  server.bind('pushArtists', function(data){
+    document.querySelector('#output').innerText = JSON.stringify(data)
+  })
+  server.bind('pushAlbums', function(data){
+    document.querySelector('#output').innerText = JSON.stringify(data)
+  })
   document.querySelector('.buttons #artists').addEventListener('click', () => {
     server.send('getArtists')
   })
   document.querySelector('.buttons #albums').addEventListener('click', () => {
     server.send('getAlbums')
   })
+  //document.querySelector('.buttons #list').addEventListener('click', () => {
+  //  server.send('getList', 'artist')
+  //})
+
+
+  server.bind('notification', function(data){
+    document.querySelector('#output').innerText = JSON.stringify(data)
+  })
+
+  // ONLOAD ==== //
+  server.bind('open', () => {
+    server.send('getStatus')
+  })
+
+  // pretty print
+  function output(obj) {
+    inp = JSON.stringify(obj, undefined, 4)
+    document.querySelector('#output').innerHTML = syntaxHighlight(inp);
+  }
+  function syntaxHighlight(json) {
+    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+      var cls = 'num';
+      if (/^"/.test(match)) {
+        if (/:$/.test(match)) {
+          cls = 'key';
+        } else {
+          cls = 'string';
+        }
+      } else if (/true|false/.test(match)) {
+        cls = 'boolean';
+      } else if (/null/.test(match)) {
+        cls = 'null';
+      }
+      return '<span class="' + cls + '">' + match + '</span>';
+    });
+  }
 });
 </script>
 </body>
