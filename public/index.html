@@ -1,18 +1,22 @@
-<h1>
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <script src="/js/websocketevent.js" />
+</head>
+
+<body>
+  <h1>
     Web Socket Example
-</h1>
-<p>
+  </h1>
+  <p>
     open console to see connection.
-</p>
+  </p>
 <script>
-    var ws = new WebSocket('ws://192.168.89.5:8080');
-
-    ws.onopen = function () {
-        console.log('websocket is connected ...')
-        ws.send('connected')
-    }
-
-    ws.onmessage = function (ev) {
-        console.log(ev);
-    }
+document.addEventListener("DOMContentLoaded", function(){
+  var server = new ServerEventsDispatcher('ws://192.168.89.5:8080')
+  server.bind('status', function(status){
+    console.log(status)
+  })
+  server.send('status')
+});
 </script>
