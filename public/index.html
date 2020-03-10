@@ -1,31 +1,70 @@
 <!DOCTYPE html>
-<html lang='en'>
+<html>
 <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MPD test</title>
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+  <link rel="manifest" href="/icons/site.webmanifest">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css"> 
   <script src="/js/websocketevent.js"></script>
 </head>
 
 <body>
-  <h1>
-    Web Socket Example
-  </h1>
-  <p>
-    open console to see connection.
-  </p>
-  <div class="buttons">
-    <button id="stats">Stats</button>
-    <button id="status">Status</button>
-    <button id="mounts">Mounts</button>
-    <button id="rescan">Rescan</button>
-    <button id="update">Update</button>
-    <button id="artists">Artists</button>
-    <button id="albums">Albums</button>
-  </div>
+  <section class="hero is-primary">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">Web Socket Example</h1>
+      <div>
+    </div>
+  </section>
+  <section>
+    <div class="container">
+      <div class="columns buttons">
+        <div class="column">
+          <div class="box">
+            <h4 class="title">Basics</h4>
+            <button class="button is-small is-rounded" id="stats">Stats</button>
+            <button class="button is-small is-rounded" id="status">Status</button>
+	  </div>
+	</div>
+        <div class="column">
+          <div class="box">
+            <h4 class="title">Mounts</h4>
+            <button class="button is-small is-rounded" id="mounts">Mounts</button>
+            <button class="button is-small is-rounded" id="mounthd">Mount MusicHD</button>
+            <button class="button is-small is-rounded" id="umounthd">Unmount MusicHD</button>
+	  </div>
+        </div>
+        <div class="column">
+          <div class="box">
+            <h4 class="title">DB Maint</h4>
+            <button class="button is-small is-rounded" id="rescan">Rescan</button>
+            <button class="button is-small is-rounded" id="update">Update</button>
+	  </div>
+        </div>
+        <div class="column">
+          <div class="box">
+            <h4 class="title">List</h4>
+            <button class="button is-small is-rounded" id="artists">Artists</button>
+            <button class="button is-small is-rounded" id="albums">Albums</button>
+	  </div>
+        </div>
+      </div> <!-- columns -->
+    </div>
+  </section>
   <div id="output"></div>
+  </div>
 
 <script>
 document.addEventListener("DOMContentLoaded", function(){
 
-  var server = new ServerEventsDispatcher('ws://localhost:8080')
+  var host = window.location.hostname
+  var server = new ServerEventsDispatcher('ws://' + host + ':8080')
 
   server.bind('pushStatus', function(data){
     document.querySelector('#output').innerText = JSON.stringify(data)
@@ -53,11 +92,6 @@ document.addEventListener("DOMContentLoaded", function(){
   server.bind('open', () => {
     //server.send('getStatus')
 
-    //server.send('addMount', {
-    //  type: 'nfs',
-    //  host: '192.168.68.2',
-    //  path: '/export/musichd'
-    //})
   })
 
   document.querySelector('.buttons #stats').addEventListener('click', () => {
@@ -68,6 +102,16 @@ document.addEventListener("DOMContentLoaded", function(){
   })
   document.querySelector('.buttons #mounts').addEventListener('click', () => {
     server.send('getMounts');
+  })
+  document.querySelector('.buttons #mounthd').addEventListener('click', () => {
+    server.send('addMount', {
+      type: 'nfs',
+      host: '192.168.68.2',
+      path: '/export/musichd'
+    })
+  })
+  document.querySelector('.buttons #mounthd').addEventListener('click', () => {
+    server.send('unmount', { point: 'musichd' })
   })
   document.querySelector('.buttons #rescan').addEventListener('click', () => {
     server.send('rescanDB');
