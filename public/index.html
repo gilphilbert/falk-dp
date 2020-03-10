@@ -13,7 +13,7 @@
   </p>
 <script>
 document.addEventListener("DOMContentLoaded", function(){
-  var server = new ServerEventsDispatcher('ws://192.168.89.5:8080')
+  var server = new ServerEventsDispatcher('ws://localhost:8080')
   server.bind('status', function(status){
     console.log(status)
   })

@@ -10,7 +10,7 @@ var ServerEventsDispatcher = function(url){
   };
 
   this.send = function(event_name, event_data){
-    var payload = JSON.stringify({event:event_name, data: event_data});
+    var payload = JSON.stringify({type:event_name, data: event_data});
     conn.send( payload ); // <= send JSON data to socket server
     return this;
   };
@@ -18,7 +18,7 @@ var ServerEventsDispatcher = function(url){
   // dispatch to the right handlers
   conn.onmessage = function(evt){
     var json = JSON.parse(evt.data)
-    dispatch(json.event, json.data)
+    dispatch(json.type, json.data)
   };
 
   conn.onclose = function(){dispatch('close',null)}
