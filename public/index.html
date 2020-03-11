@@ -31,15 +31,15 @@
   </section>
   <section class="section">
     <div class="container">
-      <div class="columns buttons">
-        <div class="column">
+      <div class="columns buttons is-multiline">
+        <div class="column is-4">
           <div class="box">
             <h4 class="title">Basics</h4>
             <button class="button is-small is-rounded" id="status">Status</button>
             <button class="button is-small is-rounded" id="stats">Stats</button>
 	  </div>
 	</div>
-        <div class="column">
+        <div class="column is-4">
           <div class="box">
             <h4 class="title">Mounts</h4>
             <button class="button is-small is-rounded" id="mounts">Mounts</button>
@@ -47,20 +47,38 @@
             <button class="button is-small is-rounded" id="umounthd">Unmount MusicHD</button>
 	  </div>
         </div>
-        <div class="column">
+        <div class="column is-4">
           <div class="box">
             <h4 class="title">DB Maint</h4>
             <button class="button is-small is-rounded" id="rescan">Rescan</button>
             <button class="button is-small is-rounded" id="update">Update</button>
 	  </div>
         </div>
-        <div class="column">
+        <div class="column is-4">
           <div class="box">
             <h4 class="title">List</h4>
             <button class="button is-small is-rounded" id="artists">Artists</button>
             <button class="button is-small is-rounded" id="albums">Albums</button>
-            <button class="button is-small is-rounded" id="list">List</button>
-            <button class="button is-small is-rounded" id="listEagles">Albums (Eagles)</button>
+            <button class="button is-small is-rounded" id="listEagles">Eagles</button>
+            <button class="button is-small is-rounded" id="listAlbum">Desperado</button>
+	  </div>
+        </div>
+        <div class="column is-4">
+          <div class="box">
+            <h4 class="title">Queue</h4>
+            <button class="button is-small is-rounded" id="queue">Queue</button>
+            <button class="button is-small is-rounded" id="enqueue">Enqueue</button>
+	    <button class="button is-small is-rounded" id="clearQueue">Clear</button>
+	  </div>
+        </div>
+        <div class="column is-4">
+          <div class="box">
+            <h4 class="title">Playback</h4>
+            <button class="button is-small is-rounded" id="play">Play</button>
+            <button class="button is-small is-rounded" id="pause">Pause</button>
+	    <button class="button is-small is-rounded" id="stop">Stop</button>
+	    <button class="button is-small is-rounded" id="prev">Prev</button>
+	    <button class="button is-small is-rounded" id="next">Next</button>
 	  </div>
         </div>
       </div> <!-- columns -->
@@ -121,13 +139,7 @@ document.addEventListener("DOMContentLoaded", function(){
   })
 
   // LIST ==== //
-  server.bind('pushList', function(data){
-    output(data)
-  })
-  server.bind('pushArtists', function(data){
-    output(data)
-  })
-  server.bind('pushAlbums', function(data){
+  server.bind('pushLibrary', function(data){
     output(data)
   })
   document.querySelector('.buttons #artists').addEventListener('click', () => {
@@ -136,17 +148,37 @@ document.addEventListener("DOMContentLoaded", function(){
   document.querySelector('.buttons #albums').addEventListener('click', () => {
     server.send('getAlbums')
   })
-  document.querySelector('.buttons #list').addEventListener('click', () => {
-    server.send('getList', { tag: "album", group: "albumartist" })
-  })
   document.querySelector('.buttons #listEagles').addEventListener('click', () => {
     server.send('getArtistAlbums', { artist: "Eagles" })
   })
+  document.querySelector('.buttons #listAlbum').addEventListener('click', () => {
+    server.send('getAlbum', { artist: "Eagles", title: "Desperado" })
+  })
 
+  // QUEUE ===== //
+  server.bind('pushQueue', function(data){
+    output(data)
+  })
+  document.querySelector('.buttons #queue').addEventListener('click', () => {
+    server.send('getQueue');
+  })
+  document.querySelector('.buttons #enqueue').addEventListener('click', () => {
+    server.send('enqueue', { uri: "musichd/Eagles/Desperado (1973)/01-Doolin-Dalton.flac" });
+  })
+  document.querySelector('.buttons #clearQueue').addEventListener('click', () => {
+    server.send('clearQueue');
+  })
 
   server.bind('notification', function(data){
     document.querySelector('#output').innerText = JSON.stringify(data)
   })
+
+  // PLAYBACK ===== //
+  document.querySelector('.buttons #play').addEventListener('click', () => { server.send('play') })
+  document.querySelector('.buttons #pause').addEventListener('click', () => { server.send('pause') })
+  document.querySelector('.buttons #stop').addEventListener('click', () => { server.send('stop') })
+  document.querySelector('.buttons #prev').addEventListener('click', () => { server.send('prev') })
+  document.querySelector('.buttons #next').addEventListener('click', () => { server.send('next') })
 
   // ONLOAD ==== //
   server.bind('open', () => {
