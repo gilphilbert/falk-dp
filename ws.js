@@ -65,7 +65,7 @@ async function setup() {
     disp.bind("getArtists", function () {
       mpdc.api.db.list("artist")
         .then(async (d) => {
-          mod = d.map(i => i.artist)
+          mod = d.map(i => { return { title: i.artist, albumart: '/art?artist=' + i.artist } } )
           disp.send("pushLibrary", { artists: mod })
         })
     })
@@ -75,7 +75,11 @@ async function setup() {
 	.then((d) => {
           mod = d.reduce((arr, item) => {
             item.album.forEach((e) => {
-              var flat = { title: e.album, artist: item.albumartist }
+              var flat = {
+                title: e.album,
+                artist: item.albumartist,
+                albumart: `/art?artist=${item.albumartist}&album=${e.album}`
+              }
               arr.push(flat)
             })
             return arr;
@@ -92,7 +96,9 @@ async function setup() {
 
     disp.bind("getArtistAlbums", function (data) {
       mpdc.api.db.list("album", `(albumartist == "${data.artist}")`)
-        .then(d => disp.send("pushLibrary", { albums: d }))
+        .then((d) => {
+          disp.send("pushLibrary", { albums: d })
+      })
     })
 
     disp.bind("getMounts", function () {
