@@ -60,6 +60,7 @@
             <button class="button is-small is-rounded" id="artists">Artists</button>
             <button class="button is-small is-rounded" id="albums">Albums</button>
             <button class="button is-small is-rounded" id="list">List</button>
+            <button class="button is-small is-rounded" id="listEagles">Albums (Eagles)</button>
 	  </div>
         </div>
       </div> <!-- columns -->
@@ -137,6 +138,9 @@ document.addEventListener("DOMContentLoaded", function(){
   })
   document.querySelector('.buttons #list').addEventListener('click', () => {
     server.send('getList', { tag: "album", group: "albumartist" })
+  })
+  document.querySelector('.buttons #listEagles').addEventListener('click', () => {
+    server.send('getArtistAlbums', { artist: "Eagles" })
   })
 
 

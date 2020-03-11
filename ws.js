@@ -2,6 +2,12 @@ var WebSocketServer = require("ws").Server
 var wss = new WebSocketServer({ port: "8080" })
 
 var mpdapi = require("mpd-api")
+var api = null
+
+mpdapi.connect({ host: host, port: port })
+  .then((con) => {
+    api = null
+  })
 
 class MPD {
   constructor({ host, port }={}) {
@@ -10,6 +16,9 @@ class MPD {
     mpdapi.connect({ host: host, port: port })
     .then((con) => {
       console.log('Connected to MPD')
+    con.api.db.list("album", "albumartist Eagles").then((d) => {
+      console.log(d)
+    })
       this._con=con
     })
   }
@@ -38,7 +47,7 @@ class MPD {
     } else if (!group) {
       this._con.api.db.list(tag, filter).then(callback)
     } else {
-      this._con.api.db.list(tag, filter, group).then(callback)
+      this._con.api.db.list(tag, null, group).then(callback)
     }
   }
 
@@ -123,7 +132,6 @@ wss.on("connection", function (ws) {
 
   disp.bind("getAlbums", function() {
     mpd.listdb({ tag: "album", group: "albumartist" }, (d) => {
-      //mod = d.map(i => i.album)
       mod = d.reduce((arr, item) => {
         item.album.forEach((e) => {
           var flat = { title: e.album, artist: item.albumartist }
@@ -134,6 +142,12 @@ wss.on("connection", function (ws) {
       mod.sort((a, b) => (a.title > b.title) ? 1 : -1)
       disp.send("pushAlbums", mod)
     })
+  })
+
+  disp.bind("getArtistAlbums", function(data) {
+    mpd.listdb({ tag: "album", filter: "albumartist Eagles" }, (d) => {
+      disp.send("pushList", d)
+    }) 
   })
 
   disp.bind("getList", function(data) {
