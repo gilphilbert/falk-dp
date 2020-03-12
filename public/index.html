@@ -56,11 +56,20 @@
         </div>
         <div class="column is-4">
           <div class="box">
-            <h4 class="title">List</h4>
+            <h4 class="title">DB</h4>
             <button class="button is-small is-rounded" id="artists">Artists</button>
             <button class="button is-small is-rounded" id="albums">Albums</button>
+            <button class="button is-small is-rounded" id="genres">Genres</button>
             <button class="button is-small is-rounded" id="listEagles">Eagles</button>
             <button class="button is-small is-rounded" id="listAlbum">Desperado</button>
+	  </div>
+        </div>
+        <div class="column is-4">
+          <div class="box">
+            <h4 class="title">Playlist</h4>
+            <button class="button is-small is-rounded" id="playlists">Get</button>
+            <button class="button is-small is-rounded" id="playlist">List</button>
+            <button class="button is-small is-rounded" id="playlistadd">Add</button>
 	  </div>
         </div>
         <div class="column is-4">
@@ -79,6 +88,12 @@
 	    <button class="button is-small is-rounded" id="stop">Stop</button>
 	    <button class="button is-small is-rounded" id="prev">Prev</button>
 	    <button class="button is-small is-rounded" id="next">Next</button>
+	  </div>
+        </div>
+        <div class="column is-4">
+          <div class="box">
+            <h4 class="title">Outputs</h4>
+            <button class="button is-small is-rounded" id="outputs">Get</button>
 	  </div>
         </div>
       </div> <!-- columns -->
@@ -139,7 +154,19 @@ document.addEventListener("DOMContentLoaded", function(){
   })
 
   // LIST ==== //
-  server.bind('pushLibrary', function(data){
+  server.bind('pushArtists', function(data){
+    output(data)
+  })
+  server.bind('pushAlbums', function(data){
+    output(data)
+  })
+  server.bind('pushGenres', function(data){
+    output(data)
+  })
+  server.bind('pushArtistAlbums', function(data){
+    output(data)
+  })
+  server.bind('pushAlbum', function(data){
     output(data)
   })
   document.querySelector('.buttons #artists').addEventListener('click', () => {
@@ -148,11 +175,31 @@ document.addEventListener("DOMContentLoaded", function(){
   document.querySelector('.buttons #albums').addEventListener('click', () => {
     server.send('getAlbums')
   })
+  document.querySelector('.buttons #genres').addEventListener('click', () => {
+    server.send('getGenres')
+  })
   document.querySelector('.buttons #listEagles').addEventListener('click', () => {
     server.send('getArtistAlbums', { artist: "Eagles" })
   })
   document.querySelector('.buttons #listAlbum').addEventListener('click', () => {
     server.send('getAlbum', { artist: "Eagles", title: "Desperado" })
+  })
+
+  // PLAYLIST ==== //
+  server.bind('pushPlaylist', function(data){
+    output(data)
+  })
+  server.bind('pushPlaylists', function(data){
+    output(data)
+  })
+  document.querySelector('.buttons #playlists').addEventListener('click', () => {
+    server.send('getPlaylists')
+  })
+  document.querySelector('.buttons #playlist').addEventListener('click', () => {
+    server.send('getPlaylist', { name: 'test' })
+  })
+  document.querySelector('.buttons #playlistadd').addEventListener('click', () => {
+    server.send('addPlaylist', { name: 'test', uri: "musichd/Eagles/Desperado (1973)/01-Doolin-Dalton.flac" })
   })
 
   // QUEUE ===== //
@@ -171,6 +218,14 @@ document.addEventListener("DOMContentLoaded", function(){
 
   server.bind('notification', function(data){
     document.querySelector('#output').innerText = JSON.stringify(data)
+  })
+
+  // OUTPUTS ===== //
+  server.bind('pushOutputs', function(data){
+    output(data)
+  })
+  document.querySelector('.buttons #outputs').addEventListener('click', () => {
+    server.send('getOutputs');
   })
 
   // PLAYBACK ===== //

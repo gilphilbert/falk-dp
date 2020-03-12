@@ -32,13 +32,16 @@ async function setup() {
             d.forEach((i) => {
 	      i.albumart = "/art/album/" + encodeURIComponent(i.artist) + "/" + encodeURIComponent(i.album)
 	    })
-	    broadcast("pushQueue", d)
+	    broadcast("pushQueue", { queue: d })
 	  })
         break
       case "player":
         mpdc.api.status.get()
           .then(d => broadcast("pushStatus", d))
         break
+      case "stored_playlist":
+        mpdc.api.playlists.get()
+          .then(d => broadcast("pushPlaylist", d))
       default:
         console.log("[MPD] Unknown State Change:" + e)
     }
@@ -47,11 +50,13 @@ async function setup() {
   wss.on("connection", function (ws) {
     var disp = new Dispatcher(ws)
 
+    // system
     disp.bind("getStatus", function () {
       mpdc.api.status.get()
         .then(d => disp.send("pushStatus", d))
     })
 
+    // db management
     disp.bind("getStats", function () {
       mpdc.api.status.stats()
         .then(d => disp.send("pushStats", d))
@@ -67,11 +72,12 @@ async function setup() {
         .then(d => disp.send("notification", d))
     })
 
+    // db listing
     disp.bind("getArtists", function () {
       mpdc.api.db.list("artist")
         .then(async (d) => {
           mod = d.map(i => { return { title: i.artist, albumart: '/art/artist/' + encodeURIComponent(i.artist) } } )
-          disp.send("pushLibrary", { artists: mod })
+          disp.send("pushArtists", mod)
         })
     })
 
@@ -90,7 +96,15 @@ async function setup() {
             return arr;
           }, []);
           mod.sort((a, b) => (a.title > b.title) ? 1 : -1)
-          disp.send("pushLibrary", { albums: mod })
+          disp.send("pushAlbums", mod)
+        })
+    })
+
+    disp.bind("getGenres", function () {
+      mpdc.api.db.list("genre")
+	.then((d) => {
+          var mod = d.map(i => i.genre)
+          disp.send("pushGenres", mod)
         })
     })
 
@@ -103,7 +117,7 @@ async function setup() {
             albumart: "/art/album/" + encodeURIComponent(data.artist) + "/" + encodeURIComponent(data.title),
             songs: d
           }
-          disp.send("pushLibrary", { album: out })
+          disp.send("pushAlbum", out)
         })
     })
 
@@ -123,10 +137,11 @@ async function setup() {
             },
             albums: mod
           }
-          disp.send("pushLibrary", out)
+          disp.send("pushArtistAlbums", out)
       })
     })
 
+    //mounts
     disp.bind("getMounts", function () {
       mpdc.api.mounts.list()
         .then((data) => {
@@ -156,6 +171,7 @@ async function setup() {
         })
     })
 
+    //queue
     disp.bind("getQueue", function () {
       mpdc.api.queue.info()
         .then((d) => {
@@ -174,6 +190,7 @@ async function setup() {
       mpdc.api.queue.clear()
     })
 
+    // actions
     disp.bind("play", function () {
       mpdc.api.playback.play()
     })
@@ -194,6 +211,29 @@ async function setup() {
     })
     disp.bind("next", function () {
       mpdc.api.playback.next()
+    })
+
+    // output devices
+    disp.bind("getOutputs", function (data) {
+      mpdc.api.outputs.list()
+        .then(d => disp.send("pushOutputs", d))
+    })
+
+
+    // playlists
+    disp.bind("getPlaylists", function (data) {
+      mpdc.api.playlists.get()
+        .then(d => { 
+          mod = d.map(i => { return { name: i.playlist, last_modified: i.last_modified } })
+          disp.send("pushPlaylists", mod)
+        })
+    })
+    disp.bind("getPlaylist", function (data) {
+      mpdc.api.playlists.listinfo(data.name)
+        .then(d => disp.send("pushPlaylist", { name: data.name, songs: d }))
+    })
+    disp.bind("addPlaylist", function (data) {
+      mpdc.api.playlists.add(data.name, data.uri)
     })
   })
 
