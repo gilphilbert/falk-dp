@@ -10,9 +10,8 @@ const rootdir = path.resolve(__dirname)
 const axios = require('axios')
 
 // the albumart service
-router.get('/', function (req, res) {
-  const artcache = rootdir + "/artcache/"
-  var q = req.query
+router.get('/artist/:artist', function (req, res) {
+  var q = req.params
 
   // you need to specify an artist!
   if (!q.artist) {
@@ -20,9 +19,27 @@ router.get('/', function (req, res) {
     return
   }
 
+  getArt({ artist: q.artist }, res)
+})
+
+router.get('/album/:artist/:album', function (req, res) {
+  var q = req.params
+
+  // you need to specify an artist!
+  if (!q.artist || !q.artist) {
+    res.json({ error: 'you must specify an artist and/or album' })
+    return
+  }
+
+  getArt({ artist: q.artist, album: q.album }, res)
+})
+
+function getArt({ artist, album }={}, res) {
+  const artcache = rootdir + "/artcache/"
+
   // generate a hash from the request
-  var cs = q.artist
-  if (q.album) {
+  var cs = artist
+  if (album) {
     cs = cs + album
   }
   const hash = crypto.createHash("sha1").update(cs).digest("hex")
@@ -36,9 +53,9 @@ router.get('/', function (req, res) {
       res.sendFile(path)
     } else {
       // what art are we looking for?
-      if (!q.album) {
+      if (!album) {
         // we're looking for an artist, let's go look for it and store it if we find it
-        getArtistArt(q.artist, path)
+        getArtistArt(artist, path)
           .then((e) => {
             // we got a file, let's serve it
             res.sendFile(path)
@@ -49,7 +66,7 @@ router.get('/', function (req, res) {
 	  })
       } else {
         // we're looking for albumart let's look for some!
-        getAlbumArt(q.artist, q.album, path)
+        getAlbumArt(artist, album, path)
           .then((e) => {
             // we got a file, let's serve it
             res.sendFile(path)
@@ -63,9 +80,7 @@ router.get('/', function (req, res) {
   } catch(err) {
     res.json({ error: 'unable to generate image' })
   }
-
-
-})
+}
 
 async function getArtistArt(artist, path) {
   // get the mbid from audioscrobbler...
@@ -97,7 +112,34 @@ async function getArtistArt(artist, path) {
 }
 
 async function getAlbumArt(artist, album, path) {
-  
+  info = await axios.get(`http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=250b1448a91894d0f7542cbcdedc936e&artist=${artist}&album=${album}&format=json`)
+  const images = info.data.album.image
+  var mega = images.filter(img => {
+    return img.size == "mega"
+  })
+
+  var imageurl = false
+  if (mega && mega.length > 0) {
+    imageurl = mega[0]["#text"]
+  }
+
+  if (imageurl) {
+    // fetch the image file
+    const response = await axios({ url: imageurl, method: 'GET', responseType: 'stream' })
+
+    // write the file
+    const writer = fs.createWriteStream(path)
+    await response.data.pipe(writer)
+
+    // return a promise
+    return new Promise((resolve, reject) => {
+      writer.on('finish', resolve)
+      writer.on('error', reject)
+    })
+  }
+
+  //we didn't find an image, panic!
+  throw new Error(1);
 }
 
 module.exports = router
