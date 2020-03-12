@@ -1,22 +1,22 @@
 {
   "name": "ui",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "A websocket-based UI for MPD",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "",
     "start": "node app.js "
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/gilphilbert/mpdui"
   },
-  "author": "",
-  "license": "",
+  "author": "Phill Gilbert",
+  "license": "GPLv3",
   "bugs": {
-    "url": ""
+    "url": "https://github.com/gilphilbert/mpdui/issues"
   },
-  "homepage": "",
+  "homepage": "https://github.com/gilphilbert/mpdui",
   "dependencies": {
     "axios": "^0.19.2",
     "express": "^4.16.2",
