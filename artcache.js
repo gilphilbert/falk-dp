@@ -45,20 +45,20 @@ function getArt({ artist, album }={}, res) {
   const hash = crypto.createHash("sha1").update(cs).digest("hex")
 
   // now convert the hash to a file name ./artcache/${filename}
-  const path = artcache + hash + ".jpg"
+  const imgpath = artcache + hash + ".jpg"
 
   try {
-    if (fs.existsSync(path)) {
+    if (fs.existsSync(imgpath)) {
       // we have the file in the cache, so serve it
-      res.sendFile(path)
+      res.sendFile(imgpath)
     } else {
       // what art are we looking for?
       if (!album) {
         // we're looking for an artist, let's go look for it and store it if we find it
-        getArtistArt(artist, path)
+        getArtistArt(artist, imgpath)
           .then((e) => {
             // we got a file, let's serve it
-            res.sendFile(path)
+            res.sendFile(imgpath)
           })
 	  .catch((e) => {
             // there's no art, serve the default artistart
@@ -66,10 +66,10 @@ function getArt({ artist, album }={}, res) {
 	  })
       } else {
         // we're looking for albumart let's look for some!
-        getAlbumArt(artist, album, path)
+        getAlbumArt(artist, album, imgpath)
           .then((e) => {
             // we got a file, let's serve it
-            res.sendFile(path)
+            res.sendFile(imgpath)
           })
 	  .catch((e) => {
             // there's no art, serve the default artistart
@@ -82,7 +82,7 @@ function getArt({ artist, album }={}, res) {
   }
 }
 
-async function getArtistArt(artist, path) {
+async function getArtistArt(artist, imgpath) {
   // get the mbid from audioscrobbler...
   info = await axios.get("https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=" + artist + "&api_key=250b1448a91894d0f7542cbcdedc936e&format=json")
   const mbid = info.data.artist.mbid
@@ -97,7 +97,7 @@ async function getArtistArt(artist, path) {
     const response = await axios({ url: data.artistthumb[0].url, method: 'GET', responseType: 'stream' })
 
     // write the file
-    const writer = fs.createWriteStream(path)
+    const writer = fs.createWriteStream(imgpath)
     await response.data.pipe(writer)
 
     // return a promise
@@ -111,7 +111,7 @@ async function getArtistArt(artist, path) {
   }
 }
 
-async function getAlbumArt(artist, album, path) {
+async function getAlbumArt(artist, album, imgpath) {
   info = await axios.get(`http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=250b1448a91894d0f7542cbcdedc936e&artist=${artist}&album=${album}&format=json`)
   const images = info.data.album.image
   var mega = images.filter(img => {
@@ -128,7 +128,7 @@ async function getAlbumArt(artist, album, path) {
     const response = await axios({ url: imageurl, method: 'GET', responseType: 'stream' })
 
     // write the file
-    const writer = fs.createWriteStream(path)
+    const writer = fs.createWriteStream(imgpath)
     await response.data.pipe(writer)
 
     // return a promise
