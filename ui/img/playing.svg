@@ -1,0 +1,62 @@
+<svg class="ldi-5qkumr" width="200px"  height="200px"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" style="background: none;"><!--?xml version="1.0" encoding="utf-8"?--><!--Generator: Adobe Illustrator 21.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)--><svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" style="transform-origin: 50px 50px 0px;" xml:space="preserve"><g style="transform-origin: 50px 50px 0px;"><g style="transform-origin: 50px 50px 0px; transform: scale(0.6);"><g style="transform-origin: 50px 50px 0px;"><g><g class="ld ld-heartbeat" style="transform-origin: 50px 50px 0px; animation-duration: 1s; animation-delay: -1s; animation-direction: normal;"><rect x="37.029" y="60.724" transform="matrix(4.488682e-11 -1 1 4.488682e-11 -8.3948 127.0288)" style="fill: #4C4746" width="44.576" height="13.976" fill="#4C4746"></rect></g><g class="ld ld-heartbeat" style="transform-origin: 50px 50px 0px; animation-duration: 1s; animation-delay: -0.923077s; animation-direction: normal;"><rect x="-17.952" y="43.012" transform="matrix(4.490636e-11 -1 1 4.490636e-11 -27.9519 72.0481)" style="fill: #4C4746" width="80" height="13.976" fill="#4C4746"></rect></g><g class="ld ld-heartbeat" style="transform-origin: 50px 50px 0px; animation-duration: 1s; animation-delay: -0.846154s; animation-direction: normal;"><rect x="10.34" y="52.669" transform="matrix(4.490103e-11 -1 1 4.490103e-11 -18.9746 100.34)" style="fill: #4C4746" width="60.685" height="13.976" fill="#4C4746"></rect></g><g class="ld ld-heartbeat" style="transform-origin: 50px 50px 0px; animation-duration: 1s; animation-delay: -0.769231s; animation-direction: normal;"><rect x="65.069" y="70.129" transform="matrix(4.489926e-11 -1 1 4.489926e-11 0.8351 155.0689)" style="#4C4746" width="25.766" height="13.976" fill="#4C4746"></rect></g><metadata xmlns:d="https://loading.io/stock/" class="ld ld-heartbeat" style="transform-origin: 50px 50px 0px; animation-duration: 1s; animation-delay: -0.692308s; animation-direction: normal;">
+<d:name class="ld ld-heartbeat" style="transform-origin: 50px 50px 0px; animation-duration: 1s; animation-delay: -0.615385s; animation-direction: normal;">bar</d:name>
+<d:tags class="ld ld-heartbeat" style="transform-origin: 50px 50px 0px; animation-duration: 1s; animation-delay: -0.538462s; animation-direction: normal;">bar,column,level,rectangle,compare,signal,chart</d:tags>
+<d:license class="ld ld-heartbeat" style="transform-origin: 50px 50px 0px; animation-duration: 1s; animation-delay: -0.461538s; animation-direction: normal;">cc-by</d:license>
+<d:slug class="ld ld-heartbeat" style="transform-origin: 50px 50px 0px; animation-duration: 1s; animation-delay: -0.384615s; animation-direction: normal;">5qkumr</d:slug>
+</metadata></g></g></g></g><style type="text/css" class="ld ld-heartbeat" style="transform-origin: 50px 50px 0px; animation-duration: 1s; animation-delay: -0.307692s; animation-direction: normal;">@keyframes ld-heartbeat {
+  0% {
+    -webkit-transform: scale(1.05);
+    transform: scale(1.05);
+  }
+  5% {
+    -webkit-transform: scale(1.25);
+    transform: scale(1.25);
+  }
+  39% {
+    -webkit-transform: scale(0.9);
+    transform: scale(0.9);
+  }
+  45% {
+    -webkit-transform: scale(1.15);
+    transform: scale(1.15);
+  }
+  60% {
+    -webkit-transform: scale(1.05);
+    transform: scale(1.05);
+  }
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+@-webkit-keyframes ld-heartbeat {
+  0% {
+    -webkit-transform: scale(1.05);
+    transform: scale(1.05);
+  }
+  5% {
+    -webkit-transform: scale(1.25);
+    transform: scale(1.25);
+  }
+  39% {
+    -webkit-transform: scale(0.9);
+    transform: scale(0.9);
+  }
+  45% {
+    -webkit-transform: scale(1.15);
+    transform: scale(1.15);
+  }
+  60% {
+    -webkit-transform: scale(1.05);
+    transform: scale(1.05);
+  }
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+.ld.ld-heartbeat {
+  -webkit-animation: ld-heartbeat 0.8s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+  animation: ld-heartbeat 0.8s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+</style></svg></svg>

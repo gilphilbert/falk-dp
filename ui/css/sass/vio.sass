@@ -1,0 +1,243 @@
+html
+    overflow: scroll
+    overflow-x: hidden
+
+::-webkit-scrollbar
+    width: 0px
+    background: transparent
+
+a
+  &:hover
+    text-decoration: underline
+    p
+      text-decoration: underline
+
+.title, .subtitle
+  @include until($desktop)
+    &.is-3
+      font-size: 1.5em
+    &.is-5
+      font-size: 1.25em
+
+body
+  @include until($desktop)
+    font-size: .8em
+
+.title
+  color: $white
+.subtitle
+  color: $grey-light
+
+.feather
+  width: 24px
+  height: 24px
+  stroke: $white
+  stroke-width: 2
+  stroke-linecap: round
+  stroke-linejoin: round
+  fill: none
+  &.is-active
+    stroke: $green
+
+.columns
+  &.albumart, &.artistart
+    .column
+      padding: 1.5em
+      // @include until($desktop)
+      //  padding: 1em .5em
+    img
+      border-radius: 5%
+      background-color: rgba(255,255,255,0.1)
+    .title
+      margin-top: 10px
+      font-weight: 500
+    .title, .subtitle
+      font-size: 1.1rem
+  &.artistart
+    img
+      border-radius: 100%
+    .title, .subtitle
+      text-align: center
+
+// this contains the entire page
+#page-container
+  height: 100vh
+  overflow: hidden
+  margin: 0
+
+//this contains the left hand menu
+#menu-container
+  background: #393535
+  @include until($desktop)
+    display: none
+
+  aside.menu
+    width: 300px
+  .image.menu-brand
+    width: 220px
+    height: auta
+    margin: 40px auto
+ 
+  .menu-label, .menu-list a
+    color: #ffffff
+    font-size: 110%
+    letter-spacing: inherit
+    text-transform: none
+    
+  .menu-label
+    font-weight: 500
+    padding-left: 40px
+    
+  .menu-list a
+    display: inline-block
+    width: 275px
+    padding: .6em 60px
+    border-radius: 0 2em 2em 0
+    &:hover
+      background: rgba(255,255,255,0.2)
+      text-decoration: none
+
+.navbar
+  background-color: transparent
+  transition: background-color 0.25s ease
+  .navbar-menu
+    display: block
+    opacity: 0
+    position: absolute
+    left: 0
+    right: 0
+    transform: translateY(-50%)
+    transition: all .4s ease-in-out
+    pointer-events: none
+  &.is-active
+    background-color: #221F1F
+    .navbar-menu
+      opacity: 1
+      transform: none
+      pointer-events: auto
+  display: none
+  @include until($desktop)
+    display: block
+  .navbar-burger
+    color: #ffffff
+  .navbar-menu
+    background-color: #221F1F
+    .navbar-item, .navbar-link
+      color: $white
+
+// this contains the right hand content pane
+#content-container
+  padding: 2.5em 1.5em calc(100px + .75em) .75em
+  @include until($desktop)
+    padding:  55px .75em calc(100px + .75em) .75em
+  overflow-y: scroll
+  background: radial-gradient(#4c4746, #221F1F)
+  -webkit-box-shadow: inset 2px 0px 3px 0px rgba(0,0,0,0.25)
+  -moz-box-shadow: inset 2px 0px 3px 0px rgba(0,0,0,0.25)
+  box-shadow: inset 2px 0px 3px 0px rgba(0,0,0,0.25)
+
+  .container:not(:first-child)
+      margin-top: 25px
+
+  .artist-info
+    padding-top: 50px
+    padding-bottom: 50px
+    figure
+      img
+        border-radius: 100%
+
+  .album-detail
+    p.title
+      @include until($desktop)
+        margin-bottom: 0
+
+  .home
+    padding-top: 1.25em
+  .albumart img
+    border-radius: 5%
+  table.songs
+    td .dropdown button
+      border: none
+      background: none
+
+  #queue-table
+    border-collapse: separate
+    border-spacing: 0 10px 
+    tr
+      border-radius: 5px
+      background-color: rgba(255,255,255,0.05)
+      td
+        vertical-align: middle
+        padding: 9px 0
+        &:first-child
+          padding-left: 10px
+        &:last-child
+          padding-right: 5px
+    tr.is-playing
+      background-color: rgba(255,255,255,0.15)
+
+// this contains the fixed-bottom play bar
+#control-bar
+  position: fixed
+  height: 100px
+  @include until($desktop)
+    height: 78px
+  width: 100%
+  bottom: 0
+  left: 0
+  background: #4C4746
+  -webkit-box-shadow: 0px -2px 3px 0px rgba(0,0,0,0.15)
+  -moz-box-shadow: 0px -2px 3px 0px rgba(0,0,0,0.15)
+  box-shadow: 0px -2px 3px 0px rgba(0,0,0,0.15)
+  line-height: 1
+  .columns
+    height: 100%
+  .now-playing
+    width: 300px
+    figure img
+      height: 70px
+      width: 70px
+      border-radius: 4px
+    .column:not(:first-child)
+      padding-left: 0
+    @include until($desktop)
+      figure img
+        height: 48px
+        width: 48px
+  .columns.play-progress
+    .column:first-child p
+      margin-right: 10px
+    .column:last-child p
+      margin-left: 10px
+  .playing-controls>svg
+    position: relative
+    top: 11px
+  .play-button
+    height: 48px
+    width: 48px
+    background: #4BBE87
+    display: inline-block
+    border-radius: 3em
+    svg
+      position: relative
+      top: 11px
+      left: 13px
+  .misc-controls
+    svg
+      margin: 0 5px
+  progress.progress
+    background: #2A2727
+    color: red
+    &::-moz-progress-value
+      background: #2A2727
+    &::-moz-progress-bar
+      background: #2A2727
+    &::-webkit-progress-value
+      background: #4BBE87
+      border-radius: 3em
+    &::-webkit-progress-bar
+      background: #393535
+      padding: 4px
+      -webkit-box-shadow: inset 0px 0px 9px -2px rgba(0,0,0,0.75)
+      -moz-box-shadow: inset 0px 0px 9px -2px rgba(0,0,0,0.75)
+      box-shadow: inset 0px 0px 9px -2px rgba(0,0,0,0.75)
