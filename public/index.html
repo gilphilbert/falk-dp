@@ -62,6 +62,8 @@
             <button class="button is-small is-rounded" id="genres">Genres</button>
             <button class="button is-small is-rounded" id="listEagles">Eagles</button>
             <button class="button is-small is-rounded" id="listAlbum">Desperado</button>
+            <button class="button is-small is-rounded" id="playchug">Play Chug All Night</button>
+            <button class="button is-small is-rounded" id="playsongs">Play Songs</button>
 	  </div>
         </div>
         <div class="column is-4">
@@ -183,6 +185,15 @@ document.addEventListener("DOMContentLoaded", function(){
   })
   document.querySelector('.buttons #listAlbum').addEventListener('click', () => {
     server.send('getAlbum', { artist: "Eagles", title: "Desperado" })
+  })
+  document.querySelector('.buttons #playchug').addEventListener('click', () => {
+    server.send('addPlay', { uri: "musichd/Eagles/Eagles (1972)/03-Chug All Night.flac" })
+  })
+  document.querySelector('.buttons #playsongs').addEventListener('click', () => {
+    server.send('addPlay', { songs: [
+      { uri: "musichd/Sheryl Crow/The Globe Sessions/Sheryl Crow - 03. Riverwide.flac" },
+      { uri: "musichd/Eagles/The Long Run (1979)/07-Those Shoes.flac" },
+    ] })
   })
 
   // PLAYLIST ==== //

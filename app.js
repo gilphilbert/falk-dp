@@ -2,10 +2,10 @@ var express = require('express')
 var app = express()
 
 // include the webservice
-const ws = require('./ws')
+const ws = require('./lib/ws')
 
 // include the artcache
-const artcache = require('./art')
+const artcache = require('./lib/art')
 app.use('/art', artcache)
 
 // serve the static files (the UI)
