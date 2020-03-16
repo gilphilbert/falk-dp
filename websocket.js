@@ -49,11 +49,40 @@ async function setup() {
 
   wss.on("connection", function (ws) {
     var disp = new Dispatcher(ws)
+    ws.on('error', () => console.log('errored'));
 
     // system
     disp.bind("getStatus", function () {
       mpdc.api.status.get()
-        .then(d => disp.send("pushStatus", d))
+        .then(status => {
+          mpdc.api.queue.info()
+            .then((queue) => {
+              if (status.song !== undefined && status.state != "stop") {
+                songdetail = queue.filter((qs) => {
+                  return qs.pos == status.song
+		})[0]
+
+                status.title = songdetail.title
+                status.artist = songdetail.artist
+                status.album = songdetail.album
+                status.genre = songdetail.genre
+                status.date = songdetail.date
+                status.albumart = "/art/album/" + songdetail.artist + "/" + songdetail.album
+
+                status.duration = status.time.total
+                status.elapsed = status.time.elapsed
+                delete(status.time)
+
+                status.sampleRate = status.audio.sampleRate
+                status.bits = status.audio.bits
+                status.channels = status.audio.channels
+                delete(status.audio)
+                delete(status.playlist)
+                delete(status.songid)
+	      }
+              disp.send("pushStatus", status)
+            })
+        })
     })
 
     // db management
@@ -68,8 +97,18 @@ async function setup() {
     })
 
     disp.bind("updateDB", function () {
-      mpdc.api.db.update()
-        .then(d => disp.send("notification", d))
+      mpdc.api.mounts.list()
+        .then((mounts) => {
+          netmount = mounts.filter((m) => {
+            if ("storage" in m) {
+              return m.storage.startsWith("smb") || m.storage.startsWith("nfs")
+	    }
+            return false
+	  }).map((m) => {
+            return m.mount
+          })
+          netmount.forEach(i => mpdc.api.db.update(i).then(d => console.log(d)))
+	})
     })
 
     // db listing
@@ -178,6 +217,7 @@ async function setup() {
           d.forEach((i) => {
             i.albumart = "/art/album/" + encodeURIComponent(i.artist) + "/" + encodeURIComponent(i.album)
           })
+		  console.log(d)
           disp.send("pushQueue", d)
         })
     })

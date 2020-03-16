@@ -8,6 +8,12 @@ const fs = require('fs')
 const path = require('path')
 const rootdir = path.resolve(__dirname)
 const axios = require('axios')
+const MusicBrainzApi = require('musicbrainz-api').MusicBrainzApi
+const mbApi = new MusicBrainzApi({
+  appName: 'Moosic',
+  appVersion: '0.0.1',
+  appContactInfo: 'gil.philbert@gmail.com'
+});
 
 // the albumart service
 router.get('/artist/:artist', function (req, res) {
@@ -39,13 +45,15 @@ function getArt({ artist, album }={}, res) {
 
   // generate a hash from the request
   var cs = artist
+  var pre = "artist/"
   if (album) {
     cs = cs + album
+    pre = "album/"
   }
   const hash = crypto.createHash("sha1").update(cs).digest("hex")
 
   // now convert the hash to a file name ./artcache/${filename}
-  const imgpath = artcache + hash + ".jpg"
+  const imgpath = artcache + pre + hash + ".jpg"
 
   try {
     if (fs.existsSync(imgpath)) {
@@ -55,6 +63,7 @@ function getArt({ artist, album }={}, res) {
       // what art are we looking for?
       if (!album) {
         // we're looking for an artist, let's go look for it and store it if we find it
+	      console.log('here')
         getArtistArt(artist, imgpath)
           .then((e) => {
             // we got a file, let's serve it
@@ -83,13 +92,20 @@ function getArt({ artist, album }={}, res) {
 }
 
 async function getArtistArt(artist, imgpath) {
+  var _artist = encodeURIComponent(artist)
   // get the mbid from audioscrobbler...
-  info = await axios.get("https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=" + artist + "&api_key=250b1448a91894d0f7542cbcdedc936e&format=json")
+/*
+  info = await axios.get("https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=" + _artist + "&api_key=250b1448a91894d0f7542cbcdedc936e&format=json")
+	console.log(info)
   const mbid = info.data.artist.mbid
+*/
+  info = await mbApi.searchArtist(artist, 0, 1)
+  mbid = info.artists[0].id
 
   // now get the fanart from fanart.tv
   fanart = await axios.get("https://webservice.fanart.tv/v3/music/" + mbid + "&?api_key=fd55f4282969cb8b8d09f470e3d18c51&format=json")
   const data = fanart.data
+	console.log(data)
 
   // check to see if we actually got any art URLs back
   if (data.artistthumb && data.artistthumb.length > 0) {
@@ -112,15 +128,27 @@ async function getArtistArt(artist, imgpath) {
 }
 
 async function getAlbumArt(artist, album, imgpath) {
-  info = await axios.get(`http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=250b1448a91894d0f7542cbcdedc936e&artist=${artist}&album=${album}&format=json`)
+  var _artist = encodeURIComponent(artist)
+  var _album = encodeURIComponent(album)
+  info = await axios.get(`http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=250b1448a91894d0f7542cbcdedc936e&artist=${_artist}&album=${_album}&format=json`)
+
   const images = info.data.album.image
-  var mega = images.filter(img => {
+  /*
+  var _img = images.filter(img => {
     return img.size == "mega"
   })
-
+  if (!_img || _img.length===0) {
+    _img = images.filter(img => {
+      return img.size == "extralarge"
+    })
+  }
+  */
+  var _img = images.filter(img => {
+    return img.size == "extralarge"
+  })
   var imageurl = false
-  if (mega && mega.length > 0) {
-    imageurl = mega[0]["#text"]
+  if (_img && _img.length > 0) {
+    imageurl = _img[0]["#text"]
   }
 
   if (imageurl) {

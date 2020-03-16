@@ -87,7 +87,7 @@ var domBuilder = (function () {
           )
         ),
         cr.td({ class: 'song-title', 'data-position': i, on: { click: function () { vioSocket.action.play(this.dataset.position) } } },
-          queue[i].name
+          queue[i].title
         ),
         cr.td(
           queue[i].artist
@@ -127,26 +127,42 @@ var domBuilder = (function () {
       switch (_loadPage) {
         case 'home':
           var state = dataTools.getState()
-          var desc = dataTools.getQuality()
-          console.log(desc)
 
           var frag = cr.div({ class: 'container is-fluid' })
+
+          var quality = ""
+          if ('songdetail' in state) {
+            songdetail = state.songdetail
+            quality = (songdetail.audio.sampleRate / 1000) + "kHz" + " " + songdetail.audio.bits + 'bit'
+          } else {
+            songdetail = {
+              title: "Not playing",
+              artist: "",
+              album: "",
+              albumart: ""
+	    }
+          }
 
           frag.appendChild(
             cr.div({ class: 'columns home' },
               cr.div({ class: 'column is-narrow' },
                 cr.figure({ class: 'image albumart' },
-                  cr.img({ src: state.albumart })
+                  cr.img()
                 )
               ),
               cr.div({ class: 'column' },
-                cr.p({ class: 'title is-3' }, state.title),
-                cr.p({ class: 'artist subtitle is-5' }, 'By ', cr.a({ href: 'artist/' + state.artist, 'data-navigo': '' }, state.artist)),
-                cr.p({ class: 'album subtitle is-5' }, 'From the album ', cr.a({ href: 'album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album)),
-                cr.p({ class: 'detail subtitle is-5 is-hidden-mobile' }, desc + ' ', cr.span({ class: 'is-uppercase' }, '(' + state.stream + ')'))
+                cr.p({ class: 'title is-3' }, songdetail.title),
+                cr.p({ class: 'artist subtitle is-5' }, 'By ', cr.a({ href: 'artist/' + songdetail.artist, 'data-navigo': '' }, songdetail.artist)),
+                cr.p({ class: 'album subtitle is-5' }, 'From the album ', cr.a({ href: 'album/' + songdetail.artist + '/' + songdetail.album, 'data-navigo': '' }, songdetail.album)),
+                cr.p({ class: 'detail subtitle is-5 is-hidden-mobile' }, quality)
               )
             )
           )
+		      
+          if ("songdetail" in state) {
+		  console.log(state.songdetail.albumart)
+            frag.querySelector('.albumart img').src = state.songdetail.albumart
+          }
 
           vioSocket.get.queue()
 
@@ -155,64 +171,6 @@ var domBuilder = (function () {
           )
 
           main.appendChild(frag)
-          break
-
-        case 'files':
-          title = 'Files'
-          data = data.navigation.lists[0].items
-
-          // we need this to set the next urls
-          var route = router.lastRoute().url
-
-          route = route.substr(route.indexOf('file') + 5, route.length)
-          if (route !== '') {
-            route = route + '/'
-          }
-
-          // main fragment to attach to page
-          frag = cr.div({ class: 'container is-fluid' })
-
-          // append the library buttons
-          // frag.appendChild(breadcrumb([{ title: 'Files', url: null }]))
-          frag.appendChild(cr.p({ class: 'title is-3 is-capitalized' }, title))
-
-          // we probably need a breadcrumb here <--------------------------
-
-          // process any folders
-          frag.appendChild(
-            cr.div({ class: 'columns is-mobile is-multiline artist-list' },
-              data.filter(function (item) {
-                if (item.type === 'folder') {
-                  return item
-                }
-              }).map(function (album) {
-                return buildTile({
-                  title: album.title,
-                  image: vioSocket.getURL(album.albumart),
-                  href: 'file/' + route + encodeURIComponent(album.title)
-                })
-              })
-            )
-          )
-
-          // process any songs
-          frag.appendChild(
-            cr.table({ class: 'table is-fullwidth songs songs-hover' },
-              cr.tbody(
-                data.filter(function (item) {
-                  if (item.type === 'song') {
-                    return item
-                  }
-                }).map(function (song) {
-                  return buildTrack(song)
-                })
-              )
-            )
-          )
-
-          // append the fragment
-          main.appendChild(frag)
-
           break
 
         case 'album':
@@ -564,8 +522,7 @@ var domBuilder = (function () {
 
       // this whole section updates the footer (now playing) banner
       if (changed.includes('albumart')) {
-        var art = vioSocket.getURL(state.albumart)
-        document.querySelector('#control-bar .now-playing img').src = art
+        document.querySelector('#control-bar .now-playing img').src = state.albumart
       }
       if (changed.includes('title')) {
         document.querySelector('#control-bar .now-playing .title').innerText = state.title
@@ -603,7 +560,8 @@ var domBuilder = (function () {
         document.querySelector('#control-bar .duration').innerText = uiTools.formatTime(state.duration)
       }
 
-      if (changed.includes('status')) {
+	    console.log(changed)
+      if (changed.includes('state')) {
         var btn = document.querySelector('.playing-controls .play-button')
         var use = btn.querySelector('use')
         if (state.status === 'play') {

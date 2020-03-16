@@ -150,7 +150,7 @@ var vioSocket = (function () {
       }
     },
     play: function (pos) {
-      if (index === undefined) {
+      if (pos === undefined) {
         server.send('play')
       } else {
         server.send('play', { pos: pos })
