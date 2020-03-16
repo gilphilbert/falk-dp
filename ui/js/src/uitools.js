@@ -1,4 +1,4 @@
-/* global dataTools, vioSocket */
+/* global dataTools, webSocket */
 
 var uiTools = (function () {
   var _title = ''
@@ -88,7 +88,7 @@ var uiTools = (function () {
     // user clicks "clear-queue"
     /*
     document.querySelector('#queue .clear-queue').addEventListener('click', function (e) {
-      vioSocket.action.clearQueue()
+      webSocket.action.clearQueue()
       document.getElementById('queue').classList.remove('is-active')
     })
     */
@@ -117,7 +117,7 @@ var uiTools = (function () {
       var name = inp.value
       var regex = /^[a-z0-9-_!?@ ]+$/i
       if (regex.test(name)) {
-        vioSocket.action.saveQueue(name)
+        webSocket.action.saveQueue(name)
         inp.classList.remove('is-danger')
         inp.closest('.field').querySelector('.help').innerText = ''
         this.classList.add('is-loading')
@@ -138,30 +138,30 @@ var uiTools = (function () {
 
       // if (this.classList.contains('playing')) {
       if (status === 'play') {
-        vioSocket.action.pause()
+        webSocket.action.pause()
       } else {
-        vioSocket.action.play()
+        webSocket.action.play()
       }
     })
 
     // user clicks "repeat"
     document.querySelector('.misc-controls .repeat').addEventListener('click', function (e) {
-      vioSocket.action.toggleRepeat()
+      webSocket.action.toggleRepeat()
     })
 
     // user clicks "next"
     document.querySelector('.playing-controls .next').addEventListener('click', function (e) {
-      vioSocket.action.next()
+      webSocket.action.next()
     })
 
     // user clicks "prev"
     document.querySelector('.playing-controls .prev').addEventListener('click', function (e) {
-      vioSocket.action.prev()
+      webSocket.action.prev()
     })
 
     // user clicks "random"
     document.querySelector('.misc-controls .random').addEventListener('click', function (e) {
-      vioSocket.action.toggleRandom()
+      webSocket.action.toggleRandom()
     })
 
     // hide dropdowns when they're clicked out of
@@ -214,26 +214,26 @@ var uiTools = (function () {
           qp = i
         }
       }
-      vioSocket.action.replaceAndPlay(uris, qp)
+      webSocket.action.replaceAndPlay(uris, qp)
     },
     dropdown: function (e) {
       this.closest('.dropdown').classList.toggle('is-active')
     },
     removeSong: function (e) {
       var pos = this.closest('tr').dataset.position
-      vioSocket.action.removeFromQueue(pos)
+      webSocket.action.removeFromQueue(pos)
     },
     playSong: function (e) {
-      vioSocket.action.addPlay({ uri: this.closest('tr').dataset.uri })
+      webSocket.action.addPlay({ uri: this.closest('tr').dataset.uri })
       this.closest('.dropdown').classList.remove('is-active')
     },
     queueSong: function (e) {
       var track = [{ uri: this.closest('tr').dataset.uri }]
-      vioSocket.action.enqueue(track)
+      webSocket.action.enqueue(track)
       this.closest('.dropdown').classList.remove('is-active')
     },
     replaceWithSong: function (e) {
-      vioSocket.action.replaceAndPlay([{ uri: this.closest('tr').dataset.uri }])
+      webSocket.action.replaceAndPlay([{ uri: this.closest('tr').dataset.uri }])
       this.closest('.dropdown').classList.remove('is-active')
     },
     addShare: function (el) {
@@ -255,7 +255,7 @@ var uiTools = (function () {
       //   path must be a valid path (and not empty)
       //   username must be valid (and must be specified for SMB only)
       //   password must be valid (and must be specified for SMB only)
-      vioSocket.action.addShare(vals)
+      webSocket.action.addShare(vals)
     }
   }
 

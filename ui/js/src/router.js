@@ -1,4 +1,4 @@
-/* global vioSocket, domBuilder, dataTools, uiTools */
+/* global webSocket, domBuilder, dataTools, uiTools */
 
 var router = (function () {
   var _router = new window.Navigo('/', false, '#')
@@ -9,49 +9,49 @@ var router = (function () {
       .on({
         playlists: function () {
           domBuilder.page.setLoad('playlists')
-          vioSocket.get.playlists()
+          webSocket.get.playlists()
         },
         'playlist/:playlist': function (params) {
           domBuilder.page.setLoad('playlist')
-          vioSocket.get.playlist(params.playlist)
+          webSocket.get.playlist(params.playlist)
         },
         files: function () {
           domBuilder.page.setLoad('files')
-          vioSocket.get.files()
+          webSocket.get.files()
         },
         'file/:location': function (params) {
           domBuilder.page.setLoad('files')
-          vioSocket.get.files('/' + encodeURI(params.location))
+          webSocket.get.files('/' + encodeURI(params.location))
         },
         'file/:location/*': function (params, query) {
           var rt = decodeURI(_router.lastRouteResolved().url) // get the most recent URL (add spaces back)
           rt = rt.substr(rt.indexOf('file/') + 4, rt.length) // get only the parameters, not the url
           domBuilder.page.setLoad('files') // load the files page
-          vioSocket.get.files(rt) // request the data
+          webSocket.get.files(rt) // request the data
         },
         artists: function () {
           domBuilder.page.setLoad('artists')
-          vioSocket.get.artists()
+          webSocket.get.artists()
         },
         'artist/:artist': function (params) {
           domBuilder.page.setLoad('artist')
-          vioSocket.get.artists(encodeURIComponent(params.artist))
+          webSocket.get.artists(encodeURIComponent(params.artist))
         },
         albums: function () {
           domBuilder.page.setLoad('albums')
-          vioSocket.get.albums()
+          webSocket.get.albums()
         },
         'album/:artist/:album': function (params) {
           domBuilder.page.setLoad('album')
-          vioSocket.get.albums(encodeURIComponent(params.artist) + '/' + encodeURIComponent(params.album))
+          webSocket.get.albums(encodeURIComponent(params.artist) + '/' + encodeURIComponent(params.album))
         },
         genres: function () {
           domBuilder.page.setLoad('genres')
-          vioSocket.get.genres()
+          webSocket.get.genres()
         },
         'genre/:genre': function (params) {
           domBuilder.page.setLoad('genre')
-          vioSocket.get.genres(encodeURIComponent(params.genre))
+          webSocket.get.genres(encodeURIComponent(params.genre))
         },
         'settings/:page': function (params) {
           domBuilder.page.setLoad('settings')

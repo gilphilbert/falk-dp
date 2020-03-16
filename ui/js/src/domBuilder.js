@@ -1,4 +1,4 @@
-/* global uiTools, dataTools, vioSocket, router */
+/* global uiTools, dataTools, webSocket, router */
 
 var domBuilder = (function () {
   var cr = window.crel.proxy
@@ -86,7 +86,7 @@ var domBuilder = (function () {
             cr.img({ src: queue[i].albumart })
           )
         ),
-        cr.td({ class: 'song-title', 'data-position': i, on: { click: function () { vioSocket.action.play(this.dataset.position) } } },
+        cr.td({ class: 'song-title', 'data-position': i, on: { click: function () { webSocket.action.play(this.dataset.position) } } },
           queue[i].title
         ),
         cr.td(
@@ -164,7 +164,7 @@ var domBuilder = (function () {
             frag.querySelector('.albumart img').src = state.songdetail.albumart
           }
 
-          vioSocket.get.queue()
+          webSocket.get.queue()
 
           frag.appendChild(
             cr.table({ id: 'queue-table', class: 'table is-fullwidth' })
@@ -191,7 +191,7 @@ var domBuilder = (function () {
             cr.div({ class: 'columns is-multiline is-mobile album-detail' },
               cr.div({ class: 'column is-3-desktop is-12-mobile' },
                 cr.figure({ class: 'image is-1by1 albumart' },
-                  cr.img({ src: vioSocket.getURL(info.albumart) })
+                  cr.img({ src: webSocket.getURL(info.albumart) })
                 )
               ),
               cr.div({ class: 'column is-8-desktop is-12-mobile' },
@@ -283,7 +283,7 @@ var domBuilder = (function () {
             cr.div({ class: 'columns artist-info is-mobile' },
               cr.div({ class: 'column is-2-tablet is-2-desktop is-4-mobile' },
                 cr.figure({ class: 'image artistart' },
-                  cr.img({ src: vioSocket.getURL(info.albumart) })
+                  cr.img({ src: webSocket.getURL(info.albumart) })
                 )
               ),
               cr.div({ class: 'column is-4' },
@@ -299,7 +299,7 @@ var domBuilder = (function () {
               albums.map(function (album) {
                 return buildTile({
                   title: album.title,
-                  image: vioSocket.getURL(album.albumart),
+                  image: webSocket.getURL(album.albumart),
                   href: 'album/' + encodeURIComponent(album.artist) + '/' + encodeURIComponent(album.title),
                   uri: album.uri
                 })
@@ -409,7 +409,7 @@ var domBuilder = (function () {
                 }
                 container.appendChild(buildTile({
                   title: item.title,
-                  image: vioSocket.getURL(item.albumart),
+                  image: webSocket.getURL(item.albumart),
                   href: tlnk + '/' + encodeURIComponent(item.title)
                 }))
               })
@@ -489,7 +489,7 @@ var domBuilder = (function () {
                       return cr.tr({ 'data-uri': song.uri },
                         cr.td(
                           cr.figure({ class: 'image is-24x24' },
-                            cr.img({ src: vioSocket.getURL(song.albumart) })
+                            cr.img({ src: webSocket.getURL(song.albumart) })
                           )
                         ),
                         cr.td(song.title),
@@ -500,7 +500,7 @@ var domBuilder = (function () {
                           cr.a({ href: 'album/' + encodeURIComponent(song.artist) + '/' + encodeURIComponent(song.album) }, song.album)
                         ),
                         cr.td(
-                          cr.span({ class: 'delete', on: { click: function () { vioSocket.action.removeFromPlaylist({ name: `${name}`, uri: `${song.uri}` }) } } })
+                          cr.span({ class: 'delete', on: { click: function () { webSocket.action.removeFromPlaylist({ name: `${name}`, uri: `${song.uri}` }) } } })
                         )
                       )
                     })
@@ -580,7 +580,7 @@ var domBuilder = (function () {
         uiTools.setPageTitle()
       } else if (changed.includes('status') || changed.includes('title')) {
         // update the queue when state or track changes
-        vioSocket.get.queue()
+        webSocket.get.queue()
       }
     },
     settings: function (subpage) {
@@ -637,9 +637,9 @@ var domBuilder = (function () {
                   cr.div({ class: 'field' },
                     cr.div({ class: 'control' },
                       cr.div({ class: 'buttons' },
-                        cr.button({ class: 'button is-primary', on: { click: () => { vioSocket.action.updateLibrary() } } }, 'Update Library'),
-                        cr.button({ class: 'button is-primary', on: { click: () => { vioSocket.action.rescanLibrary() } } }, 'Rescan Library'),
-                        cr.button({ class: 'button is-primary', on: { click: () => { vioSocket.action.updateMetadata() } } }, 'Update Metadata')
+                        cr.button({ class: 'button is-primary', on: { click: () => { webSocket.action.updateLibrary() } } }, 'Update Library'),
+                        cr.button({ class: 'button is-primary', on: { click: () => { webSocket.action.rescanLibrary() } } }, 'Rescan Library'),
+                        cr.button({ class: 'button is-primary', on: { click: () => { webSocket.action.updateMetadata() } } }, 'Update Metadata')
                       )
                     )
                   )
@@ -667,7 +667,7 @@ var domBuilder = (function () {
           cont.appendChild(frag)
 
           // load the database stats
-          vioSocket.get.libraryStats((data) => {
+          webSocket.get.libraryStats((data) => {
             cont.querySelector('.field.song-count').innerText = data.songs
             cont.querySelector('.field.artist-count').innerText = data.artists
             cont.querySelector('.field.album-count').innerText = data.albums
@@ -694,7 +694,7 @@ var domBuilder = (function () {
           cont.appendChild(frag)
 
           // load the audio devices
-          vioSocket.get.audioDevices((data) => {
+          webSocket.get.audioDevices((data) => {
             var el = document.querySelector('#playback-device')
             if (el !== undefined && data) {
               var active = data.devices.active.id
@@ -723,7 +723,7 @@ var domBuilder = (function () {
                       cr.input({ class: 'input', type: 'text', on: { keyup: function () { this.parentNode.querySelector('button').classList.remove('is-hidden') } } })
                     ),
                     cr.div({ class: 'control' },
-                      cr.button({ class: 'button is-primary', on: { click: function () { vioSocket.set.deviceName(this.parentNode.querySelector('input').value) } } }, uiTools.getSVG('save'))
+                      cr.button({ class: 'button is-primary', on: { click: function () { webSocket.set.deviceName(this.parentNode.querySelector('input').value) } } }, uiTools.getSVG('save'))
                     )
                   )
                 )
@@ -736,7 +736,7 @@ var domBuilder = (function () {
                   cr.div({ class: 'field', id: 'system-version' },
                     cr.p(
                       cr.span(),
-                      cr.button({ class: 'button is-small is-primary', on: { click: function () { vioSocket.action.updateCheck(); this.classList.add('is-info'); this.classList.add('is-loading') } } }, uiTools.getSVG('rotate-cw'))
+                      cr.button({ class: 'button is-small is-primary', on: { click: function () { webSocket.action.updateCheck(); this.classList.add('is-info'); this.classList.add('is-loading') } } }, uiTools.getSVG('rotate-cw'))
                     )
                   )
                 )
@@ -749,8 +749,8 @@ var domBuilder = (function () {
                   cr.div({ class: 'field' },
                     cr.div({ class: 'control' },
                       cr.div({ class: 'buttons' },
-                        cr.button({ class: 'button is-danger', on: { click: () => { vioSocket.action.reboot(); pageLoader(true, { msg: 'Rebooting' }) } } }, 'Reboot'),
-                        cr.button({ class: 'button is-danger', on: { click: () => { vioSocket.action.shutdown(); pageLoader(true, { msg: 'Powering down' }) } } }, 'Shutdown')
+                        cr.button({ class: 'button is-danger', on: { click: () => { webSocket.action.reboot(); pageLoader(true, { msg: 'Rebooting' }) } } }, 'Reboot'),
+                        cr.button({ class: 'button is-danger', on: { click: () => { webSocket.action.shutdown(); pageLoader(true, { msg: 'Powering down' }) } } }, 'Shutdown')
                       )
                     )
                   )
@@ -760,14 +760,14 @@ var domBuilder = (function () {
           )
           cont.appendChild(frag)
           // load the system version
-          vioSocket.get.version((data) => {
+          webSocket.get.version((data) => {
             var el = document.querySelector('#system-version p span')
             if (el !== undefined && data) {
               var v = data.systemversion + ' (' + data.builddate + ') '
               el.innerText = v
             }
           })
-          vioSocket.get.deviceName((data) => {
+          webSocket.get.deviceName((data) => {
             var el = document.querySelector('#device-name input')
             if (el !== undefined && data) {
               el.value = data.name
@@ -877,10 +877,10 @@ var domBuilder = (function () {
           )
         )
       )
-      vioSocket.get.playlists((data) => {
+      webSocket.get.playlists((data) => {
         var tbody = cr.tbody(
           data.map(function (playlist) {
-            return cr.tr(cr.td(playlist), cr.td(cr.button({ class: 'button', on: { click: () => { vioSocket.action.addToPlaylist({ name: `${playlist}`, service: `${song.service}`, uri: `${song.uri}` }); uiTools.closeModal() } } }, 'Select')))
+            return cr.tr(cr.td(playlist), cr.td(cr.button({ class: 'button', on: { click: () => { webSocket.action.addToPlaylist({ name: `${playlist}`, service: `${song.service}`, uri: `${song.uri}` }); uiTools.closeModal() } } }, 'Select')))
           })
         )
         modal.querySelector('table').appendChild(tbody)

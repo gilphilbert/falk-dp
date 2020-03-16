@@ -1,6 +1,6 @@
 /* global domBuilder, dataTools */
 
-var vioSocket = (function () {
+var webSocket = (function () {
   /* ----------- PRIVATE VARIABLES ----------- */
   var _functions = []
   var _host = ''
