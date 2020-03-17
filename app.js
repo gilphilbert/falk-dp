@@ -11,6 +11,11 @@ app.use('/art', artcache)
 // serve the static files (the UI)
 app.use('/dev', express.static('public'))
 
+app.get('/artist*', (req, res) => res.redirect("/"))
+app.get('/album*', (req, res) => res.redirect("/"))
+app.get('/playlist*', (req,res) => res.redirect("/"))
+app.get('/genre*', (req,res) => res.redirect("/"))
+
 app.use(express.static('ui'))
 
 // start the app	

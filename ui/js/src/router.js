@@ -19,23 +19,14 @@ var router = (function () {
           domBuilder.page.setLoad('files')
           webSocket.get.files()
         },
-        'file/:location': function (params) {
-          domBuilder.page.setLoad('files')
-          webSocket.get.files('/' + encodeURI(params.location))
-        },
-        'file/:location/*': function (params, query) {
-          var rt = decodeURI(_router.lastRouteResolved().url) // get the most recent URL (add spaces back)
-          rt = rt.substr(rt.indexOf('file/') + 4, rt.length) // get only the parameters, not the url
-          domBuilder.page.setLoad('files') // load the files page
-          webSocket.get.files(rt) // request the data
-        },
         artists: function () {
           domBuilder.page.setLoad('artists')
           webSocket.get.artists()
         },
         'artist/:artist': function (params) {
+          console.log(params)
           domBuilder.page.setLoad('artist')
-          webSocket.get.artists(encodeURIComponent(params.artist))
+          webSocket.get.artistAlbums(params.artist)
         },
         albums: function () {
           domBuilder.page.setLoad('albums')

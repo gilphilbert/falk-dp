@@ -30,10 +30,10 @@ async function setup() {
         mpdc.api.queue.info()
           .then(d => {
             d.forEach((i) => {
-	      i.albumart = "/art/album/" + encodeURIComponent(i.artist) + "/" + encodeURIComponent(i.album)
-	    })
-	    broadcast("pushQueue", { queue: d })
-	  })
+	            i.albumart = "/art/album/" + encodeURIComponent(i.artist) + "/" + encodeURIComponent(i.album)
+	          })
+	          broadcast("pushQueue", { queue: d })
+	        })
         break
       case "player":
         mpdc.api.status.get()
@@ -60,7 +60,7 @@ async function setup() {
               if (status.song !== undefined && status.state != "stop") {
                 songdetail = queue.filter((qs) => {
                   return qs.pos == status.song
-		})[0]
+		            })[0]
 
                 status.title = songdetail.title
                 status.artist = songdetail.artist
@@ -79,7 +79,7 @@ async function setup() {
                 delete(status.audio)
                 delete(status.playlist)
                 delete(status.songid)
-	      }
+	            }
               disp.send("pushStatus", status)
             })
         })
@@ -102,13 +102,13 @@ async function setup() {
           netmount = mounts.filter((m) => {
             if ("storage" in m) {
               return m.storage.startsWith("smb") || m.storage.startsWith("nfs")
-	    }
+	          }
             return false
-	  }).map((m) => {
+	        }).map((m) => {
             return m.mount
           })
           netmount.forEach(i => mpdc.api.db.update(i).then(d => console.log(d)))
-	})
+	      })
     })
 
     // db listing
@@ -122,7 +122,7 @@ async function setup() {
 
     disp.bind("getAlbums", function () {
       mpdc.api.db.list("album", null, "albumartist")
-	.then((d) => {
+	      .then((d) => {
           mod = d.reduce((arr, item) => {
             item.album.forEach((e) => {
               var flat = {
@@ -141,7 +141,7 @@ async function setup() {
 
     disp.bind("getGenres", function () {
       mpdc.api.db.list("genre")
-	.then((d) => {
+	      .then((d) => {
           var mod = d.map(i => i.genre)
           disp.send("pushGenres", mod)
         })
@@ -161,14 +161,15 @@ async function setup() {
     })
 
     disp.bind("getArtistAlbums", function (data) {
+      console.log(data)
       mpdc.api.db.list("album", `(albumartist == "${data.artist}")`)
         .then((d) => {
           mod = d.map((d) => {
-	    return {
+	          return {
               title: d.album,
               albumart: "/art/album/" + encodeURIComponent(data.artist) + "/" + encodeURIComponent(d.album)
             }
-	  })
+	        })
           var out = {
             artist: {
               title: data.artist,
@@ -193,7 +194,7 @@ async function setup() {
       var point = data.path.substr(data.path.lastIndexOf("/")+1, data.path.length)
       var share = data.type + "://" + data.host + data.path
       mpdc.api.mounts.mount(point, share)
-	.then(() => {
+	      .then(() => {
           mpdc.api.mounts.list()
             .then((d) => {
               disp.send("pushMounts", d)
@@ -203,7 +204,7 @@ async function setup() {
 
     disp.bind("unmount", function (data) {
       mpdc.api.mounts.unmount(data.mountpoint)
-	.then((resp) => {
+	      .then((resp) => {
           mpdc.api.mounts.list((d) => {
             disp.send("pushMounts", d)
           })
@@ -217,7 +218,6 @@ async function setup() {
           d.forEach((i) => {
             i.albumart = "/art/album/" + encodeURIComponent(i.artist) + "/" + encodeURIComponent(i.album)
           })
-		  console.log(d)
           disp.send("pushQueue", d)
         })
     })
@@ -237,10 +237,10 @@ async function setup() {
         var promises=[]
         for (i=0; i<songs.length; i++) {
           promises[i] = mpdc.api.queue.addid(songs[i].uri)
-	}
+	      }
         Promise.all(promises).then((values) => {
           mpdc.api.playback.playid(values[0])
-	})
+	      })
       }
     })
 

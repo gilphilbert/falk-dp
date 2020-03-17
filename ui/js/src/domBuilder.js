@@ -131,7 +131,7 @@ var domBuilder = (function () {
           var frag = cr.div({ class: 'container is-fluid' })
 
           var quality = ""
-          if ('songdetail' in state) {
+          if ('title' in state) {
             songdetail = state.songdetail
             quality = (songdetail.audio.sampleRate / 1000) + "kHz" + " " + songdetail.audio.bits + 'bit'
           } else {
@@ -140,7 +140,7 @@ var domBuilder = (function () {
               artist: "",
               album: "",
               albumart: ""
-	    }
+	          }
           }
 
           frag.appendChild(
@@ -160,7 +160,6 @@ var domBuilder = (function () {
           )
 		      
           if ("songdetail" in state) {
-		  console.log(state.songdetail.albumart)
             frag.querySelector('.albumart img').src = state.songdetail.albumart
           }
 
@@ -254,23 +253,22 @@ var domBuilder = (function () {
 
         case 'artist':
           // set the page title
-          title = data.navigation.info.title
+          title = data.artist.title
 
           // list of the artist's albums
-          albums = data.navigation.lists[0].items
+          albums = data.albums
 
           // list of the artist's songs
-          songs = data.navigation.lists[1].items
+          //songs = data.navigation.lists[1].items
 
           // find all the songs that aren't in an album
+          /*
           var orphanSongs = songs.filter(function (song) {
             if (song.album === '') {
               return song
             }
           })
-
-          // the artist information
-          info = data.navigation.info
+          */
 
           // create main fragment
           frag = cr.div({ class: 'container is-fluid' })
@@ -283,12 +281,12 @@ var domBuilder = (function () {
             cr.div({ class: 'columns artist-info is-mobile' },
               cr.div({ class: 'column is-2-tablet is-2-desktop is-4-mobile' },
                 cr.figure({ class: 'image artistart' },
-                  cr.img({ src: webSocket.getURL(info.albumart) })
+                  cr.img({ src: data.artist.albumart })
                 )
               ),
               cr.div({ class: 'column is-4' },
-                cr.p({ class: 'title is-4' }, data.navigation.info.title),
-                cr.p({ class: 'subtitle is-6' }, albums.length + ' album' + ((albums.length > 1 || albums.length === 0) ? 's' : '') + ' - ' + songs.length + ' track' + ((songs.length > 1) ? 's' : ''))
+                cr.p({ class: 'title is-4' }, data.artist.title),
+                cr.p({ class: 'subtitle is-6' }, albums.length + ' album' + ((albums.length > 1 || albums.length === 0) ? 's' : '') )// + ' - ' + songs.length + ' track' + ((songs.length > 1) ? 's' : ''))
               )
             )
           )
@@ -299,7 +297,7 @@ var domBuilder = (function () {
               albums.map(function (album) {
                 return buildTile({
                   title: album.title,
-                  image: webSocket.getURL(album.albumart),
+                  image: album.albumart,
                   href: 'album/' + encodeURIComponent(album.artist) + '/' + encodeURIComponent(album.title),
                   uri: album.uri
                 })
@@ -308,6 +306,7 @@ var domBuilder = (function () {
           )
 
           // append any 'orphan' songs (songs not in an album)
+          /*
           frag.appendChild(
             cr.table({ class: 'table is-fullwidth songs songs-hover' },
               cr.tbody(
@@ -321,6 +320,7 @@ var domBuilder = (function () {
               )
             )
           )
+          */
 
           // append the main fragment to the page
           main.appendChild(frag)
@@ -516,7 +516,6 @@ var domBuilder = (function () {
       _loadPage = ''
     },
     updateState: function (newState) {
-      console.log(newState)
       var changed = dataTools.changeState(newState)
       var state = dataTools.getState()
 
@@ -560,11 +559,10 @@ var domBuilder = (function () {
         document.querySelector('#control-bar .duration').innerText = uiTools.formatTime(state.duration)
       }
 
-	    console.log(changed)
       if (changed.includes('state')) {
         var btn = document.querySelector('.playing-controls .play-button')
         var use = btn.querySelector('use')
-        if (state.status === 'play') {
+        if (state.state === 'play') {
           use.setAttribute('xlink:href', '/img/feather-sprite.svg#pause')
           uiTools.progress.startCounting()
         } else {

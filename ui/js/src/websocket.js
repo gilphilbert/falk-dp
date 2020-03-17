@@ -83,19 +83,22 @@ var webSocket = (function () {
     shares: function () {
       server.send('getOutputs')
     },
-    playlists: function (func) {
+    playlists: function () {
       server.send("getPlaylists")
     },
     playlist: function (name) {
       server.send('getPlaylist', { name: name })
     },
-    artists: function (name) {
+    artists: function () {
       server.send('getArtists')
     },
-    albums: function (name) {
+    artistAlbums: function (name) {
+      server.send('getArtistAlbums', { artist: name })
+    },
+    albums: function () {
       server.send('getAlbums')
     },
-    genres: function (name) {
+    genres: function () {
       server.send('getGenres')
     },
     libraryStats: function () {
@@ -157,6 +160,7 @@ var webSocket = (function () {
       }
     },
     pause: function () {
+      console.log('pausing')
       server.send('pause')
     },
     next: function () {

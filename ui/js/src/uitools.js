@@ -134,10 +134,10 @@ var uiTools = (function () {
     */
 
     document.querySelector('.playing-controls .play-button').addEventListener('click', function (e) {
-      var status = dataTools.getState().status
+      var state = dataTools.getState().state
 
       // if (this.classList.contains('playing')) {
-      if (status === 'play') {
+      if (state === 'play') {
         webSocket.action.pause()
       } else {
         webSocket.action.play()
@@ -259,32 +259,6 @@ var uiTools = (function () {
     }
   }
 
-  var lastfmLookup = {
-    lookup: function (params) {
-      var url = 'http://ws.audioscrobbler.com/2.0/?method=' + params + '&api_key=bff916a170cd9f49ba958e28dd2b03b1&format=json'
-      fetch(url, {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/x-www-form-urlencoded'
-        },
-        body: {}
-      })
-        .then(response => {
-          console.log(response)
-          response.json().then(data => {
-            console.log(data) 
-          })
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    },
-    artist: function (artist) {
-      this.lookup('artist.getinfo&artist=Cher')
-
-    }
-  }
-
   var closeModal = function () {
     var el = document.querySelector('#modal-container .modal')
     if (el !== undefined) {
@@ -302,7 +276,6 @@ var uiTools = (function () {
     setPageTitle: setPageTitle,
     progress: progress,
     formatTime: formatTime,
-    lastfmLookup: lastfmLookup,
     showBackground: showBackground,
     handlers: handlers,
     closeModal: closeModal,
