@@ -1,3 +1,3 @@
 #!/bin/bash
-sass master.scss:../volumio.css
-sass --style=compressed master.scss:../volumio.min.css
+sass master.scss:../moosic.css
+sass --style=compressed master.scss:../moosic.min.css

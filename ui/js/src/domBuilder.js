@@ -127,21 +127,13 @@ var domBuilder = (function () {
       switch (_loadPage) {
         case 'home':
           var state = dataTools.getState()
-
           var frag = cr.div({ class: 'container is-fluid' })
 
           var quality = ""
-          if ('title' in state) {
-            songdetail = state.songdetail
-            quality = (songdetail.audio.sampleRate / 1000) + "kHz" + " " + songdetail.audio.bits + 'bit'
-          } else {
-            songdetail = {
-              title: "Not playing",
-              artist: "",
-              album: "",
-              albumart: ""
-	          }
+          if (state.sampleRate && state.bits) {
+            quality = (state.sampleRate / 1000) + "kHz" + " " + state.bits + 'bit'
           }
+
 
           frag.appendChild(
             cr.div({ class: 'columns home' },
@@ -151,16 +143,18 @@ var domBuilder = (function () {
                 )
               ),
               cr.div({ class: 'column' },
-                cr.p({ class: 'title is-3' }, songdetail.title),
-                cr.p({ class: 'artist subtitle is-5' }, 'By ', cr.a({ href: 'artist/' + songdetail.artist, 'data-navigo': '' }, songdetail.artist)),
-                cr.p({ class: 'album subtitle is-5' }, 'From the album ', cr.a({ href: 'album/' + songdetail.artist + '/' + songdetail.album, 'data-navigo': '' }, songdetail.album)),
+                cr.p({ class: 'title is-3' }, state.title),
+                cr.p({ class: 'artist subtitle is-5' }, 'By ', cr.a({ href: 'artist/' + state.artist, 'data-navigo': '' }, state.artist)),
+                cr.p({ class: 'album subtitle is-5' }, 'From the album ', cr.a({ href: 'album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album)),
                 cr.p({ class: 'detail subtitle is-5 is-hidden-mobile' }, quality)
               )
             )
           )
 		      
-          if ("songdetail" in state) {
-            frag.querySelector('.albumart img').src = state.songdetail.albumart
+          if ("albumart" in state) {
+            frag.querySelector('.albumart img').src = state.albumart
+          } else {
+            frag.querySelector('.albumart img').src = '/img/notplaying.png'
           }
 
           webSocket.get.queue()
@@ -174,13 +168,12 @@ var domBuilder = (function () {
 
         case 'album':
           // set the page title
-          title = data.navigation.info.album
+          console.log(data)
+          title = data.title + " - " + data.artist
 
           // list of songs in this album
-          var songs = data.navigation.lists[0].items
-
-          // this is the album information
-          var info = data.navigation.info
+          const duration = uiTools.formatTime(Math.round(data.songs.reduce((total, song) => total + parseFloat(song.duration), 0)))
+          console.log(duration)
 
           // create the main fragment
           frag = cr.div({ class: 'container is-fluid' })
@@ -190,14 +183,14 @@ var domBuilder = (function () {
             cr.div({ class: 'columns is-multiline is-mobile album-detail' },
               cr.div({ class: 'column is-3-desktop is-12-mobile' },
                 cr.figure({ class: 'image is-1by1 albumart' },
-                  cr.img({ src: webSocket.getURL(info.albumart) })
+                  cr.img({ src: data.albumart })
                 )
               ),
               cr.div({ class: 'column is-8-desktop is-12-mobile' },
                 cr.p({ class: 'is-uppercase has-text-weight-semibold is-hidden-mobile' }, 'Album'),
-                cr.p({ class: 'title is-3 album-title has-text-weight-semibold' }, info.album),
-                cr.p('By ', cr.a({ class: 'artist has-text-weight-semibold', 'data-navigo': '', href: 'artist/' + encodeURIComponent(info.artist) }, info.artist)),
-                cr.p({ class: 'detail' }, songs.length + ' Song' + ((songs.length > 1) ? 's' : '') + ' - ' + info.duration + ((info.year) ? ' - ' + info.year : '')),
+                cr.p({ class: 'title is-3 album-title has-text-weight-semibold' }, data.title),
+                cr.p('By ', cr.a({ class: 'artist has-text-weight-semibold', 'data-navigo': '', href: 'artist/' + encodeURIComponent(data.artist) }, data.artist)),
+                cr.p({ class: 'detail' }, data.songs.length + ' Song' + ((data.songs.length > 1) ? 's' : '') + ' - ' + duration + ((data.songs[0].date) ? ' - ' + data.songs[0].date : '')),
                 cr.span({ class: 'tags' }),
                 cr.button({ class: 'button is-rounded is-primary' }, 'Play album')
               )
@@ -207,7 +200,7 @@ var domBuilder = (function () {
           frag.appendChild(
             cr.table({ class: 'table is-fullwidth songs songs-hover' },
               cr.tbody(
-                songs.map(function (song) {
+                data.songs.map(function (song) {
                   return buildTrack(song)
                 })
               )
@@ -298,7 +291,7 @@ var domBuilder = (function () {
                 return buildTile({
                   title: album.title,
                   image: album.albumart,
-                  href: 'album/' + encodeURIComponent(album.artist) + '/' + encodeURIComponent(album.title),
+                  href: 'album/' + encodeURIComponent(data.artist.title) + '/' + encodeURIComponent(album.title),
                   uri: album.uri
                 })
               })
@@ -523,6 +516,10 @@ var domBuilder = (function () {
       if (changed.includes('albumart')) {
         document.querySelector('#control-bar .now-playing img').src = state.albumart
       }
+      if (!state.albumart) {
+        document.querySelector('#control-bar .now-playing img').src = '/img/notplaying.png'
+      }
+
       if (changed.includes('title')) {
         document.querySelector('#control-bar .now-playing .title').innerText = state.title
       }
@@ -553,9 +550,9 @@ var domBuilder = (function () {
         }
       }
 
-      if (changed.includes('seek')) {
-        uiTools.progress.set(state.seek, state.duration)
-        document.querySelector('#control-bar .seek').innerText = uiTools.formatTime(Math.round(state.seek / 1000))
+      if (changed.includes('elapsed')) {
+        uiTools.progress.set(state.elapsed, state.duration)
+        document.querySelector('#control-bar .seek').innerText = uiTools.formatTime(state.elapsed)
         document.querySelector('#control-bar .duration').innerText = uiTools.formatTime(state.duration)
       }
 
@@ -568,6 +565,7 @@ var domBuilder = (function () {
         } else {
           use.setAttribute('xlink:href', '/img/feather-sprite.svg#play')
           uiTools.progress.stopCounting()
+          uiTools.progress.updateProgress()
         }
         uiTools.setPageTitle({ state })
       }

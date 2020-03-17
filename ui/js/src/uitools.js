@@ -81,6 +81,16 @@ var uiTools = (function () {
     set: function (seek, duration) {
       this._seek = seek
       this._duration = duration
+    },
+    updateProgress: function () {
+      console.log(this._seek)
+      console.log(this._duration)
+      var p = Math.round((this._seek / 100) / (this._duration * 100))
+      var p = this._seek / this._duration * 1000
+      console.log(p)
+      if (!isNaN(p) && p !== Infinity) {
+        document.querySelector('#control-bar .play-progress progress').value = p
+      }
     }
   }
 

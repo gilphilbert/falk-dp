@@ -95,6 +95,9 @@ var webSocket = (function () {
     artistAlbums: function (name) {
       server.send('getArtistAlbums', { artist: name })
     },
+    album: function(artist, title) {
+      server.send('getAlbum', { artist: artist, title: title })
+    },
     albums: function () {
       server.send('getAlbums')
     },

@@ -24,6 +24,36 @@ async function setup() {
     })
   }
 
+  async function getStatus () {
+    var status = await mpdc.api.status.get()
+    var queue = await mpdc.api.queue.info()
+    if (status.song !== undefined && status.state != "stop") {
+      songdetail = queue.filter((qs) => {
+        return qs.pos == status.song
+      })[0]
+
+      status.title = songdetail.title
+      status.artist = songdetail.artist
+      status.album = songdetail.album
+      status.genre = songdetail.genre
+      status.date = songdetail.date
+      status.albumart = "/art/album/" + songdetail.artist + "/" + songdetail.album
+
+      status.duration = status.time.total
+      status.elapsed = status.time.elapsed
+      delete(status.time)
+
+      status.sampleRate = status.audio.sampleRate
+      status.bits = status.audio.bits
+      status.channels = status.audio.channels
+      delete(status.audio)
+      delete(status.playlist)
+      delete(status.songid)
+    }
+    return status
+    //disp.send("pushStatus", status)
+  }
+
   mpdc.on("system", (e) => {
     switch(e) {
       case "playlist":
@@ -36,8 +66,9 @@ async function setup() {
 	        })
         break
       case "player":
-        mpdc.api.status.get()
-          .then(d => broadcast("pushStatus", d))
+        //mpdc.api.status.get()
+        //  .then(d => broadcast("pushStatus", d))
+        getStatus().then(status => broadcast("pushStatus", status))
         break
       case "stored_playlist":
         mpdc.api.playlists.get()
@@ -53,36 +84,7 @@ async function setup() {
 
     // system
     disp.bind("getStatus", function () {
-      mpdc.api.status.get()
-        .then(status => {
-          mpdc.api.queue.info()
-            .then((queue) => {
-              if (status.song !== undefined && status.state != "stop") {
-                songdetail = queue.filter((qs) => {
-                  return qs.pos == status.song
-		            })[0]
-
-                status.title = songdetail.title
-                status.artist = songdetail.artist
-                status.album = songdetail.album
-                status.genre = songdetail.genre
-                status.date = songdetail.date
-                status.albumart = "/art/album/" + songdetail.artist + "/" + songdetail.album
-
-                status.duration = status.time.total
-                status.elapsed = status.time.elapsed
-                delete(status.time)
-
-                status.sampleRate = status.audio.sampleRate
-                status.bits = status.audio.bits
-                status.channels = status.audio.channels
-                delete(status.audio)
-                delete(status.playlist)
-                delete(status.songid)
-	            }
-              disp.send("pushStatus", status)
-            })
-        })
+      getStatus().then(status => disp.send("pushStatus", status))
     })
 
     // db management

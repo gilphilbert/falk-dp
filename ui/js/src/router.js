@@ -34,7 +34,7 @@ var router = (function () {
         },
         'album/:artist/:album': function (params) {
           domBuilder.page.setLoad('album')
-          webSocket.get.albums(encodeURIComponent(params.artist) + '/' + encodeURIComponent(params.album))
+          webSocket.get.album(params.artist, params.album)
         },
         genres: function () {
           domBuilder.page.setLoad('genres')
