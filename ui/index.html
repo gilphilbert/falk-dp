@@ -46,11 +46,14 @@
   <body>
     <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
-        <div class="navbar-dropdown">
-          <a class="navbar-item" onclick="window.history.back()">
-            <svg class="feather"><use xlink:href="/img/feather-sprite.svg#chevron-left"></use></svg>
-          </a>
-        </div>
+        <a class="navbar-item" onclick="window.history.back()">
+          <svg class="feather"><use xlink:href="/img/feather-sprite.svg#chevron-left"></use></svg>
+        </a>
+        <!--<a class="navbar-item" href="/" data-navigo>-->
+          <figure class="image">
+            <img src="/img/moosic-logo.svg"  style="height: 30px; margin-top: 12px" />
+          </figure>
+        <!--</a>-->
         <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
@@ -100,9 +103,9 @@
     </div>
 
     <div id="control-bar">
-      <div class="columns is-vcentered is-marginless">
+      <div class="columns is-vcentered is-marginless is-mobile">
         <div class="column is-narrow">
-          <div class="columns is-vcentered now-playing">
+          <div class="columns is-vcentered now-playing is-mobile">
             <div class="column is-narrow">
               <figure class="image is-70x70">
                 <img>
@@ -121,7 +124,7 @@
           </span>
           <svg class="feather next"><use xlink:href="/img/feather-sprite.svg#skip-forward"></use></svg>
         </div>
-        <div class="column">
+        <div class="column is-hidden-mobile">
           <div class="columns play-progress is-gapless">
             <div class="column is-narrow">
               <p class="seek"></p>

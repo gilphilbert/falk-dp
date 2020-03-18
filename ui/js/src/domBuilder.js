@@ -137,7 +137,7 @@ var domBuilder = (function () {
 
           frag.appendChild(
             cr.div({ class: 'columns home' },
-              cr.div({ class: 'column is-narrow' },
+              cr.div({ class: 'column is-4' },
                 cr.figure({ class: 'image albumart' },
                   cr.img()
                 )

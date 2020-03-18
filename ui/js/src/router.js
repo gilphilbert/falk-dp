@@ -1,7 +1,7 @@
 /* global webSocket, domBuilder, dataTools, uiTools */
 
 var router = (function () {
-  var _router = new window.Navigo('/', false, '#')
+  var _router = new window.Navigo('/', true, '#')
 
   var init = function () {
     _router.updatePageLinks()
