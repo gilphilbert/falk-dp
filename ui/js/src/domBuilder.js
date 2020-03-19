@@ -168,12 +168,10 @@ var domBuilder = (function () {
 
         case 'album':
           // set the page title
-          console.log(data)
           title = data.title + " - " + data.artist
 
           // list of songs in this album
           const duration = uiTools.formatTime(Math.round(data.songs.reduce((total, song) => total + parseFloat(song.duration), 0)))
-          console.log(duration)
 
           // create the main fragment
           frag = cr.div({ class: 'container is-fluid' })
@@ -533,15 +531,13 @@ var domBuilder = (function () {
           document.querySelector('#control-bar .misc-controls .repeat').classList.remove('is-active')
         }
       }
-      /*
-      if (changed.includes('repeatSingle')) {
+      if (changed.includes('single')) {
         var rpt = 'repeat'
-        if (state.repeatSingle === true) {
+        if (state.single === true) {
           rpt += '-one'
         }
-        document.querySelector('footer .repeat use').setAttribute('xlink:href', '/img/feather-sprite.svg#' + rpt)
+        document.querySelector('#control-bar .repeat use').setAttribute('xlink:href', '/img/feather-sprite.svg#' + rpt)
       }
-      */
       if (changed.includes('random')) {
         if (state.random === true) {
           document.querySelector('#control-bar .misc-controls .random').classList.add('is-active')
@@ -583,195 +579,151 @@ var domBuilder = (function () {
       // this is our main container
       var main = uiTools.clearNodes('#content-container')
 
-      // window.ui.page.build('settings')
+      uiTools.setPageTitle('Setttings')
 
-      var ii = ['library', 'playback', 'appearance', 'system', 'plugins', 'alarm', 'sleep', 'help']
-      var div = cr.div({ class: 'tabs' },
-        cr.ul(
-          ii.map((item) => {
-            return cr.li({ class: ((subpage === item) ? 'is-active' : '') }, cr.a({ href: 'settings/' + item, 'data-navigo': '', class: 'is-capitalized' }, item))
-          })
+      var cont = cr.div({ id: 'setting-page' },
+        cr.p({ class: 'title' }, 'Database'),
+        cr.div({ class: 'field is-horizontal' },
+          cr.div({ class: 'field-label' },
+            cr.label({ class: 'label' }, 'Songs')
+          ),
+          cr.div({ class: 'field-body' },
+            cr.div({ class: 'field song-count' }, 'Loading')
+          )
+        ),
+        cr.div({ class: 'field is-horizontal' },
+          cr.div({ class: 'field-label' },
+            cr.label({ class: 'label' }, 'Artists')
+          ),
+          cr.div({ class: 'field-body' },
+            cr.div({ class: 'field artist-count' }, 'Loading')
+          )
+        ),
+        cr.div({ class: 'field is-horizontal' },
+          cr.div({ class: 'field-label' },
+            cr.label({ class: 'label' }, 'Albums')
+          ),
+          cr.div({ class: 'field-body' },
+            cr.div({ class: 'field album-count' }, 'Loading')
+          )
+        ),
+        cr.div({ class: 'field is-horizontal' },
+          cr.div({ class: 'field-label' }),
+          cr.div({ class: 'field-body' },
+            cr.div({ class: 'field' },
+              cr.div({ class: 'control' },
+                cr.div({ class: 'buttons' },
+                  cr.button({ class: 'button is-primary', on: { click: () => { webSocket.action.updateLibrary() } } }, 'Update Library'),
+                  cr.button({ class: 'button is-primary', on: { click: () => { webSocket.action.rescanLibrary() } } }, 'Rescan Library'),
+                  cr.button({ class: 'button is-primary', on: { click: () => { webSocket.action.updateMetadata() } } }, 'Update Metadata')
+                )
+              )
+            )
+          )
+        ),
+        cr.p({ class: 'title' }, 'Network shares'),
+        cr.div({ class: 'field is-horizontal' },
+          cr.div({ class: 'field-label' }),
+          cr.div({ class: 'field-body' },
+            cr.div({ class: 'field' },
+              cr.div({ class: 'control' },
+                cr.div({ class: 'buttons' },
+                  cr.button({ class: 'button is-primary', on: { click: function () { modals.addShare() } } }, 'Add share')
+                )
+              )
+            )
+          )
+        ),
+        cr.p({ class: 'title' }, 'Audio'),
+        cr.div({ class: 'field is-horizontal' },
+          cr.div({ class: 'field-label' },
+            cr.label({ class: 'label' }, 'Playback device')
+          ),
+          cr.div({ class: 'field-body' },
+            cr.div({ class: 'field' },
+              cr.div({ class: 'select', id: 'playback-device' })
+            )
+          )
+        ),
+        cr.p({ class: 'title' }, 'General'),
+        cr.div({ class: 'field is-horizontal' },
+          cr.div({ class: 'field-label' },
+            cr.label({ class: 'label' }, 'Device name')
+          ),
+          cr.div({ class: 'field-body' },
+            cr.div({ class: 'field  has-addons', id: 'device-name' },
+              cr.div({ class: 'control' },
+                cr.input({ class: 'input', type: 'text', on: { keyup: function () { this.parentNode.querySelector('button').classList.remove('is-hidden') } } })
+              ),
+              cr.div({ class: 'control' },
+                cr.button({ class: 'button is-primary', on: { click: function () { webSocket.set.deviceName(this.parentNode.querySelector('input').value) } } }, uiTools.getSVG('save'))
+              )
+            )
+          )
+        ),
+        cr.div({ class: 'field is-horizontal' },
+          cr.div({ class: 'field-label' },
+            cr.label({ class: 'label' }, 'Version')
+          ),
+          cr.div({ class: 'field-body' },
+            cr.div({ class: 'field', id: 'system-version' },
+              cr.p(
+                cr.span(),
+                cr.button({ class: 'button is-small is-primary', on: { click: function () { webSocket.action.updateCheck(); this.classList.add('is-info'); this.classList.add('is-loading') } } }, uiTools.getSVG('rotate-cw'))
+              )
+            )
+          )
+        ),
+        cr.div({ class: 'field is-horizontal' },
+          cr.div({ class: 'field-label is-normal' },
+            cr.label({ class: 'label' }, 'Power')
+          ),
+          cr.div({ class: 'field-body' },
+            cr.div({ class: 'field' },
+              cr.div({ class: 'control' },
+                cr.div({ class: 'buttons' },
+                  cr.button({ class: 'button is-danger', on: { click: () => { webSocket.action.reboot(); pageLoader(true, { msg: 'Rebooting' }) } } }, 'Reboot'),
+                  cr.button({ class: 'button is-danger', on: { click: () => { webSocket.action.shutdown(); pageLoader(true, { msg: 'Powering down' }) } } }, 'Shutdown')
+                )
+              )
+            )
+          )
         )
       )
-      main.appendChild(div)
+      // load the database stats
+      webSocket.get.libraryStats((data) => {
+        cont.querySelector('.field.song-count').innerText = data.songs
+        cont.querySelector('.field.artist-count').innerText = data.artists
+        cont.querySelector('.field.album-count').innerText = data.albums
+      })
 
-      var cont = cr.div({ id: 'setting-page' })
-      switch (subpage) {
-        case 'library':
-          uiTools.setPageTitle('Library Setttings')
-          var frag = document.createDocumentFragment()
-          frag.appendChild(
-            cr.div({ class: 'box' },
-              cr.p({ class: 'title' }, 'Database'),
-              cr.div({ class: 'field is-horizontal' },
-                cr.div({ class: 'field-label' },
-                  cr.label({ class: 'label' }, 'Songs')
-                ),
-                cr.div({ class: 'field-body' },
-                  cr.div({ class: 'field song-count' }, 'Loading')
-                )
-              ),
-              cr.div({ class: 'field is-horizontal' },
-                cr.div({ class: 'field-label' },
-                  cr.label({ class: 'label' }, 'Artists')
-                ),
-                cr.div({ class: 'field-body' },
-                  cr.div({ class: 'field artist-count' }, 'Loading')
-                )
-              ),
-              cr.div({ class: 'field is-horizontal' },
-                cr.div({ class: 'field-label' },
-                  cr.label({ class: 'label' }, 'Albums')
-                ),
-                cr.div({ class: 'field-body' },
-                  cr.div({ class: 'field album-count' }, 'Loading')
-                )
-              ),
-              cr.div({ class: 'field is-horizontal' },
-                cr.div({ class: 'field-label' }),
-                cr.div({ class: 'field-body' },
-                  cr.div({ class: 'field' },
-                    cr.div({ class: 'control' },
-                      cr.div({ class: 'buttons' },
-                        cr.button({ class: 'button is-primary', on: { click: () => { webSocket.action.updateLibrary() } } }, 'Update Library'),
-                        cr.button({ class: 'button is-primary', on: { click: () => { webSocket.action.rescanLibrary() } } }, 'Rescan Library'),
-                        cr.button({ class: 'button is-primary', on: { click: () => { webSocket.action.updateMetadata() } } }, 'Update Metadata')
-                      )
-                    )
-                  )
-                )
-              )
-            )
-          )
-          frag.appendChild(
-            cr.div({ class: 'box' },
-              cr.p({ class: 'title' }, 'Network shares'),
-              cr.div({ class: 'field is-horizontal' },
-                cr.div({ class: 'field-label' }),
-                cr.div({ class: 'field-body' },
-                  cr.div({ class: 'field' },
-                    cr.div({ class: 'control' },
-                      cr.div({ class: 'buttons' },
-                        cr.button({ class: 'button is-primary', on: { click: function () { modals.addShare() } } }, 'Add share')
-                      )
-                    )
-                  )
-                )
-              )
-            )
-          )
-          cont.appendChild(frag)
-
-          // load the database stats
-          webSocket.get.libraryStats((data) => {
-            cont.querySelector('.field.song-count').innerText = data.songs
-            cont.querySelector('.field.artist-count').innerText = data.artists
-            cont.querySelector('.field.album-count').innerText = data.albums
+      // load the audio devices
+      webSocket.get.audioDevices((data) => {
+        console.log(data)
+        var el = document.querySelector('#playback-device')
+        if (el !== undefined && data) {
+          //var active = data.outputenabled
+          var options = data.filter((i) => i.outputname !== undefined).map((i) => {
+            return cr.option({ 'data-id': i.outputid, selected: ((i.outputenabled === true) ? 'true' : 'false') }, i.outputname)
           })
-          break
-        case 'playback':
-          uiTools.setPageTitle('Playback Setttings')
-          frag = document.createDocumentFragment()
-          frag.appendChild(
-            cr.div({ class: 'box' },
-              cr.p({ class: 'title' }, 'Audio'),
-              cr.div({ class: 'field is-horizontal' },
-                cr.div({ class: 'field-label' },
-                  cr.label({ class: 'label' }, 'Playback device')
-                ),
-                cr.div({ class: 'field-body' },
-                  cr.div({ class: 'field' },
-                    cr.div({ class: 'select', id: 'playback-device' })
-                  )
-                )
-              )
-            )
-          )
-          cont.appendChild(frag)
-
-          // load the audio devices
-          webSocket.get.audioDevices((data) => {
-            var el = document.querySelector('#playback-device')
-            if (el !== undefined && data) {
-              var active = data.devices.active.id
-              var all = data.devices.available
-              var options = all.map((i) => {
-                return cr.option({ 'data-id': i.id, selected: ((i.id === active) ? 'true' : 'false') }, i.name)
-              })
-              uiTools.clearNodes(el)
-              el.appendChild(cr.select(options))
-            }
-          })
-          break
-        case 'system':
-          uiTools.setPageTitle('System Setttings')
-          frag = document.createDocumentFragment()
-          frag.appendChild(
-            cr.div({ class: 'box' },
-              cr.p({ class: 'title' }, 'General'),
-              cr.div({ class: 'field is-horizontal' },
-                cr.div({ class: 'field-label' },
-                  cr.label({ class: 'label' }, 'Device name')
-                ),
-                cr.div({ class: 'field-body' },
-                  cr.div({ class: 'field  has-addons', id: 'device-name' },
-                    cr.div({ class: 'control' },
-                      cr.input({ class: 'input', type: 'text', on: { keyup: function () { this.parentNode.querySelector('button').classList.remove('is-hidden') } } })
-                    ),
-                    cr.div({ class: 'control' },
-                      cr.button({ class: 'button is-primary', on: { click: function () { webSocket.set.deviceName(this.parentNode.querySelector('input').value) } } }, uiTools.getSVG('save'))
-                    )
-                  )
-                )
-              ),
-              cr.div({ class: 'field is-horizontal' },
-                cr.div({ class: 'field-label' },
-                  cr.label({ class: 'label' }, 'Version')
-                ),
-                cr.div({ class: 'field-body' },
-                  cr.div({ class: 'field', id: 'system-version' },
-                    cr.p(
-                      cr.span(),
-                      cr.button({ class: 'button is-small is-primary', on: { click: function () { webSocket.action.updateCheck(); this.classList.add('is-info'); this.classList.add('is-loading') } } }, uiTools.getSVG('rotate-cw'))
-                    )
-                  )
-                )
-              ),
-              cr.div({ class: 'field is-horizontal' },
-                cr.div({ class: 'field-label is-normal' },
-                  cr.label({ class: 'label' }, 'Power')
-                ),
-                cr.div({ class: 'field-body' },
-                  cr.div({ class: 'field' },
-                    cr.div({ class: 'control' },
-                      cr.div({ class: 'buttons' },
-                        cr.button({ class: 'button is-danger', on: { click: () => { webSocket.action.reboot(); pageLoader(true, { msg: 'Rebooting' }) } } }, 'Reboot'),
-                        cr.button({ class: 'button is-danger', on: { click: () => { webSocket.action.shutdown(); pageLoader(true, { msg: 'Powering down' }) } } }, 'Shutdown')
-                      )
-                    )
-                  )
-                )
-              )
-            )
-          )
-          cont.appendChild(frag)
-          // load the system version
-          webSocket.get.version((data) => {
-            var el = document.querySelector('#system-version p span')
-            if (el !== undefined && data) {
-              var v = data.systemversion + ' (' + data.builddate + ') '
-              el.innerText = v
-            }
-          })
-          webSocket.get.deviceName((data) => {
-            var el = document.querySelector('#device-name input')
-            if (el !== undefined && data) {
-              el.value = data.name
-            }
-          })
-
-          break
-      }
+          uiTools.clearNodes(el)
+          el.appendChild(cr.select(options))
+        }
+      })
+      // load the system version
+      //webSocket.get.version((data) => {
+      //  var el = document.querySelector('#system-version p span')
+      //  if (el !== undefined && data) {
+      //    var v = data.systemversion + ' (' + data.builddate + ') '
+      //    el.innerText = v
+      //  }
+      //})
+      //webSocket.get.deviceName((data) => {
+      //  var el = document.querySelector('#device-name input')
+      //  if (el !== undefined && data) {
+      //    el.value = data.name
+      //  }
+      //})
 
       main.appendChild(cont)
       router.update()

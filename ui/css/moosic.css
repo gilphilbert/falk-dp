@@ -11098,6 +11098,10 @@ a:hover p {
   color: #b5b5b5;
 }
 
+.label {
+  color: #ffffff;
+}
+
 .feather {
   width: 24px;
   height: 24px;
@@ -11144,9 +11148,15 @@ a:hover p {
   }
 }
 #menu-container:hover aside.menu {
-  width: 220px;
+  width: 180px;
+}
+#menu-container:hover aside.menu .detail {
+  visibility: visible;
 }
 #menu-container aside.menu {
+  box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15);
+  -webkit-box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15);
   height: 100%;
   background: #393535;
   position: absolute;
@@ -11166,18 +11176,18 @@ a:hover p {
   letter-spacing: inherit;
   text-transform: none;
 }
-#menu-container .menu-label {
-  font-weight: 500;
-  padding-left: 40px;
-}
 #menu-container .menu-list a {
   display: inline-block;
   width: 100%;
-  padding: 0.6em 60px;
+  padding: 0.6em 0;
 }
 #menu-container .menu-list a:hover {
   background: rgba(255, 255, 255, 0.2);
   text-decoration: none;
+}
+#menu-container .detail {
+  margin-top: 5px;
+  visibility: hidden;
 }
 
 .navbar {
@@ -11276,6 +11286,12 @@ a:hover p {
 }
 #content-container #queue-table tr.is-playing {
   background-color: rgba(255, 255, 255, 0.15);
+}
+#content-container #setting-page .title {
+  margin-top: 1em;
+}
+#content-container #setting-page .title:first-child {
+  margin-top: inherit;
 }
 
 #control-bar {

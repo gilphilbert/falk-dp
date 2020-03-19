@@ -13,10 +13,16 @@ var webSocket = (function () {
     var conn = new WebSocket(url)
 
     var callbacks = {}
+    var cbOnce = {}
 
     this.bind = function(event_name, callback){
       callbacks[event_name] = callbacks[event_name] || []
       callbacks[event_name].push(callback)
+      return this;// chainable
+    }
+
+    this.bindOnce = function(event_name, callback){
+      cbOnce[event_name] = callback
       return this;// chainable
     }
 
@@ -49,9 +55,15 @@ var webSocket = (function () {
 
     var dispatch = function(event_name, message){
       var chain = callbacks[event_name]
-      if(typeof chain == 'undefined') return
-      for(var i = 0; i < chain.length; i++){
-        chain[i]( message )
+      if(typeof chain !== 'undefined') {
+        for(var i = 0; i < chain.length; i++){
+          chain[i]( message )
+        }
+      }
+      var once = cbOnce[event_name]
+      if(typeof once !== 'undefined') {
+        once( message )
+        cbOnce[event_name] = undefined
       }
     }
   }
@@ -104,7 +116,8 @@ var webSocket = (function () {
     genres: function () {
       server.send('getGenres')
     },
-    libraryStats: function () {
+    libraryStats: function (callback) {
+      server.bindOnce('pushStats', callback)
       server.send('getStats')
     },
     outputDevices: function () {
@@ -114,10 +127,10 @@ var webSocket = (function () {
     //   on('pushDeviceName', func)
     //   sendOnly('getDeviceName')
     // },
-    // audioDevices: function (func) {
-    //   on('pushOutputDevices', func)
-    //   sendOnly('getOutputDevices')
-    // },
+     audioDevices: function (func) {
+      server.bindOnce('pushOutputs', func)
+       server.send('getOutputs')
+    },
     // version: function (func) {
     //   if (func !== undefined) {
     //     _socket.once('pushSystemVersion', func)
@@ -178,15 +191,16 @@ var webSocket = (function () {
     },
     toggleRepeat: function () {
       var state = dataTools.getState()
-      // if (state.repeatSingle === true) {
-      //   sendData('setRepeat', { value: false, repeatSingle: false })
-      // } else {
-      //   if (state.repeat === true) {
-      //     sendData('setRepeat', { value: true, repeatSingle: true })
-      //   } else {
-      //     sendData('setRepeat', { value: true, repeatSingle: false })
-      //   }
-      // }
+       if (state.single === true) {
+        server.send('repeat', { state: false })
+        server.send('single', { state: false })
+       } else {
+         if (state.repeat === true) {
+          server.send('single', { state: true })
+         } else {
+          server.send('repeat', { state: true })
+         }
+       }
     },
     updateLibrary: function () {
       server.send('updateDB')

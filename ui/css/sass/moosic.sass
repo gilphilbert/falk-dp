@@ -28,6 +28,9 @@ body
 .subtitle
   color: $grey-light
 
+.label
+  color: $white
+
 .feather
   width: 24px
   height: 24px
@@ -72,8 +75,14 @@ body
 
   &:hover
     aside.menu
-      width: 220px
+      @include from($desktop)
+      width: 180px
+      .detail
+        visibility: visible
   aside.menu
+    box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
+    -webkit-box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
+    -moz-box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
     height: 100%
     background: #393535
     position: absolute
@@ -93,17 +102,17 @@ body
     letter-spacing: inherit
     text-transform: none
     
-  .menu-label
-    font-weight: 500
-    padding-left: 40px
-    
   .menu-list a
     display: inline-block
     width: 100%
-    padding: .6em 60px
+    padding: .6em 0
     &:hover
       background: rgba(255,255,255,0.2)
       text-decoration: none
+
+  .detail
+    margin-top: 5px
+    visibility: hidden
 
 .navbar
   background-color: transparent
@@ -183,6 +192,12 @@ body
           padding-right: 5px
     tr.is-playing
       background-color: rgba(255,255,255,0.15)
+
+  #setting-page
+    .title
+      margin-top: 1em
+    .title:first-child
+      margin-top: inherit
 
 // this contains the fixed-bottom play bar
 #control-bar

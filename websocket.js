@@ -66,8 +66,7 @@ async function setup() {
 	        })
         break
       case "player":
-        //mpdc.api.status.get()
-        //  .then(d => broadcast("pushStatus", d))
+      case "options":
         getStatus().then(status => broadcast("pushStatus", status))
         break
       case "stored_playlist":
@@ -80,7 +79,7 @@ async function setup() {
 
   wss.on("connection", function (ws) {
     var disp = new Dispatcher(ws)
-    ws.on('error', () => console.log('errored'));
+    ws.on('error', (e) => console.log(e));
 
     // system
     disp.bind("getStatus", function () {
@@ -163,7 +162,6 @@ async function setup() {
     })
 
     disp.bind("getArtistAlbums", function (data) {
-      console.log(data)
       mpdc.api.db.list("album", `(albumartist == "${data.artist}")`)
         .then((d) => {
           mod = d.map((d) => {
@@ -291,8 +289,18 @@ async function setup() {
       mpdc.api.playback.next()
     })
     disp.bind("repeat", function (data) {
-      if (data.state) {
+      if (data.state !== undefined) {
         mpdc.api.playback.repeat(data.state)
+      }
+    })
+    disp.bind("single", function (data) {
+      if (data.state !== undefined) {
+        mpdc.api.playback.single(data.state)
+      }
+    })
+    disp.bind("random", function (data) {
+      if (data.state !== undefined) {
+        mpdc.api.playback.random(data.state)
       }
     })
 
