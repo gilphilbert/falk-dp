@@ -247,13 +247,14 @@ var uiTools = (function () {
       this.closest('.dropdown').classList.remove('is-active')
     },
     addShare: function (el) {
-      var column = el.closest('.column')
+      var box = el.closest('.box')
+      console.log(box)
 
       var vals = {
         //name: column.querySelector('.name').value,
-        host: column.querySelector('.address').value,
-        path: column.querySelector('.path').value,
-        type: column.querySelector('.type').value,
+        host: box.querySelector('.address').value,
+        path: box.querySelector('.path').value,
+        type: box.querySelector('.type').value,
         //username: column.querySelector('.username').value,
         //password: column.querySelector('.password').value,
         //options: column.querySelector('.options').value
