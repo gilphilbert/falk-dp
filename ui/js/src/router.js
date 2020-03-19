@@ -44,12 +44,9 @@ var router = (function () {
           domBuilder.page.setLoad('genre')
           webSocket.get.genres(encodeURIComponent(params.genre))
         },
-        'settings/:page': function (params) {
-          domBuilder.page.setLoad('settings')
-          domBuilder.page.settings(params.page)
-        },
         settings: function () {
-          _router.navigate('settings/library')
+          domBuilder.page.setLoad('settings')
+          domBuilder.page.settings()
         },
         '*': function () {
           domBuilder.page.setLoad('home')

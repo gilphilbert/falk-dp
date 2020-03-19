@@ -33,7 +33,6 @@ var uiTools = (function () {
 
   var setPageTitle = function ({ title, state } = {}) {
     var t = ''
-
     if (title !== undefined) { // if there's a title
       _title = title // save it
       t = title // set it
@@ -53,7 +52,6 @@ var uiTools = (function () {
     } else {
       t = 'Audiophile Music Player'
     }
-
     // set the title
     document.title = t + ' | Moosic'
   }

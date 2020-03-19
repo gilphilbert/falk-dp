@@ -575,11 +575,9 @@ var domBuilder = (function () {
         webSocket.get.queue()
       }
     },
-    settings: function (subpage) {
+    settings: function () {
       // this is our main container
       var main = uiTools.clearNodes('#content-container')
-
-      uiTools.setPageTitle('Setttings')
 
       var cont = cr.div({ id: 'setting-page' },
         cr.p({ class: 'title' }, 'Database'),
@@ -699,7 +697,6 @@ var domBuilder = (function () {
 
       // load the audio devices
       webSocket.get.audioDevices((data) => {
-        console.log(data)
         var el = document.querySelector('#playback-device')
         if (el !== undefined && data) {
           //var active = data.outputenabled
@@ -724,8 +721,8 @@ var domBuilder = (function () {
       //    el.value = data.name
       //  }
       //})
-
       main.appendChild(cont)
+      uiTools.setPageTitle({ title: 'Settings' })
       router.update()
     }
   }
