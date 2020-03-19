@@ -49,11 +49,11 @@
         <a class="navbar-item" onclick="window.history.back()">
           <svg class="feather"><use xlink:href="/img/feather-sprite.svg#chevron-left"></use></svg>
         </a>
-        <!--<a class="navbar-item" href="/" data-navigo>-->
+        <a href="/" data-navigo>
           <figure class="image">
             <img src="/img/moosic-logo.svg"  style="height: 30px; margin-top: 12px" />
           </figure>
-        <!--</a>-->
+        </a>
         <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
@@ -72,34 +72,35 @@
       </div>
     </nav>
     <div class="columns is-mobile" id="page-container">
-      <div class="column is-narrow" id="menu-container">
-        <aside class="menu">
-          <figure class="image menu-brand">
-            <a href="/" data-navigo>
-              <img src="/img/moosic-logo.svg" />
-            </a>
-          </figure>
-          <ul class="menu-list">
-            <li><a href="/" data-navigo>Now playing</a></li>
-          </ul>
-          <p class="menu-label">
-            Library
-          </p>
-          <ul class="menu-list">
-            <li><a href="playlists" data-navigo>Playlists</a></li>
-            <li><a href="artists" data-navigo>Artists</a></li>
-            <li><a href="albums" data-navigo>Albums</a></li>
-            <li><a href="genres" data-navigo>Genres</a></li>
-          </ul>
-          <p class="menu-label">
-            System
-          </p>
-          <ul class="menu-list">
-            <li><a href="settings" data-navigo>Settings</a></li>
-          </ul>
-        </aside>
-      </div>
       <div class="column" id="content-container"></div>
+    </div>
+
+    <div id="menu-container">
+      <aside class="menu">
+        <figure class="image menu-brand">
+          <a href="/" data-navigo>
+            <img src="/img/moosic-logo-notext.svg" />
+          </a>
+        </figure>
+        <ul class="menu-list">
+          <li><a href="/" data-navigo>Now playing</a></li>
+        </ul>
+        <p class="menu-label">
+          Library
+        </p>
+        <ul class="menu-list">
+          <li><a href="playlists" data-navigo>Playlists</a></li>
+          <li><a href="artists" data-navigo>Artists</a></li>
+          <li><a href="albums" data-navigo>Albums</a></li>
+          <li><a href="genres" data-navigo>Genres</a></li>
+        </ul>
+        <p class="menu-label">
+          System
+        </p>
+        <ul class="menu-list">
+          <li><a href="settings" data-navigo>Settings</a></li>
+        </ul>
+      </aside>
     </div>
 
     <div id="control-bar">

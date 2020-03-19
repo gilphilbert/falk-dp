@@ -67,15 +67,24 @@ body
 
 //this contains the left hand menu
 #menu-container
-  background: #393535
   @include until($desktop)
     display: none
 
+  &:hover
+    aside.menu
+      width: 220px
   aside.menu
-    width: 70px
+    height: 100%
+    background: #393535
+    position: absolute
+    top: 0
+    left: 0
+    width: 90px
+    transition: width 250ms
+
   .image.menu-brand
-    width: 220px
-    height: auta
+    width: 55px
+    height: auto
     margin: 40px auto
  
   .menu-label, .menu-list a
@@ -90,9 +99,8 @@ body
     
   .menu-list a
     display: inline-block
-    width: 275px
+    width: 100%
     padding: .6em 60px
-    border-radius: 0 2em 2em 0
     &:hover
       background: rgba(255,255,255,0.2)
       text-decoration: none
@@ -127,7 +135,7 @@ body
 
 // this contains the right hand content pane
 #content-container
-  padding: 2.5em 1.5em calc(100px + .75em) .75em
+  padding: 2.5em 1.5em calc(100px + .75em) calc(1.5em + 90px)
   @include until($desktop)
     padding:  55px .75em calc(100px + .75em) .75em
   overflow-y: scroll

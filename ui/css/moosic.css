@@ -11138,20 +11138,26 @@ a:hover p {
   margin: 0;
 }
 
-#menu-container {
-  background: #393535;
-}
 @media screen and (max-width: 1023px) {
   #menu-container {
     display: none;
   }
 }
+#menu-container:hover aside.menu {
+  width: 220px;
+}
 #menu-container aside.menu {
-  width: 70px;
+  height: 100%;
+  background: #393535;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 90px;
+  transition: width 250ms;
 }
 #menu-container .image.menu-brand {
-  width: 220px;
-  height: auta;
+  width: 55px;
+  height: auto;
   margin: 40px auto;
 }
 #menu-container .menu-label, #menu-container .menu-list a {
@@ -11166,9 +11172,8 @@ a:hover p {
 }
 #menu-container .menu-list a {
   display: inline-block;
-  width: 275px;
+  width: 100%;
   padding: 0.6em 60px;
-  border-radius: 0 2em 2em 0;
 }
 #menu-container .menu-list a:hover {
   background: rgba(255, 255, 255, 0.2);
@@ -11214,7 +11219,7 @@ a:hover p {
 }
 
 #content-container {
-  padding: 2.5em 1.5em calc(100px + .75em) 0.75em;
+  padding: 2.5em 1.5em calc(100px + .75em) calc(1.5em + 90px);
   overflow-y: scroll;
   background: radial-gradient(#4c4746, #221F1F);
   -webkit-box-shadow: inset 2px 0px 3px 0px rgba(0, 0, 0, 0.25);
