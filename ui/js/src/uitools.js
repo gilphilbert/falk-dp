@@ -18,12 +18,15 @@ var uiTools = (function () {
     return (s - (s %= 60)) / 60 + (s > 9 ? ':' : ':0') + s
   }
 
-  var getSVG = function (iconName) {
+  var getSVG = function (iconName, cls) {
     var svgElem = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
     svgElem.classList.add('feather')
     var useElem = document.createElementNS('http://www.w3.org/2000/svg', 'use')
     useElem.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '/img/feather-sprite.svg#' + iconName)
     svgElem.appendChild(useElem)
+    if (cls) {
+      svgElem.classList.add(cls)
+    }
     return svgElem
   }
 
@@ -55,6 +58,8 @@ var uiTools = (function () {
     // set the title
     document.title = t + ' | Moosic'
   }
+
+  
 
   var progress = {
     _seek: 0,
@@ -245,13 +250,13 @@ var uiTools = (function () {
       var column = el.closest('.column')
 
       var vals = {
-        name: column.querySelector('.name').value,
-        ip: column.querySelector('.address').value,
+        //name: column.querySelector('.name').value,
+        host: column.querySelector('.address').value,
         path: column.querySelector('.path').value,
-        fstype: column.querySelector('.type').value,
-        username: column.querySelector('.username').value,
-        password: column.querySelector('.password').value,
-        options: column.querySelector('.options').value
+        type: column.querySelector('.type').value,
+        //username: column.querySelector('.username').value,
+        //password: column.querySelector('.password').value,
+        //options: column.querySelector('.options').value
       }
 
       // capture bad values (and missing / extra values)

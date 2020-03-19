@@ -729,27 +729,16 @@ var domBuilder = (function () {
 
   var modals = {
     addShare: function () {
-      var modal = cr.div({ id: 'update-detail-modal', class: 'modal modal-fx-3dSignDown' },
+      var modal = cr.div({ id: 'update-detail-modal', class: 'modal is-small modal-fx-3dSignDown' },
         cr.div({ class: 'modal-background' }),
         cr.div({ class: 'modal-content' },
-          cr.div({ class: 'box is-paddingless' },
-            cr.div({ class: 'columns is-paddingless is-marginless' },
-              cr.div({ class: 'corner-image has-background-light is-paddingless is-hidden-mobile' },
-                cr.p({ class: 'title' }, 'Add Share'),
-                cr.img({ src: '/img/modal-corner-add.svg' })
-              ),
-              cr.div({ class: 'column' },
-                cr.p('Music library'),
+          cr.div({ class: 'box' },
+                uiTools.getSVG('server', 'title-icon'),
+                //cr.svg({ class: 'feather' }, cr.use({ 'xlink:href': '' })),
                 cr.p({ class: 'title' }, 'Add share'),
                 cr.div({ class: 'field' },
                   cr.div({ class: 'control' },
-                    cr.input({ class: 'input name', type: 'text', placeholder: 'Share name' })
-                  ),
-                  cr.p({ class: 'help is-danger' })
-                ),
-                cr.div({ class: 'field' },
-                  cr.div({ class: 'control' },
-                    cr.input({ class: 'input address', type: 'text', placeholder: 'IP address' })
+                    cr.input({ class: 'input address', type: 'text', placeholder: 'Server address' })
                   ),
                   cr.p({ class: 'help is-danger' })
                 ),
@@ -770,39 +759,26 @@ var domBuilder = (function () {
                   ),
                   cr.p({ class: 'help is-danger' })
                 ),
-                cr.div({ class: 'field' },
-                  cr.div({ class: 'control' },
-                    cr.input({ class: 'input username', type: 'text', placeholder: 'Username' })
+                cr.div({ class: 'columns buttons' },
+                  cr.div({ class: 'column '},
+                    cr.div({ class: 'field' },
+                      cr.div({ class: 'control' },
+                        cr.button({ class: 'button is-dark is-rounded is-fullwidth', on: { click: function () { this.closest('.modal').classList.remove('is-active') } } }, 'Close')
+                      )
+                    )
                   ),
-                  cr.p({ class: 'help is-danger' })
-                ),
-                cr.div({ class: 'field' },
-                  cr.div({ class: 'control' },
-                    cr.input({ class: 'input password', type: 'password', placeholder: 'Password' })
-                  ),
-                  cr.p({ class: 'help is-danger' })
-                ),
-                cr.div({ class: 'field' },
-                  cr.div({ class: 'control' },
-                    cr.input({ class: 'input options', type: 'text', placeholder: 'Options' })
-                  ),
-                  cr.p({ class: 'help is-danger' })
-                ),
-                cr.div({ class: 'field first-button' },
-                  cr.div({ class: 'control' },
-                    cr.button({ class: 'button is-primary is-fullwidth', on: { click: function () { uiTools.handlers.addShare(this) } } }, 'Add')
-                  )
-                ),
-                cr.div({ class: 'field' },
-                  cr.div({ class: 'control' },
-                    cr.button({ class: 'button is-text is-fullwidth', on: { click: function () { this.closest('.modal').classList.remove('is-active') } } }, 'Close')
+                  cr.div({ class: 'column' },
+                    cr.div({ class: 'field first-button' },
+                      cr.div({ class: 'control' },
+                        cr.button({ class: 'button is-primary is-rounded is-fullwidth', on: { click: function () { uiTools.handlers.addShare(this) } } }, 'Add')
+                      )
+                    )
                   )
                 )
-              )
-            )
           )
         )
       )
+      //modal.querySelector('.feather use').setAttribute('xlink:href', '/img/feather-sprite.svg#server')
       uiTools.clearNodes('#modal-container').appendChild(modal)
 
       // wait for the element to be added to the DOM so we get our nice effects!

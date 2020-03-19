@@ -208,8 +208,10 @@ var webSocket = (function () {
     rescanLibrary: function () {
       server.send('rescanDB')
     },
-    addShare: function ({ name, ip, path, fstypes } = {}) {
-      server.send('addMount', { name, ip, path, fstype })
+    addShare: function ({ host, path, type } = {}) {
+      if (host && path && type) {
+        server.send('addMount', { host, path, type })
+      }
     },
     shudown: function () {
       server.send('shutdown')
