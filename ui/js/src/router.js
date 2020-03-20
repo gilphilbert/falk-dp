@@ -24,7 +24,6 @@ var router = (function () {
           webSocket.get.artists()
         },
         'artist/:artist': function (params) {
-          console.log(params)
           domBuilder.page.setLoad('artist')
           webSocket.get.artistAlbums(params.artist)
         },

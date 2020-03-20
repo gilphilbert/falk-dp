@@ -40,19 +40,19 @@ var domBuilder = (function () {
   }
 
   var buildTrack = function (data) {
+    var format = ((data.format) ? (parseInt(data.format.split(':')[0])/1000) + 'kHz ' + data.format.split(':')[1] + 'bit' : '')
+    var filetype = data.file.split('.')[data.file.split('.').length - 1]
     var tr = cr.tr({ 'data-uri': data.uri, 'data-title': data.title, 'data-service': data.service },
-      (('tracknumber' in data) ? cr.td({ class: 'pointer', on: { click: uiTools.handlers.tracks } }, data.tracknumber) : null),
+      (('track' in data) ? cr.td({ class: 'pointer', on: { click: uiTools.handlers.tracks } }, data.track) : null),
       cr.td({ class: 'pointer', on: { click: uiTools.handlers.tracks } }, data.title),
-      ((!('trackType' in data)) ? cr.td(data.artist) : null),
-      ((!('trackType' in data)) ? cr.td(data.album) : null),
-      ((data.trackType) ? cr.td(data.trackType.toUpperCase()) : null),
       ((data.duration) ? cr.td(uiTools.formatTime(data.duration)) : null),
+      ((filetype) ? cr.td(filetype.toUpperCase()) : null),
+      ((format) ? cr.td(cr.span({ class: 'tag' }, format)) : null),
       cr.td(
         cr.div({ class: 'dropdown is-right' },
           cr.div({ class: 'dropdown-trigger' },
             cr.button({ 'aria-haspopup': true, on: { click: uiTools.handlers.dropdown } },
-              cr.img({ src: '/img/icons/ellipsis.svg' })
-              // cr.svg({ class: 'feather' }, cr.use({ 'xlink:href': '/img/feather-sprite.svg#more-vertical' }))
+              uiTools.getSVG('more-vertical')
             )
           ),
           cr.div({ class: 'dropdown-menu', role: 'menu' },
@@ -169,7 +169,7 @@ var domBuilder = (function () {
         case 'album':
           // set the page title
           title = data.title + " - " + data.artist
-
+console.log(data)
           // list of songs in this album
           const duration = uiTools.formatTime(Math.round(data.songs.reduce((total, song) => total + parseFloat(song.duration), 0)))
 
@@ -242,7 +242,7 @@ var domBuilder = (function () {
 
           break
 
-        case 'artist':
+        case 'artist':  
           // set the page title
           title = data.artist.title
 
@@ -276,8 +276,8 @@ var domBuilder = (function () {
                 )
               ),
               cr.div({ class: 'column is-4' },
-                cr.p({ class: 'title is-4' }, data.artist.title),
-                cr.p({ class: 'subtitle is-6' }, albums.length + ' album' + ((albums.length > 1 || albums.length === 0) ? 's' : '') )// + ' - ' + songs.length + ' track' + ((songs.length > 1) ? 's' : ''))
+                cr.p({ class: 'title' }, data.artist.title),
+                cr.p({ class: 'subtitle' }, albums.length + ' album' + ((albums.length > 1 || albums.length === 0) ? 's' : '') )// + ' - ' + songs.length + ' track' + ((songs.length > 1) ? 's' : ''))
               )
             )
           )
