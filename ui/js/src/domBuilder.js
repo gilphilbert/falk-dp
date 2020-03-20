@@ -579,7 +579,7 @@ var domBuilder = (function () {
       // this is our main container
       var main = uiTools.clearNodes('#content-container')
 
-      var cont = cr.div({ id: 'setting-page' },
+      var cont = cr.div({ class: 'container', id: 'setting-page' },
         cr.p({ class: 'title' }, 'Database'),
         cr.div({ class: 'field is-horizontal' },
           cr.div({ class: 'field-label' },
