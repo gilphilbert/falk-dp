@@ -557,29 +557,32 @@ var domBuilder = (function () {
         var use = btn.querySelector('use')
         if (state.state === 'play') {
           use.setAttribute('xlink:href', '/img/feather-sprite.svg#pause')
-          uiTools.progress.startCounting()
+          uiTools.progress.start()
         } else {
           use.setAttribute('xlink:href', '/img/feather-sprite.svg#play')
-          uiTools.progress.stopCounting()
-          uiTools.progress.updateProgress()
+          uiTools.progress.stop()
+          uiTools.progress.update()
         }
         uiTools.setPageTitle({ state })
       }
 
-      // if we're on (or currently loading) the home page, update it now
+      // if we're currently loading the home page create it 
       if (_loadPage === 'home') {
         page.build('home')
         uiTools.setPageTitle()
       } else if (changed.includes('status') || changed.includes('title')) {
         // update the queue when state or track changes
         webSocket.get.queue()
+        // <!-------------------------------------------------------------------------------ALSO UPDATE THE HOMEPAGE-----------------------> //
+        // <!-------------------------------------------------------------------------------ALSO UPDATE THE HOMEPAGE-----------------------> //
+        // <!-------------------------------------------------------------------------------ALSO UPDATE THE HOMEPAGE-----------------------> //
       }
     },
     settings: function () {
       // this is our main container
       var main = uiTools.clearNodes('#content-container')
 
-      var cont = cr.div({ class: 'container', id: 'setting-page' },
+      var cont = cr.div({ class: 'container is-fluid', id: 'setting-page' },
         cr.p({ class: 'title' }, 'Database'),
         cr.div({ class: 'field is-horizontal' },
           cr.div({ class: 'field-label' },
@@ -611,9 +614,8 @@ var domBuilder = (function () {
             cr.div({ class: 'field' },
               cr.div({ class: 'control' },
                 cr.div({ class: 'buttons' },
-                  cr.button({ class: 'button is-primary', on: { click: () => { webSocket.action.updateLibrary() } } }, 'Update Library'),
-                  cr.button({ class: 'button is-primary', on: { click: () => { webSocket.action.rescanLibrary() } } }, 'Rescan Library'),
-                  cr.button({ class: 'button is-primary', on: { click: () => { webSocket.action.updateMetadata() } } }, 'Update Metadata')
+                  cr.button({ class: 'button is-rounded is-primary', on: { click: () => { webSocket.action.updateLibrary() } } }, 'Update Library'),
+                  cr.button({ class: 'button is-rounded is-primary', on: { click: () => { webSocket.action.rescanLibrary() } } }, 'Rescan Library'),
                 )
               )
             )
@@ -626,7 +628,7 @@ var domBuilder = (function () {
             cr.div({ class: 'field' },
               cr.div({ class: 'control' },
                 cr.div({ class: 'buttons' },
-                  cr.button({ class: 'button is-primary', on: { click: function () { modals.addShare() } } }, 'Add share')
+                  cr.button({ class: 'button is-rounded is-primary', on: { click: function () { modals.addShare() } } }, 'Add share')
                 )
               )
             )
@@ -643,7 +645,7 @@ var domBuilder = (function () {
             )
           )
         ),
-        cr.p({ class: 'title' }, 'General'),
+        /*cr.p({ class: 'title' }, 'General'),
         cr.div({ class: 'field is-horizontal' },
           cr.div({ class: 'field-label' },
             cr.label({ class: 'label' }, 'Device name')
@@ -658,8 +660,8 @@ var domBuilder = (function () {
               )
             )
           )
-        ),
-        cr.div({ class: 'field is-horizontal' },
+        ),*/
+        /*cr.div({ class: 'field is-horizontal' },
           cr.div({ class: 'field-label' },
             cr.label({ class: 'label' }, 'Version')
           ),
@@ -671,7 +673,8 @@ var domBuilder = (function () {
               )
             )
           )
-        ),
+        ),*/
+        cr.p({ class: 'title' }, 'System'),
         cr.div({ class: 'field is-horizontal' },
           cr.div({ class: 'field-label is-normal' },
             cr.label({ class: 'label' }, 'Power')
@@ -680,8 +683,8 @@ var domBuilder = (function () {
             cr.div({ class: 'field' },
               cr.div({ class: 'control' },
                 cr.div({ class: 'buttons' },
-                  cr.button({ class: 'button is-danger', on: { click: () => { webSocket.action.reboot(); pageLoader(true, { msg: 'Rebooting' }) } } }, 'Reboot'),
-                  cr.button({ class: 'button is-danger', on: { click: () => { webSocket.action.shutdown(); pageLoader(true, { msg: 'Powering down' }) } } }, 'Shutdown')
+                  cr.button({ class: 'button is-rounded is-danger', on: { click: () => { webSocket.action.reboot(); pageLoader(true, { msg: 'Rebooting' }) } } }, 'Reboot'),
+                  cr.button({ class: 'button is-rounded is-danger', on: { click: () => { webSocket.action.shutdown(); pageLoader(true, { msg: 'Powering down' }) } } }, 'Shutdown')
                 )
               )
             )

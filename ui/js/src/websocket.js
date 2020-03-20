@@ -46,7 +46,6 @@ var webSocket = (function () {
     this.bind("close", (e) => {
       if (e.code!=1000) {
         setTimeout(function(){
-          console.log("WebSocketClient: reconnecting...")
           conn = new WebSocket(url)
           startup()
         }, 3000)
@@ -176,7 +175,6 @@ var webSocket = (function () {
       }
     },
     pause: function () {
-      console.log('pausing')
       server.send('pause')
     },
     next: function () {

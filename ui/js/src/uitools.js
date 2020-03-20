@@ -66,27 +66,22 @@ var uiTools = (function () {
     _duration: 0,
     _counter: false,
     // this is used for the progress bar (since we have to manually count the 'ticks' of the clock
-    stopCounting: function () {
+    stop: function () {
       clearInterval(this._counter)
     },
-    startCounting: function () {
-      var x = dataTools.getState()
-      this._seek = x.seek
-      this._duration = x.duration
+    start: function () {
       this._counter = setInterval(() => {
-        this._seek += 100
-        var p = Math.round(Math.round(this._seek / 100) / this._duration * 100)
-        if (!isNaN(p) && p !== Infinity) {
-          document.querySelector('#control-bar .play-progress progress').value = p
-        }
+       this.update(true)
       }, 100)
     },
     set: function (seek, duration) {
-      this._seek = seek
-      this._duration = duration
+      this._seek = seek * 1000
+      this._duration = duration * 1000
     },
-    updateProgress: function () {
-      var p = Math.round((this._seek / 100) / (this._duration * 100))
+    update: function (count) {
+      if (count) {
+        this._seek = this._seek + 100
+      }
       var p = this._seek / this._duration * 1000
       if (!isNaN(p) && p !== Infinity) {
         document.querySelector('#control-bar .play-progress progress').value = p
