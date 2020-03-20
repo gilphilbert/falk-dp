@@ -24,19 +24,23 @@ sudo apt install git
 ### Prepare system
 MPD's configuration isn't configured for internal mounts by default. The following script changes to a simple database and creates the structures required.
 ```
-sed 's/db_file/#db_file/g' /etc/mpd.conf
-printf "database {\n plugin "simple"\n path "/var/lib/mpd/db"\n cache_directory "/var/lib/mpd/cache"\n}" | sudo tee -a mpd.conf
+sudo sed 's/db_file/#db_file/g' -i /etc/mpd.conf
+printf "database {\n plugin \"simple\"\n path \"/var/lib/mpd/db\"\n cache_directory \"/var/lib/mpd/cache\"\n}" | sudo tee -a /etc/mpd.conf
 sudo mkdir -p /var/lib/mpd/cache
 sudo touch /var/lib/mpd/db
-sudo chown mpd.audio /var/lib/mpd/cache * -R
+sudo chown mpd.audio /var/lib/mpd/cache
+sudo chown mpd.audio /var/lib/mpd/db
+sudo systemctl restart mpd
 ```
 
 ### Install Moosic
 ```
 git clone https://github.com/gilphilbert/mpdui.git
 cd moosic
+sudo mv moosic.service /etc/systemd/system
 npm install
-npm start
+sudo systemctl enable moosic
+sudo systemctl start moosic
 ```
 
 You might want to configure this as a deamon (I'll probably get around to it at some point...)

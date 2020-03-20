@@ -192,7 +192,7 @@ async function setup() {
 
     disp.bind("addMount", function (data) {
       var point = data.path.substr(data.path.lastIndexOf("/")+1, data.path.length)
-      var share = data.type + "://" + data.host + data.path
+      var share = data.type + "://" + data.host + "/" + data.path
       mpdc.api.mounts.mount(point, share)
 	      .then(() => {
           mpdc.api.mounts.list()
