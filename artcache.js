@@ -63,7 +63,6 @@ function getArt({ artist, album }={}, res) {
       // what art are we looking for?
       if (!album) {
         // we're looking for an artist, let's go look for it and store it if we find it
-	      console.log('here')
         getArtistArt(artist, imgpath)
           .then((e) => {
             // we got a file, let's serve it
@@ -96,7 +95,6 @@ async function getArtistArt(artist, imgpath) {
   // get the mbid from audioscrobbler...
 /*
   info = await axios.get("https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=" + _artist + "&api_key=250b1448a91894d0f7542cbcdedc936e&format=json")
-	console.log(info)
   const mbid = info.data.artist.mbid
 */
   info = await mbApi.searchArtist(artist, 0, 1)
@@ -105,7 +103,6 @@ async function getArtistArt(artist, imgpath) {
   // now get the fanart from fanart.tv
   fanart = await axios.get("https://webservice.fanart.tv/v3/music/" + mbid + "&?api_key=fd55f4282969cb8b8d09f470e3d18c51&format=json")
   const data = fanart.data
-	console.log(data)
 
   // check to see if we actually got any art URLs back
   if (data.artistthumb && data.artistthumb.length > 0) {
