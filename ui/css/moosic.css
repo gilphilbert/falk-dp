@@ -11306,9 +11306,20 @@ a:hover p {
 #content-container .albumart img {
   border-radius: 5%;
 }
-#content-container table.songs td .dropdown button {
+@media screen and (max-width: 1023px) {
+  #content-container table.table.songs td {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+#content-container table.table.songs td .dropdown button {
   border: none;
   background: none;
+}
+@media screen and (max-width: 1023px) {
+  #content-container table.table.songs td .dropdown button {
+    padding: 0;
+  }
 }
 #content-container #queue-table {
   border-collapse: separate;

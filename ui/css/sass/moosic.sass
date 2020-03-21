@@ -206,10 +206,16 @@ body
     padding-top: 1.25em
   .albumart img
     border-radius: 5%
-  table.songs
-    td .dropdown button
-      border: none
-      background: none
+  table.table.songs
+    td
+      @include until($desktop)
+        padding-left: 0
+        padding-right: 0
+      .dropdown button
+        @include until($desktop)
+          padding: 0
+        border: none
+        background: none
 
   #queue-table
     border-collapse: separate

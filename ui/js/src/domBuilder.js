@@ -46,8 +46,8 @@ var domBuilder = (function () {
       (('track' in data) ? cr.td({ class: 'pointer', on: { click: uiTools.handlers.tracks } }, data.track) : null),
       cr.td({ class: 'pointer', on: { click: uiTools.handlers.tracks } }, data.title),
       ((data.duration) ? cr.td(uiTools.formatTime(data.duration)) : null),
-      ((filetype) ? cr.td(filetype.toUpperCase()) : null),
-      ((format) ? cr.td(cr.span({ class: 'tag' }, format)) : null),
+      ((filetype) ? cr.td({ class: 'is-hidden-mobile' }, filetype.toUpperCase()) : null),
+      ((format) ? cr.td({ class: 'is-hidden-mobile' }, cr.span({ class: 'tag' }, format)) : null),
       cr.td(
         cr.div({ class: 'dropdown is-right' },
           cr.div({ class: 'dropdown-trigger' },
@@ -137,7 +137,7 @@ var domBuilder = (function () {
 
           frag.appendChild(
             cr.div({ class: 'columns home' },
-              cr.div({ class: 'column is-3 is-2-fullhd is-8-mobile' },
+              cr.div({ class: 'column is-3 is-2-fullhd' },
                 cr.figure({ class: 'image albumart' },
                   cr.img()
                 )
@@ -185,12 +185,19 @@ console.log(data)
                 )
               ),
               cr.div({ class: 'column is-8-desktop is-12-mobile' },
-                cr.p({ class: 'is-uppercase has-text-weight-semibold is-hidden-mobile' }, 'Album'),
-                cr.p({ class: 'title is-3 album-title has-text-weight-semibold' }, data.title),
-                cr.p('By ', cr.a({ class: 'artist has-text-weight-semibold', 'data-navigo': '', href: 'artist/' + encodeURIComponent(data.artist) }, data.artist)),
-                cr.p({ class: 'detail' }, data.songs.length + ' Song' + ((data.songs.length > 1) ? 's' : '') + ' - ' + duration + ((data.songs[0].date) ? ' - ' + data.songs[0].date : '')),
-                cr.span({ class: 'tags' }),
-                cr.button({ class: 'button is-rounded is-primary' }, 'Play album')
+                cr.div( { class: 'columns is-mobile' }, 
+                  cr.div({ class: 'column'},
+                    cr.p({ class: 'is-uppercase has-text-weight-semibold is-hidden-mobile' }, 'Album'),
+                    cr.p({ class: 'title is-3 album-title has-text-weight-semibold' }, data.title),
+                    cr.p('By ', cr.a({ class: 'artist has-text-weight-semibold', 'data-navigo': '', href: 'artist/' + encodeURIComponent(data.artist) }, data.artist)),
+                    cr.p({ class: 'detail' }, data.songs.length + ' Song' + ((data.songs.length > 1) ? 's' : '') + ' - ' + duration + ((data.songs[0].date) ? ' - ' + data.songs[0].date : '')),
+                    cr.span({ class: 'tags' })
+                  ),
+                  cr.div({ class:'column is-narrow'},
+                    cr.button({ class: 'button is-rounded is-primary is-hidden-touch' }, 'Play album'),
+                    cr.button({ class: 'button is-rounded is-primary is-hidden-desktop' }, uiTools.getSVG('play'))
+                  )
+                )
               )
             )
           )
