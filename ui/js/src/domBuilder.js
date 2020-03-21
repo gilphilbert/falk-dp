@@ -47,7 +47,7 @@ var domBuilder = (function () {
       ((data.duration) ? cr.td(uiTools.formatTime(data.duration)) : null),
       ((filetype) ? cr.td({ class: 'is-hidden-mobile' }, filetype.toUpperCase()) : null),
       ((format) ? cr.td({ class: 'is-hidden-mobile' }, cr.span({ class: 'tag is-rounded' }, format)) : null),
-      cr.td(
+      cr.td({ class: 'is-narrow' },
         cr.div({ class: 'dropdown is-right' },
           cr.div({ class: 'dropdown-trigger' },
             cr.button({ 'aria-haspopup': true, on: { click: uiTools.handlers.dropdown } },
@@ -385,7 +385,7 @@ var domBuilder = (function () {
               data.map(function (genre) {
                 return buildTile({
                   title: genre,
-                  image: '/img/icons/playlist-padded.svg',
+                  image: '/img/genre.png',
                   href: 'genre/' + encodeURIComponent(genre)
                 })
               })

@@ -10,18 +10,16 @@ var router = (function () {
         playlists: function () {
           domBuilder.page.setLoad('playlists')
           webSocket.get.playlists()
+          uiTools.hideMenu()
         },
         'playlist/:playlist': function (params) {
           domBuilder.page.setLoad('playlist')
           webSocket.get.playlist(params.playlist)
         },
-        files: function () {
-          domBuilder.page.setLoad('files')
-          webSocket.get.files()
-        },
         artists: function () {
           domBuilder.page.setLoad('artists')
           webSocket.get.artists()
+          uiTools.hideMenu()
         },
         'artist/:artist': function (params) {
           domBuilder.page.setLoad('artist')
@@ -30,6 +28,7 @@ var router = (function () {
         albums: function () {
           domBuilder.page.setLoad('albums')
           webSocket.get.albums()
+          uiTools.hideMenu()
         },
         'album/:artist/:album': function (params) {
           domBuilder.page.setLoad('album')
@@ -38,6 +37,7 @@ var router = (function () {
         genres: function () {
           domBuilder.page.setLoad('genres')
           webSocket.get.genres()
+          uiTools.hideMenu()
         },
         'genre/:genre': function (params) {
           domBuilder.page.setLoad('genre')
@@ -46,6 +46,7 @@ var router = (function () {
         settings: function () {
           domBuilder.page.setLoad('settings')
           domBuilder.page.settings()
+          uiTools.hideMenu()
         },
         '*': function () {
           domBuilder.page.setLoad('home')
@@ -54,6 +55,7 @@ var router = (function () {
             domBuilder.page.build('home')
             uiTools.setPageTitle('Audiophile Music Player')
           }
+          uiTools.hideMenu()
         }
       })
       .resolve()

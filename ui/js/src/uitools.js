@@ -191,20 +191,15 @@ var uiTools = (function () {
 
     document.querySelector('.navbar-burger').addEventListener('click', function (el) {
       this.classList.toggle('is-active')
-      var nb = this.closest('.navbar')
-      nb.classList.toggle('is-active')
-      nb.querySelector('.navbar-menu').classList.toggle('is-active')
+      document.querySelector('aside.menu').classList.toggle('is-active')
     })
 
-    document.querySelectorAll('.navbar-menu .navbar-item').forEach((el) => {
-      el.addEventListener('click', (it) => {
-        var nb = el.closest('.navbar')
-        var bu = nb.querySelector('.navbar-burger')
-        nb.classList.toggle('is-active')
-        bu.classList.toggle('is-active')
-        nb.querySelector('.navbar-menu').classList.toggle('is-active')
-      })
-    })
+  }
+
+  var hideMenu = function () {
+    document.querySelector('.navbar-burger').classList.remove('is-active')
+    document.querySelector('aside.menu').classList.remove('is-active')
+    console.log('here')
   }
 
   var handlers = {
@@ -285,6 +280,7 @@ var uiTools = (function () {
     showBackground: showBackground,
     handlers: handlers,
     closeModal: closeModal,
+    hideMenu: hideMenu,
     init: init
   }
 })()
