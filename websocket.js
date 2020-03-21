@@ -257,6 +257,21 @@ async function setup() {
             mpdc.api.queue.addid(data.uri)
               .then(id => mpdc.api.playback.playid(id))
           })
+      } else if (data.songs.length) {
+        mpdc.api.queue.clear()
+          .then(() => {
+            var promises=[]
+            data.songs.forEach(song => {
+              promises.push(mpdc.api.queue.addid(song.uri))
+            })
+            Promise.all(promises).then((values) => {
+              if ('pos' in data) {
+                mpdc.api.playback.play(data.pos)
+              } else {
+                mpdc.api.playback.play(0)
+              }
+            })
+          })
       }
     })
 

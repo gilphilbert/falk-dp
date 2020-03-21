@@ -41,7 +41,7 @@ var domBuilder = (function () {
   var buildTrack = function (data) {
     var format = ((data.format) ? (parseInt(data.format.split(':')[0])/1000) + 'kHz ' + data.format.split(':')[1] + 'bit' : '')
     var filetype = data.file.split('.')[data.file.split('.').length - 1]
-    var tr = cr.tr(
+    var tr = cr.tr( { 'data-uri': data.file },
       (('track' in data) ? cr.td({ class: 'is-narrow pointer', on: { click: uiTools.handlers.tracks } }, data.track) : null),
       cr.td({ class: 'pointer', on: { click: uiTools.handlers.tracks } }, data.title),
       ((data.duration) ? cr.td(uiTools.formatTime(data.duration)) : null),
@@ -542,6 +542,7 @@ var domBuilder = (function () {
 
       if (changed.includes('title')) {
         document.querySelector('#control-bar .now-playing .title').innerText = state.title
+        uiTools.progress.stop()
       }
       if (changed.includes('artist')) {
         document.querySelector('#control-bar .now-playing .subtitle').innerText = state.artist
@@ -570,7 +571,7 @@ var domBuilder = (function () {
 
       if (changed.includes('elapsed')) {
         uiTools.progress.set(state.elapsed, state.duration)
-        document.querySelector('#control-bar .seek').innerText = uiTools.formatTime(state.elapsed)
+        //document.querySelector('#control-bar .seek').innerText = uiTools.formatTime(state.elapsed)
         document.querySelector('#control-bar .duration').innerText = uiTools.formatTime(state.duration)
       }
 

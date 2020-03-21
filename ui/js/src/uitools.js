@@ -82,6 +82,7 @@ var uiTools = (function () {
       if (count) {
         this._seek = this._seek + 100
       }
+      document.querySelector('#control-bar .seek').innerText = formatTime(Math.floor(this._seek / 1000))
       var p = this._seek / this._duration * 1000
       if (!isNaN(p) && p !== Infinity) {
         document.querySelector('#control-bar .play-progress progress').value = p
@@ -194,12 +195,20 @@ var uiTools = (function () {
       document.querySelector('aside.menu').classList.toggle('is-active')
     })
 
+    document.addEventListener('swiped-left', function(e) {
+      //console.log(e.target)
+      showMenu()
+    });
+
   }
 
   var hideMenu = function () {
     document.querySelector('.navbar-burger').classList.remove('is-active')
     document.querySelector('aside.menu').classList.remove('is-active')
-    console.log('here')
+  }
+  var showMenu = function () {
+    document.querySelector('.navbar-burger').classList.add('is-active')
+    document.querySelector('aside.menu').classList.add('is-active')
   }
 
   var handlers = {
@@ -238,24 +247,12 @@ var uiTools = (function () {
     },
     addShare: function (el) {
       var box = el.closest('.box')
-      console.log(box)
 
       var vals = {
-        //name: column.querySelector('.name').value,
         host: box.querySelector('.address').value,
         path: box.querySelector('.path').value,
-        type: box.querySelector('.type').value,
-        //username: column.querySelector('.username').value,
-        //password: column.querySelector('.password').value,
-        //options: column.querySelector('.options').value
+        type: box.querySelector('.type').value
       }
-
-      // capture bad values (and missing / extra values)
-      // rules:
-      //   ip must be a valid ip address (and not empty)
-      //   path must be a valid path (and not empty)
-      //   username must be valid (and must be specified for SMB only)
-      //   password must be valid (and must be specified for SMB only)
       webSocket.action.addShare(vals)
     }
   }
@@ -281,6 +278,7 @@ var uiTools = (function () {
     handlers: handlers,
     closeModal: closeModal,
     hideMenu: hideMenu,
+    showMenu: showMenu,
     init: init
   }
 })()
