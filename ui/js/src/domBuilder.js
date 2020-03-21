@@ -185,8 +185,8 @@ console.log(data)
                 )
               ),
               cr.div({ class: 'column is-8-desktop is-12-mobile' },
-                cr.div( { class: 'columns is-mobile' }, 
-                  cr.div({ class: 'column'},
+                cr.div( { class: 'columns is-multiline is-mobile' }, 
+                  cr.div({ class: 'column is-8-mobile is-12-desktop'},
                     cr.p({ class: 'is-uppercase has-text-weight-semibold is-hidden-mobile' }, 'Album'),
                     cr.p({ class: 'title is-3 album-title has-text-weight-semibold' }, data.title),
                     cr.p('By ', cr.a({ class: 'artist has-text-weight-semibold', 'data-navigo': '', href: 'artist/' + encodeURIComponent(data.artist) }, data.artist)),
