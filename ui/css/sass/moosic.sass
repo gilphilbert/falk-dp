@@ -23,6 +23,9 @@ body
   @include until($desktop)
     font-size: .8em
 
+.pointer
+  cursor: pointer
+
 .title
   color: $white
 .subtitle
@@ -175,6 +178,13 @@ body
     background-color: #221F1F
     .navbar-item, .navbar-link
       color: $white
+
+.dropdown-content
+  background-color: #696363
+  .dropdown-item
+    cursor: pointer
+    &:hover
+      background-color: #ffffff28
 
 // this contains the right hand content pane
 #content-container

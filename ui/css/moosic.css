@@ -11090,6 +11090,10 @@ a:hover p {
   }
 }
 
+.pointer {
+  cursor: pointer;
+}
+
 .title {
   color: #ffffff;
 }
@@ -11270,6 +11274,16 @@ a:hover p {
 }
 .navbar .navbar-menu .navbar-item, .navbar .navbar-menu .navbar-link {
   color: #ffffff;
+}
+
+.dropdown-content {
+  background-color: #696363;
+}
+.dropdown-content .dropdown-item {
+  cursor: pointer;
+}
+.dropdown-content .dropdown-item:hover {
+  background-color: #ffffff28;
 }
 
 #content-container {

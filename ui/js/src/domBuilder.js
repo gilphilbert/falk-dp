@@ -43,11 +43,11 @@ var domBuilder = (function () {
     var format = ((data.format) ? (parseInt(data.format.split(':')[0])/1000) + 'kHz ' + data.format.split(':')[1] + 'bit' : '')
     var filetype = data.file.split('.')[data.file.split('.').length - 1]
     var tr = cr.tr({ 'data-uri': data.uri, 'data-title': data.title, 'data-service': data.service },
-      (('track' in data) ? cr.td({ class: 'pointer', on: { click: uiTools.handlers.tracks } }, data.track) : null),
+      (('track' in data) ? cr.td({ class: 'is-narrow pointer', on: { click: uiTools.handlers.tracks } }, data.track) : null),
       cr.td({ class: 'pointer', on: { click: uiTools.handlers.tracks } }, data.title),
       ((data.duration) ? cr.td(uiTools.formatTime(data.duration)) : null),
       ((filetype) ? cr.td({ class: 'is-hidden-mobile' }, filetype.toUpperCase()) : null),
-      ((format) ? cr.td({ class: 'is-hidden-mobile' }, cr.span({ class: 'tag' }, format)) : null),
+      ((format) ? cr.td({ class: 'is-hidden-mobile' }, cr.span({ class: 'tag is-rounded' }, format)) : null),
       cr.td(
         cr.div({ class: 'dropdown is-right' },
           cr.div({ class: 'dropdown-trigger' },
@@ -169,9 +169,28 @@ var domBuilder = (function () {
         case 'album':
           // set the page title
           title = data.title + " - " + data.artist
-console.log(data)
           // list of songs in this album
           const duration = uiTools.formatTime(Math.round(data.songs.reduce((total, song) => total + parseFloat(song.duration), 0)))
+
+          var format = ''
+          var channels = ''
+          // if every song has the same format
+          if (data.songs.every(song => song.format === data.songs[0].format)) {
+            format = data.songs[0].format
+          }
+          if (format !== '' ) {
+            format = format.split(':')
+            channels = format[2]
+            switch (channels) {
+              case '2':
+                channels = 'stereo'
+                break
+              case '6':
+                channels = '5.1'
+                break
+            }
+            format = parseInt(format[0] / 1000) + 'kHz ' + format[1] + 'bit'
+          }
 
           // create the main fragment
           frag = cr.div({ class: 'container is-fluid' })
@@ -191,7 +210,10 @@ console.log(data)
                     cr.p({ class: 'title is-3 album-title has-text-weight-semibold' }, data.title),
                     cr.p('By ', cr.a({ class: 'artist has-text-weight-semibold', 'data-navigo': '', href: 'artist/' + encodeURIComponent(data.artist) }, data.artist)),
                     cr.p({ class: 'detail' }, data.songs.length + ' Song' + ((data.songs.length > 1) ? 's' : '') + ' - ' + duration + ((data.songs[0].date) ? ' - ' + data.songs[0].date : '')),
-                    cr.span({ class: 'tags' })
+                    cr.div({ class: 'tags' },
+                    ((format !== '') ? cr.span({ class: 'tag is-rounded' }, format) : null),
+                    ((format !== '') ? cr.span({ class: 'tag is-rounded is-capitalized' }, channels) : null)
+                    )
                   ),
                   cr.div({ class:'column is-narrow'},
                     cr.button({ class: 'button is-rounded is-primary is-hidden-touch' }, 'Play album'),
