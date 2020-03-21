@@ -26,23 +26,22 @@ var domBuilder = (function () {
     }
   }
 
-  var buildTile = function ({ image, title, href, uri, subtitle, subtitleHref, subtitleUri } = {}) {
-    uri = uri || ''
+  var buildTile = function ({ title, image, href, subtitle, subtitleHref } = {}) {
     return cr.div({ class: 'column is-tile is-2-desktop is-4-tablet is-6-mobile' },
-      cr.a({ href: href, 'data-navigo': '', 'data-uri': uri },
+      cr.a({ href: href, 'data-navigo': '' },
         cr.figure({ class: 'image is-1by1' },
           cr.img({ src: image })
         ),
         cr.p({ class: 'title is-5 is-capitalized' }, title)
       ),
-      ((subtitle !== undefined) ? cr.a({ href: subtitleHref, 'data-navigo': '', 'data-uri': subtitleUri }, cr.p({ class: 'subtitle is-5' }, subtitle)) : null)
+      ((subtitle !== undefined) ? cr.a({ href: subtitleHref, 'data-navigo': '' }, cr.p({ class: 'subtitle is-5' }, subtitle)) : null)
     )
   }
 
   var buildTrack = function (data) {
     var format = ((data.format) ? (parseInt(data.format.split(':')[0])/1000) + 'kHz ' + data.format.split(':')[1] + 'bit' : '')
     var filetype = data.file.split('.')[data.file.split('.').length - 1]
-    var tr = cr.tr({ 'data-uri': data.uri, 'data-title': data.title, 'data-service': data.service },
+    var tr = cr.tr(
       (('track' in data) ? cr.td({ class: 'is-narrow pointer', on: { click: uiTools.handlers.tracks } }, data.track) : null),
       cr.td({ class: 'pointer', on: { click: uiTools.handlers.tracks } }, data.title),
       ((data.duration) ? cr.td(uiTools.formatTime(data.duration)) : null),
@@ -258,7 +257,6 @@ var domBuilder = (function () {
                   title: album.title,
                   subtitle: album.artist,
                   subtitleHref: 'artist/' + encodeURIComponent(album.artist),
-                  subtitleUri: '',
                   image: album.albumart,
                   href: 'album/' + encodeURIComponent(album.artist) + '/' + encodeURIComponent(album.title)
                 })
@@ -319,7 +317,6 @@ var domBuilder = (function () {
                   title: album.title,
                   image: album.albumart,
                   href: 'album/' + encodeURIComponent(data.artist.title) + '/' + encodeURIComponent(album.title),
-                  uri: album.uri
                 })
               })
             )
@@ -376,24 +373,20 @@ var domBuilder = (function () {
           break
 
         case 'genres':
-          // this is the data we'll need
-          var genres = data
-
           // the main document fragment
           frag = cr.div({ class: 'container is-fluid' })
 
           // append the library buttons
-          // frag.appendChild(breadcrumb([{ title: 'Genres', url: null }]))
           frag.appendChild(cr.p({ class: 'title is-3 is-capitalized' }, title))
 
           // build the list of genres
           frag.appendChild(
             cr.div({ class: 'columns is-mobile is-multiline albumart' },
-              genres.map(function (genre) {
+              data.map(function (genre) {
                 return buildTile({
-                  title: genre.title,
+                  title: genre,
                   image: '/img/icons/playlist-padded.svg',
-                  href: 'genre/' + encodeURIComponent(genre.title)
+                  href: 'genre/' + encodeURIComponent(genre)
                 })
               })
             )
@@ -506,7 +499,7 @@ var domBuilder = (function () {
                 cr.table({ class: 'table is-fullwidth songs songs-hover' },
                   cr.tbody(
                     songs.map((song) => {
-                      return cr.tr({ 'data-uri': song.uri },
+                      return cr.tr(
                         cr.td(
                           cr.figure({ class: 'image is-24x24' },
                             cr.img({ src: webSocket.getURL(song.albumart) })
@@ -520,7 +513,7 @@ var domBuilder = (function () {
                           cr.a({ href: 'album/' + encodeURIComponent(song.artist) + '/' + encodeURIComponent(song.album) }, song.album)
                         ),
                         cr.td(
-                          cr.span({ class: 'delete', on: { click: function () { webSocket.action.removeFromPlaylist({ name: `${name}`, uri: `${song.uri}` }) } } })
+                          cr.span({ class: 'delete', on: { click: function () { webSocket.action.removeFromPlaylist({ name: `${name}` }) } } })
                         )
                       )
                     })

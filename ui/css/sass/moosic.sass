@@ -106,27 +106,23 @@ body
   margin: 0
 
 //this contains the left hand menu
-#menu-container
-  @include until($desktop)
-    display: none
+aside.menu
+  box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
+  -webkit-box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
+  -moz-box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
+  height: 100%
+  background: #393535
+  position: absolute
+  top: 0
+  left: 0
+  width: 90px
+  transition: width 250ms
 
   &:hover
-    aside.menu
-      @include from($desktop)
-      width: 180px
-      .detail
-        visibility: visible
-  aside.menu
-    box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
-    -webkit-box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
-    -moz-box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
-    height: 100%
-    background: #393535
-    position: absolute
-    top: 0
-    left: 0
-    width: 90px
-    transition: width 250ms
+    @include from($desktop)
+    width: 180px
+    .detail
+      visibility: visible
 
   .image.menu-brand
     width: 55px
@@ -188,6 +184,7 @@ body
 
 // this contains the right hand content pane
 #content-container
+  height: 100vh
   padding: 2.5em 1.5em calc(100px + .75em) calc(1.5em + 90px)
   @include until($desktop)
     padding:  55px .75em calc(100px + .75em) .75em

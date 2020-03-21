@@ -11190,18 +11190,7 @@ a:hover p {
   margin: 0;
 }
 
-@media screen and (max-width: 1023px) {
-  #menu-container {
-    display: none;
-  }
-}
-#menu-container:hover aside.menu {
-  width: 180px;
-}
-#menu-container:hover aside.menu .detail {
-  visibility: visible;
-}
-#menu-container aside.menu {
+aside.menu {
   box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15);
   -webkit-box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15);
   -moz-box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15);
@@ -11213,27 +11202,33 @@ a:hover p {
   width: 90px;
   transition: width 250ms;
 }
-#menu-container .image.menu-brand {
+aside.menu:hover {
+  width: 180px;
+}
+aside.menu:hover .detail {
+  visibility: visible;
+}
+aside.menu .image.menu-brand {
   width: 55px;
   height: auto;
   margin: 40px auto;
 }
-#menu-container .menu-label, #menu-container .menu-list a {
+aside.menu .menu-label, aside.menu .menu-list a {
   color: #ffffff;
   font-size: 110%;
   letter-spacing: inherit;
   text-transform: none;
 }
-#menu-container .menu-list a {
+aside.menu .menu-list a {
   display: inline-block;
   width: 100%;
   padding: 0.6em 0;
 }
-#menu-container .menu-list a:hover {
+aside.menu .menu-list a:hover {
   background: rgba(255, 255, 255, 0.2);
   text-decoration: none;
 }
-#menu-container .detail {
+aside.menu .detail {
   margin-top: 5px;
   visibility: hidden;
 }
@@ -11287,6 +11282,7 @@ a:hover p {
 }
 
 #content-container {
+  height: 100vh;
   padding: 2.5em 1.5em calc(100px + .75em) calc(1.5em + 90px);
   overflow-y: scroll;
   background: radial-gradient(#4c4746, #221F1F);
