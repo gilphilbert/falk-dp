@@ -11373,6 +11373,20 @@ aside.menu .detail {
   vertical-align: middle;
   padding: 9px 0;
 }
+@media screen and (max-width: 1023px) {
+  #content-container #queue-table tr td {
+    width: 0%;
+    white-space: nowrap;
+  }
+}
+@media screen and (max-width: 1023px) {
+  #content-container #queue-table tr td.title-cell {
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 1px;
+  }
+}
 #content-container #queue-table tr td:first-child {
   padding-left: 10px;
   padding-right: 10px;

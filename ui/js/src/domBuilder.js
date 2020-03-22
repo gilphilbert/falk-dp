@@ -84,7 +84,7 @@ var domBuilder = (function () {
             cr.img({ src: queue[i].albumart })
           )
         ),
-        cr.td({ 'data-position': i, on: { click: function () { webSocket.action.play(this.dataset.position) } } },
+        cr.td({ class: 'title-cell', 'data-position': i, on: { click: function () { webSocket.action.play(this.dataset.position) } } },
           cr.span({ class: 'song-title' }, queue[i].title),
           cr.p({ class: 'is-hidden-desktop' }, queue[i].artist + ' - ' + uiTools.formatTime(queue[i].duration))
         ),

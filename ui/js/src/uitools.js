@@ -195,10 +195,12 @@ var uiTools = (function () {
       document.querySelector('aside.menu').classList.toggle('is-active')
     })
 
-    document.addEventListener('swiped-left', function(e) {
-      //console.log(e.target)
+    document.addEventListener('swiped-right', function(e) {
       showMenu()
-    });
+    })
+    document.addEventListener('swiped-left', function(e) {
+      hideMenu()
+    })
 
   }
 
