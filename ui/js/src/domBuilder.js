@@ -144,8 +144,8 @@ var domBuilder = (function () {
               cr.div({ class: 'column' },
                 cr.p({ class: 'title is-1-touch is-3-desktop is-marginless has-text-centered-touch' }, state.title),
                 cr.p({ class: 'detail has-text-centered-touch' }, ((quality !== '') ? cr.span({ class: 'tag' }, quality) : null)),
-                cr.p({ class: 'artist has-text-centered-touch' }, cr.span({ class: 'is-hidden-touch' }, 'By '), cr.a({ href: 'artist/' + state.artist, 'data-navigo': '' }, state.artist)),
-                cr.p({ class: 'album has-text-centered-touch' }, cr.span({ class: 'is-hidden-touch' }, 'From the album '), cr.a({ href: 'album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album))
+                cr.p({ class: 'artist has-text-centered-touch subtitle is-marginless' }, cr.span({ class: 'is-hidden-touch' }, 'By '), cr.a({ href: 'artist/' + state.artist, 'data-navigo': '' }, state.artist)),
+                cr.p({ class: 'album has-text-centered-touch subtitle is-marginless' }, cr.span({ class: 'is-hidden-touch' }, 'From the album '), cr.a({ href: 'album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album))
               )
             )
           )
