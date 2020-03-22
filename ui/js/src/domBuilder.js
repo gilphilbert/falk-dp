@@ -75,26 +75,26 @@ var domBuilder = (function () {
     }
     el = uiTools.clearNodes(el)
     var frag = document.createDocumentFragment()
-    var status = dataTools.getStatus()
-    var queuePos = dataTools.getQueuePosition()
+    var queuePos = dataTools.getState().song
 
     for (var i = 0; i <= queue.length - 1; i++) {
       frag.appendChild(cr.tr({ class: ((i === queuePos) ? 'is-playing' : '') },
-        cr.td(
-          cr.figure({ class: 'image albumart ' + status + ' is-32x32' },
+        cr.td({ class: 'is-narrow' },
+          cr.figure({ class: 'image albumart is-32x32' },
             cr.img({ src: queue[i].albumart })
           )
         ),
-        cr.td({ class: 'song-title', 'data-position': i, on: { click: function () { webSocket.action.play(this.dataset.position) } } },
-          queue[i].title
+        cr.td({ 'data-position': i, on: { click: function () { webSocket.action.play(this.dataset.position) } } },
+          cr.span({ class: 'song-title' }, queue[i].title),
+          cr.p({ class: 'is-hidden-desktop' }, queue[i].artist + ' - ' + uiTools.formatTime(queue[i].duration))
         ),
-        cr.td(
+        cr.td({ class: 'is-hidden-touch' },
           queue[i].artist
         ),
-        cr.td({ class: 'is-hidden-mobile' },
+        cr.td({ class: 'is-hidden-touch' },
           queue[i].album
         ),
-        cr.td(
+        cr.td({ class: 'is-hidden-touch' },
           uiTools.formatTime(queue[i].duration)
         ),
         cr.td({ class: 'remove', on: { click: uiTools.handlers.removeSong } }, cr.span({ class: 'delete' }))
@@ -142,10 +142,10 @@ var domBuilder = (function () {
                 )
               ),
               cr.div({ class: 'column' },
-                cr.p({ class: 'title is-3' }, state.title),
-                cr.p({ class: 'artist subtitle is-5' }, 'By ', cr.a({ href: 'artist/' + state.artist, 'data-navigo': '' }, state.artist)),
-                cr.p({ class: 'album subtitle is-5' }, 'From the album ', cr.a({ href: 'album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album)),
-                cr.p({ class: 'detail subtitle is-5 is-hidden-mobile' }, quality)
+                cr.p({ class: 'title is-1-touch is-3-desktop is-marginless has-text-centered-touch' }, state.title),
+                cr.p({ class: 'detail has-text-centered-touch' }, ((quality !== '') ? cr.span({ class: 'tag' }, quality) : null)),
+                cr.p({ class: 'artist has-text-centered-touch' }, cr.span({ class: 'is-hidden-touch' }, 'By '), cr.a({ href: 'artist/' + state.artist, 'data-navigo': '' }, state.artist)),
+                cr.p({ class: 'album has-text-centered-touch' }, cr.span({ class: 'is-hidden-touch' }, 'From the album '), cr.a({ href: 'album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album))
               )
             )
           )
@@ -571,7 +571,6 @@ var domBuilder = (function () {
 
       if (changed.includes('elapsed')) {
         uiTools.progress.set(state.elapsed, state.duration)
-        //document.querySelector('#control-bar .seek').innerText = uiTools.formatTime(state.elapsed)
         document.querySelector('#control-bar .duration').innerText = uiTools.formatTime(state.duration)
       }
 

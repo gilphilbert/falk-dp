@@ -11,42 +11,51 @@ var router = (function () {
           domBuilder.page.setLoad('playlists')
           webSocket.get.playlists()
           uiTools.hideMenu()
+          uiTools.control.show()
         },
         'playlist/:playlist': function (params) {
           domBuilder.page.setLoad('playlist')
           webSocket.get.playlist(params.playlist)
+          uiTools.control.show()
         },
         artists: function () {
           domBuilder.page.setLoad('artists')
           webSocket.get.artists()
           uiTools.hideMenu()
+          uiTools.control.show()
         },
         'artist/:artist': function (params) {
           domBuilder.page.setLoad('artist')
           webSocket.get.artistAlbums(params.artist)
+          uiTools.control.show()
         },
         albums: function () {
           domBuilder.page.setLoad('albums')
           webSocket.get.albums()
           uiTools.hideMenu()
+          uiTools.control.show()
         },
         'album/:artist/:album': function (params) {
           domBuilder.page.setLoad('album')
           webSocket.get.album(params.artist, params.album)
+          uiTools.control.show()
         },
         genres: function () {
           domBuilder.page.setLoad('genres')
           webSocket.get.genres()
           uiTools.hideMenu()
+          uiTools.control.show()
         },
         'genre/:genre': function (params) {
           domBuilder.page.setLoad('genre')
           webSocket.get.genres(encodeURIComponent(params.genre))
+          uiTools.showControl()
         },
         settings: function () {
           domBuilder.page.setLoad('settings')
           domBuilder.page.settings()
           uiTools.hideMenu()
+          uiTools.control.show()
         },
         '*': function () {
           domBuilder.page.setLoad('home')
@@ -56,6 +65,7 @@ var router = (function () {
             uiTools.setPageTitle('Audiophile Music Player')
           }
           uiTools.hideMenu()
+          uiTools.control.hide()
         }
       })
       .resolve()

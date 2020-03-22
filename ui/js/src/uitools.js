@@ -211,6 +211,15 @@ var uiTools = (function () {
     document.querySelector('aside.menu').classList.add('is-active')
   }
 
+  var control = {
+    hide: () => {
+      document.querySelector('#control-bar').classList.add('is-hidden-touch')
+    },
+    show: () => {
+      document.querySelector('#control-bar').classList.remove('is-hidden-touch')
+    }
+  }
+
   var handlers = {
     tracks: function (e) {
       var rows = this.closest('tbody').querySelectorAll('tr')
@@ -279,6 +288,7 @@ var uiTools = (function () {
     closeModal: closeModal,
     hideMenu: hideMenu,
     showMenu: showMenu,
+    control: control,
     init: init
   }
 })()
