@@ -11328,6 +11328,9 @@ aside.menu .detail {
 #content-container .home {
   padding-top: 1.25em;
 }
+#content-container .home .artist {
+  margin-bottom: 0.5rem;
+}
 #content-container .home .detail {
   margin-bottom: 1.25rem;
 }
@@ -11365,13 +11368,10 @@ aside.menu .detail {
     padding: 0;
   }
 }
-#content-container #queue-table {
-  border-collapse: separate;
-  border-spacing: 0 10px;
-}
 #content-container #queue-table tr td {
   vertical-align: middle;
   padding: 9px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 @media screen and (max-width: 1023px) {
   #content-container #queue-table tr td {
@@ -11398,10 +11398,10 @@ aside.menu .detail {
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
 }
-#content-container #queue-table tr.is-playing {
-  background-color: rgba(255, 255, 255, 0.075);
+#content-container #queue-table tr:last-child td {
+  border-bottom: none;
 }
-#content-container #queue-table tr.is-playing .song-title {
+#content-container #queue-table tr.is-playing {
   font-weight: bold;
 }
 #content-container #setting-page .title {
@@ -11416,7 +11416,6 @@ aside.menu .detail {
   height: 100px;
   width: 100%;
   bottom: 0;
-  left: 0;
   background: #4C4746;
   z-index: 3;
   -webkit-box-shadow: 0px -2px 3px 0px rgba(0, 0, 0, 0.15);
@@ -11428,6 +11427,16 @@ aside.menu .detail {
   #control-bar {
     height: 78px;
   }
+}
+@media screen and (max-width: 1023px) {
+  #control-bar {
+    left: 100%;
+    transition: left 250ms ease 0s;
+  }
+}
+#control-bar.is-active {
+  left: 0;
+  transition: left 250ms ease 0s;
 }
 #control-bar .columns {
   height: 100%;
@@ -11474,10 +11483,6 @@ aside.menu .detail {
 #control-bar .misc-controls svg {
   margin: 0 5px;
 }
-#control-bar progress.progress {
-  background: #2A2727;
-  color: red;
-}
 #control-bar progress.progress::-moz-progress-value {
   background: #2A2727;
 }
@@ -11490,7 +11495,6 @@ aside.menu .detail {
 }
 #control-bar progress.progress::-webkit-progress-bar {
   background: #393535;
-  padding: 4px;
   -webkit-box-shadow: inset 0px 0px 9px -2px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: inset 0px 0px 9px -2px rgba(0, 0, 0, 0.75);
   box-shadow: inset 0px 0px 9px -2px rgba(0, 0, 0, 0.75);

@@ -190,9 +190,17 @@ var uiTools = (function () {
       })
     })
 
-    document.querySelector('.navbar-burger').addEventListener('click', function (el) {
-      this.classList.toggle('is-active')
-      document.querySelector('aside.menu').classList.toggle('is-active')
+    document.querySelector('.menu-trigger').addEventListener('click', (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+      showMenu()
+    })
+
+    document.addEventListener('click', function (e) {
+      var state = document.querySelector('aside.menu').classList.contains('is-active')
+      if (state) {
+        hideMenu()
+      }
     })
 
     document.addEventListener('swiped-right', function(e) {
@@ -205,20 +213,18 @@ var uiTools = (function () {
   }
 
   var hideMenu = function () {
-    document.querySelector('.navbar-burger').classList.remove('is-active')
     document.querySelector('aside.menu').classList.remove('is-active')
   }
   var showMenu = function () {
-    document.querySelector('.navbar-burger').classList.add('is-active')
     document.querySelector('aside.menu').classList.add('is-active')
   }
 
   var control = {
     hide: () => {
-      document.querySelector('#control-bar').classList.add('is-hidden-touch')
+      document.querySelector('#control-bar').classList.remove('is-active')
     },
     show: () => {
-      document.querySelector('#control-bar').classList.remove('is-hidden-touch')
+      document.querySelector('#control-bar').classList.add('is-active')
     }
   }
 

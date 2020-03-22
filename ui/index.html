@@ -46,18 +46,13 @@
   <body>
     <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
-        <a class="navbar-item" onclick="window.history.back()">
-          <svg class="feather"><use xlink:href="/img/feather-sprite.svg#chevron-left"></use></svg>
+        <a class="navbar-item menu-trigger">
+          <svg class="feather"><use xlink:href="/img/feather-sprite.svg#chevron-right"></use></svg>
         </a>
         <a href="/" data-navigo>
           <figure class="image">
             <img src="/img/moosic-logo.svg"  style="height: 30px; margin-top: 12px" />
           </figure>
-        </a>
-        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
         </a>
       </div>
     </nav>
@@ -81,7 +76,7 @@
     </aside>
 
 
-    <div id="control-bar">
+    <div id="control-bar" class="is-active">
       <div class="columns is-vcentered is-marginless is-mobile">
         <div class="column is-narrow">
           <div class="columns is-vcentered now-playing is-mobile">

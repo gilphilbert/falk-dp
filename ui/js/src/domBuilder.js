@@ -142,10 +142,10 @@ var domBuilder = (function () {
                 )
               ),
               cr.div({ class: 'column' },
-                cr.p({ class: 'title is-1-touch is-3-desktop is-marginless has-text-centered-touch' }, state.title),
+                cr.p({ class: 'title is-1-touch is-3-desktop has-text-centered-touch' }, state.title),
+                cr.p({ class: 'artist has-text-centered-touch subtitle has-text-weight-bold' }, cr.span({ class: 'is-hidden-touch' }, 'By '), cr.a({ href: 'artist/' + state.artist, 'data-navigo': '' }, state.artist)),
                 cr.p({ class: 'detail has-text-centered-touch' }, ((quality !== '') ? cr.span({ class: 'tag' }, quality) : null)),
-                cr.p({ class: 'artist has-text-centered-touch subtitle is-marginless' }, cr.span({ class: 'is-hidden-touch' }, 'By '), cr.a({ href: 'artist/' + state.artist, 'data-navigo': '' }, state.artist)),
-                cr.p({ class: 'album has-text-centered-touch subtitle is-marginless' }, cr.span({ class: 'is-hidden-touch' }, 'From the album '), cr.a({ href: 'album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album))
+                //cr.p({ class: 'album has-text-centered-touch subtitle is-marginless' }, cr.span({ class: 'is-hidden-touch' }, 'From the album '), cr.a({ href: 'album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album))
               )
             )
           )
@@ -302,7 +302,7 @@ var domBuilder = (function () {
                   cr.img({ src: data.artist.albumart })
                 )
               ),
-              cr.div({ class: 'column is-4' },
+              cr.div({ class: 'column is-8' },
                 cr.p({ class: 'title' }, data.artist.title),
                 cr.p({ class: 'subtitle' }, albums.length + ' album' + ((albums.length > 1 || albums.length === 0) ? 's' : '') )// + ' - ' + songs.length + ' track' + ((songs.length > 1) ? 's' : ''))
               )
