@@ -107,9 +107,9 @@ body
 
 //this contains the left hand menu
 aside.menu
-  box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
-  -webkit-box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
-  -moz-box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
+  //box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
+  //-webkit-box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
+  //-moz-box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
   height: 100%
   background: #393535
   position: absolute
@@ -200,9 +200,6 @@ aside.menu
     padding:  55px .75em calc(100px + .75em) .75em
   overflow-y: scroll
   background: radial-gradient(#4c4746, #221F1F)
-  -webkit-box-shadow: inset 2px 0px 3px 0px rgba(0,0,0,0.25)
-  -moz-box-shadow: inset 2px 0px 3px 0px rgba(0,0,0,0.25)
-  box-shadow: inset 2px 0px 3px 0px rgba(0,0,0,0.25)
 
   .container:not(:first-child)
       margin-top: 25px
@@ -251,7 +248,7 @@ aside.menu
         background: none
 
   #queue-table
-    //border-collapse: separate
+    border-collapse: separate
     //border-spacing: 0 10px 
     tr
       //border-radius: 5px
@@ -259,7 +256,7 @@ aside.menu
       td
         vertical-align: middle
         padding: 9px 0
-        border-bottom: 1px solid rgb(255,255,255,0.05)
+        //border-bottom: 1px solid rgb(255,255,255,0.05)
         @include until($desktop)
           width: 0%
           white-space: nowrap
@@ -282,9 +279,10 @@ aside.menu
         td
           border-bottom: none
       &.is-playing
-        //background-color: rgba(255,255,255,0.075)
-        //.song-title
+        background-color: rgba(255,255,255,0.02)
         font-weight: bold
+        td:first-child
+          border-left: 2px solid $primary
 
   #setting-page
     .title
@@ -305,9 +303,9 @@ aside.menu
     transition: left 250ms ease 0s
   background: #4C4746
   z-index: 3
-  -webkit-box-shadow: 0px -2px 3px 0px rgba(0,0,0,0.15)
-  -moz-box-shadow: 0px -2px 3px 0px rgba(0,0,0,0.15)
-  box-shadow: 0px -2px 3px 0px rgba(0,0,0,0.15)
+  //-webkit-box-shadow: 0px -2px 3px 0px rgba(0,0,0,0.15)
+  //-moz-box-shadow: 0px -2px 3px 0px rgba(0,0,0,0.15)
+  //box-shadow: 0px -2px 3px 0px rgba(0,0,0,0.15)
   line-height: 1
   &.is-active
       left: 0
@@ -360,6 +358,6 @@ aside.menu
     &::-webkit-progress-bar
       background: #393535
       //padding: 4px
-      -webkit-box-shadow: inset 0px 0px 9px -2px rgba(0,0,0,0.75)
-      -moz-box-shadow: inset 0px 0px 9px -2px rgba(0,0,0,0.75)
-      box-shadow: inset 0px 0px 9px -2px rgba(0,0,0,0.75)
+      //-webkit-box-shadow: inset 0px 0px 9px -2px rgba(0,0,0,0.75)
+      //-moz-box-shadow: inset 0px 0px 9px -2px rgba(0,0,0,0.75)
+      //box-shadow: inset 0px 0px 9px -2px rgba(0,0,0,0.75)
