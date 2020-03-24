@@ -215,8 +215,7 @@ var domBuilder = (function () {
                     )
                   ),
                   cr.div({ class:'column is-narrow'},
-                    cr.button({ class: 'button is-rounded is-primary is-hidden-touch' }, 'Play album'),
-                    cr.button({ class: 'button is-rounded is-primary is-hidden-desktop' }, uiTools.getSVG('play'))
+                    cr.button({ class: 'button is-rounded is-primary play-album', on: { click: uiTools.handlers.playAlbum } }, cr.span({ class: 'is-hidden-touch' }, 'Play album'), cr.span({ class: 'is-hidden-desktop' }, uiTools.getSVG('play')))
                   )
                 )
               )

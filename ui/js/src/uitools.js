@@ -229,6 +229,14 @@ var uiTools = (function () {
   }
 
   var handlers = {
+    playAlbum: function (e) {
+      var rows = document.querySelector('table.songs').querySelectorAll('tr')
+      var uris = []
+      rows.forEach((tr) => {
+        uris.push({ uri: tr.dataset.uri })
+      })
+      webSocket.action.replaceAndPlay(uris)
+    },
     tracks: function (e) {
       var rows = this.closest('tbody').querySelectorAll('tr')
       var uris = []

@@ -154,8 +154,6 @@ var webSocket = (function () {
     },
     replaceAndPlay: function (songs, pos) {
       pos = pos || 0
-      console.log(songs)
-      console.log(pos)
       server.send('replaceAndPlay', { songs: songs, pos: pos })
     },
     enqueue: function (songs) {

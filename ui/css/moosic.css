@@ -11191,6 +11191,9 @@ a:hover p {
 }
 
 aside.menu {
+  box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15);
+  -webkit-box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15);
   height: 100%;
   background: #393535;
   position: absolute;
@@ -11304,6 +11307,12 @@ aside.menu .detail {
     padding: 55px 0.75em calc(100px + .75em) 0.75em;
   }
 }
+@media screen and (max-width: 1023px) {
+  #content-container > .container.is-fluid {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
 #content-container .container:not(:first-child) {
   margin-top: 25px;
 }
@@ -11384,10 +11393,11 @@ aside.menu .detail {
   }
 }
 #content-container #queue-table tr td:first-child {
-  padding-left: 10px;
+  padding-left: 9px;
   padding-right: 10px;
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
+  border-left: 3px solid transparent;
 }
 #content-container #queue-table tr td:last-child {
   padding-right: 5px;
@@ -11398,11 +11408,11 @@ aside.menu .detail {
   border-bottom: none;
 }
 #content-container #queue-table tr.is-playing {
-  background-color: rgba(255, 255, 255, 0.02);
+  background-color: rgba(255, 255, 255, 0.05);
   font-weight: bold;
 }
 #content-container #queue-table tr.is-playing td:first-child {
-  border-left: 2px solid #4BBE87;
+  border-left: 3px solid #4BBE87;
 }
 #content-container #setting-page .title {
   margin-top: 1em;
@@ -11454,6 +11464,11 @@ aside.menu .detail {
     height: 48px;
     width: 48px;
   }
+}
+#control-bar .now-playing .title {
+  max-height: 37px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 #control-bar .columns.play-progress .column:first-child p {
   margin-right: 10px;
