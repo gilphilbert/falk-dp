@@ -11379,18 +11379,22 @@ aside.menu .detail {
   white-space: nowrap;
 }
 
+.mobile-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .mobile-controls svg.feather {
   margin: 0 25px;
 }
 .mobile-controls svg.feather.is-small {
   height: 17px;
   width: 17px;
-  position: relative;
-  top: -3px;
 }
 .mobile-controls .button {
   height: 48px;
   width: 48px;
+  padding: 0;
 }
 .mobile-controls .button .feather {
   margin: 0;

@@ -132,7 +132,7 @@ var domBuilder = (function () {
                 cr.p({ class: 'detail has-text-centered-touch' }, ((quality !== '') ? cr.span({ class: 'tag' }, quality) : null)),
                 cr.p({ class: 'album has-text-centered-touch subtitle is-marginless' }, cr.span({ class: 'is-hidden-touch' }, 'From the album '), cr.a({ href: 'album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album))
               ),
-              cr.div({ class: 'column mobile-controls is-hidden-desktop has-text-centered' },
+              cr.div({ class: 'column mobile-controls is-hidden-desktop is-12' },
                 uiTools.getSVG('shuffle', 'is-small'),
                 uiTools.getSVG('skip-back'),
                 cr.button({ class: 'button is-primary is-rounded' }, uiTools.getSVG('play')),
