@@ -59,8 +59,6 @@ var uiTools = (function () {
     document.title = t + ' | Moosic'
   }
 
-  
-
   var progress = {
     _seek: 0,
     _duration: 0,
@@ -71,7 +69,7 @@ var uiTools = (function () {
     },
     start: function () {
       this._counter = setInterval(() => {
-       this.update(true)
+        this.update(true)
       }, 100)
     },
     set: function (seek, duration) {
@@ -203,13 +201,12 @@ var uiTools = (function () {
       }
     })
 
-    document.addEventListener('swiped-right', function(e) {
+    document.addEventListener('swiped-right', function (e) {
       showMenu()
     })
-    document.addEventListener('swiped-left', function(e) {
+    document.addEventListener('swiped-left', function (e) {
       hideMenu()
     })
-
   }
 
   var hideMenu = function () {

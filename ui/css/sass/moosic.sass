@@ -78,6 +78,9 @@ body
   fill: none
   &.is-active
     stroke: $green
+  &.is-small
+    height: 20px
+    width: 20px
 
 .columns
   &.albumart, &.artistart
@@ -225,8 +228,6 @@ aside.menu
     padding-top: 1.25em
     .artist
       margin-bottom: 0.5rem
-    .detail
-      margin-bottom: 1.25rem
   .albumart img
     border-radius: 5%
 
@@ -257,6 +258,33 @@ aside.menu
   overflow: hidden
   text-overflow: ellipsis
   white-space: nowrap
+
+.mobile-controls
+  svg.feather
+    margin: 0 25px
+    //&:first-child,
+    //&:last-child
+      stroke: $grey-light
+    &.is-small
+      height: 17px
+      width: 17px
+      position: relative
+      top: -3px
+  .button
+    height: 48px
+    width: 48px
+    .feather
+      margin: 0
+
+.play-button
+  height: 48px
+  width: 48px
+  background: #4BBE87
+  border-radius: 3em
+  display: inline-flex
+  align-items: center
+  svg
+    margin: 0 auto
 
 #queue-list
   a
@@ -369,16 +397,6 @@ aside.menu
   .playing-controls
     display: flex
     align-items: center
-    .play-button
-      height: 48px
-      width: 48px
-      background: #4BBE87
-      display: inline-block
-      border-radius: 3em
-      display: flex
-      align-items: center
-      svg
-        margin: 0 auto
   //progress bar
   .play-progress
     .column:first-child p

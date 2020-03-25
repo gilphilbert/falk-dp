@@ -11162,6 +11162,10 @@ a:hover p {
 .feather.is-active {
   stroke: #4BBE87;
 }
+.feather.is-small {
+  height: 20px;
+  width: 20px;
+}
 
 .columns.albumart .column, .columns.artistart .column {
   padding: 1.5em;
@@ -11334,9 +11338,6 @@ aside.menu .detail {
 #content-container .home .artist {
   margin-bottom: 0.5rem;
 }
-#content-container .home .detail {
-  margin-bottom: 1.25rem;
-}
 #content-container .albumart img {
   border-radius: 5%;
 }
@@ -11376,6 +11377,35 @@ aside.menu .detail {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.mobile-controls svg.feather {
+  margin: 0 25px;
+}
+.mobile-controls svg.feather.is-small {
+  height: 17px;
+  width: 17px;
+  position: relative;
+  top: -3px;
+}
+.mobile-controls .button {
+  height: 48px;
+  width: 48px;
+}
+.mobile-controls .button .feather {
+  margin: 0;
+}
+
+.play-button {
+  height: 48px;
+  width: 48px;
+  background: #4BBE87;
+  border-radius: 3em;
+  display: inline-flex;
+  align-items: center;
+}
+.play-button svg {
+  margin: 0 auto;
 }
 
 #queue-list a {
@@ -11468,18 +11498,6 @@ aside.menu .detail {
 #control-bar .playing-controls {
   display: flex;
   align-items: center;
-}
-#control-bar .playing-controls .play-button {
-  height: 48px;
-  width: 48px;
-  background: #4BBE87;
-  display: inline-block;
-  border-radius: 3em;
-  display: flex;
-  align-items: center;
-}
-#control-bar .playing-controls .play-button svg {
-  margin: 0 auto;
 }
 #control-bar .play-progress .column:first-child p {
   margin-right: 10px;

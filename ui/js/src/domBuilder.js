@@ -39,9 +39,9 @@ var domBuilder = (function () {
   }
 
   var buildTrack = function (data) {
-    var format = ((data.format) ? (parseInt(data.format.split(':')[0])/1000) + 'kHz ' + data.format.split(':')[1] + 'bit' : '')
+    var format = ((data.format) ? (parseInt(data.format.split(':')[0]) / 1000) + 'kHz ' + data.format.split(':')[1] + 'bit' : '')
     var filetype = data.file.split('.')[data.file.split('.').length - 1]
-    var tr = cr.tr( { 'data-uri': data.file },
+    var tr = cr.tr({ 'data-uri': data.file },
       (('track' in data) ? cr.td({ class: 'is-narrow pointer', on: { click: uiTools.handlers.tracks } }, data.track) : null),
       cr.td({ class: 'pointer', on: { click: uiTools.handlers.tracks } }, data.title),
       ((data.duration) ? cr.td(uiTools.formatTime(data.duration)) : null),
@@ -77,12 +77,12 @@ var domBuilder = (function () {
     var queuePos = dataTools.getState().song
     var els = document.createDocumentFragment()
     queue.forEach((song) => {
-      els.appendChild(cr.div({ class: 'columns is-mobile is-vcentered' + ((song.pos == queuePos) ? ' is-playing' : ''), 'data-pos': song.pos, 'data-id': song.id },
+      els.appendChild(cr.div({ class: 'columns is-mobile is-vcentered' + ((song.pos === queuePos) ? ' is-playing' : ''), 'data-pos': song.pos, 'data-id': song.id },
         cr.div({ class: 'column is-narrow' }, cr.figure({ class: 'image is-32x32' }, cr.img({ src: song.albumart }))),
-        cr.div({ class: 'column has-no-overflow pointer', on: { click: function () { webSocket.action.play(this.closest('.columns').dataset.pos) } }}, song.title, cr.p({ class: 'is-hidden-desktop' }, song.artist + ' - ' + uiTools.formatTime(song.duration))),
-        cr.div({ class: 'column has-no-overflow is-fixed-size is-hidden-touch'}, cr.a({ href: 'artist/' + song.artist, 'data-navigo': '' }, song.artist)),
-        cr.div({ class: 'column has-no-overflow is-fixed-size is-hidden-touch'}, cr.a({ href: 'album/' + song.artist + '/' + song.album, 'data-navigo': '' }, song.album)),
-        cr.div({ class: 'column is-fixed-size is-hidden-touch'}, uiTools.formatTime(song.duration)),
+        cr.div({ class: 'column has-no-overflow pointer', on: { click: function () { webSocket.action.play(this.closest('.columns').dataset.pos) } } }, song.title, cr.p({ class: 'is-hidden-desktop' }, song.artist + ' - ' + uiTools.formatTime(song.duration))),
+        cr.div({ class: 'column has-no-overflow is-fixed-size is-hidden-touch' }, cr.a({ href: 'artist/' + song.artist, 'data-navigo': '' }, song.artist)),
+        cr.div({ class: 'column has-no-overflow is-fixed-size is-hidden-touch' }, cr.a({ href: 'album/' + song.artist + '/' + song.album, 'data-navigo': '' }, song.album)),
+        cr.div({ class: 'column is-fixed-size is-hidden-touch' }, uiTools.formatTime(song.duration)),
         cr.div({ class: 'column remove is-narrow', on: { click: uiTools.handlers.removeSong } }, cr.span({ class: 'delete' }))
       ))
     })
@@ -114,11 +114,10 @@ var domBuilder = (function () {
           var state = dataTools.getState()
           var frag = cr.div({ class: 'container is-fluid' })
 
-          var quality = ""
+          var quality = ''
           if (state.sampleRate && state.bits) {
-            quality = (state.sampleRate / 1000) + "kHz" + " " + state.bits + 'bit'
+            quality = (state.sampleRate / 1000) + 'kHz' + ' ' + state.bits + 'bit'
           }
-
 
           frag.appendChild(
             cr.div({ class: 'columns home' },
@@ -131,12 +130,19 @@ var domBuilder = (function () {
                 cr.p({ class: 'title is-1-touch is-3-desktop has-text-centered-touch' }, state.title),
                 cr.p({ class: 'artist has-text-centered-touch subtitle has-text-weight-bold' }, cr.span({ class: 'is-hidden-touch' }, 'By '), cr.a({ href: 'artist/' + state.artist, 'data-navigo': '' }, state.artist)),
                 cr.p({ class: 'detail has-text-centered-touch' }, ((quality !== '') ? cr.span({ class: 'tag' }, quality) : null)),
-                //cr.p({ class: 'album has-text-centered-touch subtitle is-marginless' }, cr.span({ class: 'is-hidden-touch' }, 'From the album '), cr.a({ href: 'album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album))
+                cr.p({ class: 'album has-text-centered-touch subtitle is-marginless' }, cr.span({ class: 'is-hidden-touch' }, 'From the album '), cr.a({ href: 'album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album))
+              ),
+              cr.div({ class: 'column mobile-controls is-hidden-desktop has-text-centered' },
+                uiTools.getSVG('shuffle', 'is-small'),
+                uiTools.getSVG('skip-back'),
+                cr.button({ class: 'button is-primary is-rounded' }, uiTools.getSVG('play')),
+                uiTools.getSVG('skip-forward'),
+                uiTools.getSVG('repeat', 'is-small')
               )
             )
           )
-		      
-          if ("albumart" in state) {
+
+          if ('albumart' in state) {
             frag.querySelector('.albumart img').src = state.albumart
           } else {
             frag.querySelector('.albumart img').src = '/img/notplaying.png'
@@ -145,7 +151,7 @@ var domBuilder = (function () {
           webSocket.get.queue()
 
           frag.appendChild(
-            cr.table({ id: 'queue-list', class: 'table is-fullwidth' })
+            cr.div({ id: 'queue-list' })
           )
 
           main.appendChild(frag)
@@ -153,9 +159,9 @@ var domBuilder = (function () {
 
         case 'album':
           // set the page title
-          title = data.title + " - " + data.artist
+          title = data.title + ' - ' + data.artist
           // list of songs in this album
-          const duration = uiTools.formatTime(Math.round(data.songs.reduce((total, song) => total + parseFloat(song.duration), 0)))
+          var duration = uiTools.formatTime(Math.round(data.songs.reduce((total, song) => total + parseFloat(song.duration), 0)))
 
           var format = ''
           var channels = ''
@@ -163,7 +169,7 @@ var domBuilder = (function () {
           if (data.songs.every(song => song.format === data.songs[0].format)) {
             format = data.songs[0].format
           }
-          if (format !== '' ) {
+          if (format !== '') {
             format = format.split(':')
             channels = format[2]
             switch (channels) {
@@ -189,18 +195,18 @@ var domBuilder = (function () {
                 )
               ),
               cr.div({ class: 'column is-8-desktop is-12-mobile' },
-                cr.div( { class: 'columns is-multiline is-mobile' }, 
-                  cr.div({ class: 'column is-8-mobile is-12-desktop'},
+                cr.div({ class: 'columns is-multiline is-mobile' },
+                  cr.div({ class: 'column is-8-mobile is-12-desktop' },
                     cr.p({ class: 'is-uppercase has-text-weight-semibold is-hidden-mobile' }, 'Album'),
                     cr.p({ class: 'title is-3 album-title has-text-weight-semibold' }, data.title),
                     cr.p('By ', cr.a({ class: 'artist has-text-weight-semibold', 'data-navigo': '', href: 'artist/' + encodeURIComponent(data.artist) }, data.artist)),
                     cr.p({ class: 'detail' }, data.songs.length + ' Song' + ((data.songs.length > 1) ? 's' : '') + ' - ' + duration + ((data.songs[0].date) ? ' - ' + data.songs[0].date : '')),
                     cr.div({ class: 'tags' },
-                    ((format !== '') ? cr.span({ class: 'tag is-rounded' }, format) : null),
-                    ((format !== '') ? cr.span({ class: 'tag is-rounded is-capitalized' }, channels) : null)
+                      ((format !== '') ? cr.span({ class: 'tag is-rounded' }, format) : null),
+                      ((format !== '') ? cr.span({ class: 'tag is-rounded is-capitalized' }, channels) : null)
                     )
                   ),
-                  cr.div({ class:'column is-narrow'},
+                  cr.div({ class: 'column is-narrow' },
                     cr.button({ class: 'button is-rounded is-primary play-album', on: { click: uiTools.handlers.playAlbum } }, cr.span({ class: 'is-hidden-touch' }, 'Play album'), cr.span({ class: 'is-hidden-desktop' }, uiTools.getSVG('play')))
                   )
                 )
@@ -225,7 +231,7 @@ var domBuilder = (function () {
 
         case 'albums':
           // list of albums
-          var albums = data //.navigation.lists[0].items
+          var albums = data
 
           // create main fragment
           frag = cr.div({ class: 'container is-fluid' })
@@ -254,7 +260,7 @@ var domBuilder = (function () {
 
           break
 
-        case 'artist':  
+        case 'artist':
           // set the page title
           title = data.artist.title
 
@@ -262,7 +268,7 @@ var domBuilder = (function () {
           albums = data.albums
 
           // list of the artist's songs
-          //songs = data.navigation.lists[1].items
+          // songs = data.navigation.lists[1].items
 
           // find all the songs that aren't in an album
           /*
@@ -289,7 +295,7 @@ var domBuilder = (function () {
               ),
               cr.div({ class: 'column is-8' },
                 cr.p({ class: 'title' }, data.artist.title),
-                cr.p({ class: 'subtitle' }, albums.length + ' album' + ((albums.length > 1 || albums.length === 0) ? 's' : '') )// + ' - ' + songs.length + ' track' + ((songs.length > 1) ? 's' : ''))
+                cr.p({ class: 'subtitle' }, albums.length + ' album' + ((albums.length > 1 || albums.length === 0) ? 's' : '')) // + ' - ' + songs.length + ' track' + ((songs.length > 1) ? 's' : ''))
               )
             )
           )
@@ -301,7 +307,7 @@ var domBuilder = (function () {
                 return buildTile({
                   title: album.title,
                   image: album.albumart,
-                  href: 'album/' + encodeURIComponent(data.artist.title) + '/' + encodeURIComponent(album.title),
+                  href: 'album/' + encodeURIComponent(data.artist.title) + '/' + encodeURIComponent(album.title)
                 })
               })
             )
@@ -331,7 +337,7 @@ var domBuilder = (function () {
 
         case 'artists':
           // this is the data we'll need (list of artists)
-          var artists = data //data.navigation.lists[0].items
+          var artists = data // data.navigation.lists[0].items
 
           // the main document fragment
           frag = cr.div({ class: 'container is-fluid' })
@@ -458,7 +464,7 @@ var domBuilder = (function () {
           // create the main page fragment
           frag = document.createDocumentFragment()
 
-          songs = []
+          var songs = []
           if (data.lists && data.lists.length > 0) {
             songs = data.lists[0]
           } else if ('navigation' in data && 'lists' in data.navigation && data.navigation.lists[0].items.length > 0) {
@@ -573,7 +579,7 @@ var domBuilder = (function () {
         uiTools.setPageTitle({ state })
       }
 
-      // if we're currently loading the home page create it 
+      // if we're currently loading the home page create it
       if (_loadPage === 'home') {
         page.build('home')
         uiTools.setPageTitle()
@@ -622,7 +628,7 @@ var domBuilder = (function () {
               cr.div({ class: 'control' },
                 cr.div({ class: 'buttons' },
                   cr.button({ class: 'button is-rounded is-primary', on: { click: () => { webSocket.action.updateLibrary() } } }, 'Update Library'),
-                  cr.button({ class: 'button is-rounded is-primary', on: { click: () => { webSocket.action.rescanLibrary() } } }, 'Rescan Library'),
+                  cr.button({ class: 'button is-rounded is-primary', on: { click: () => { webSocket.action.rescanLibrary() } } }, 'Rescan Library')
                 )
               )
             )
@@ -652,7 +658,8 @@ var domBuilder = (function () {
             )
           )
         ),
-        /*cr.p({ class: 'title' }, 'General'),
+        /*
+        cr.p({ class: 'title' }, 'General'),
         cr.div({ class: 'field is-horizontal' },
           cr.div({ class: 'field-label' },
             cr.label({ class: 'label' }, 'Device name')
@@ -667,8 +674,10 @@ var domBuilder = (function () {
               )
             )
           )
-        ),*/
-        /*cr.div({ class: 'field is-horizontal' },
+        ),
+        */
+        /*
+        cr.div({ class: 'field is-horizontal' },
           cr.div({ class: 'field-label' },
             cr.label({ class: 'label' }, 'Version')
           ),
@@ -680,7 +689,8 @@ var domBuilder = (function () {
               )
             )
           )
-        ),*/
+        ),
+        */
         cr.p({ class: 'title' }, 'System'),
         cr.div({ class: 'field is-horizontal' },
           cr.div({ class: 'field-label is-normal' },
@@ -709,7 +719,7 @@ var domBuilder = (function () {
       webSocket.get.audioDevices((data) => {
         var el = document.querySelector('#playback-device')
         if (el !== undefined && data) {
-          //var active = data.outputenabled
+          // var active = data.outputenabled
           var options = data.filter((i) => i.outputname !== undefined).map((i) => {
             return cr.option({ 'data-id': i.outputid, selected: ((i.outputenabled === true) ? 'true' : 'false') }, i.outputname)
           })
@@ -718,19 +728,19 @@ var domBuilder = (function () {
         }
       })
       // load the system version
-      //webSocket.get.version((data) => {
-      //  var el = document.querySelector('#system-version p span')
-      //  if (el !== undefined && data) {
-      //    var v = data.systemversion + ' (' + data.builddate + ') '
-      //    el.innerText = v
-      //  }
-      //})
-      //webSocket.get.deviceName((data) => {
-      //  var el = document.querySelector('#device-name input')
-      //  if (el !== undefined && data) {
-      //    el.value = data.name
-      //  }
-      //})
+      // webSocket.get.version((data) => {
+      //   var el = document.querySelector('#system-version p span')
+      //   if (el !== undefined && data) {
+      //     var v = data.systemversion + ' (' + data.builddate + ') '
+      //     el.innerText = v
+      //   }
+      // })
+      // webSocket.get.deviceName((data) => {
+      //   var el = document.querySelector('#device-name input')
+      //   if (el !== undefined && data) {
+      //     el.value = data.name
+      //   }
+      // })
       main.appendChild(cont)
       uiTools.setPageTitle({ title: 'Settings' })
       router.update()
@@ -743,52 +753,50 @@ var domBuilder = (function () {
         cr.div({ class: 'modal-background' }),
         cr.div({ class: 'modal-content' },
           cr.div({ class: 'box' },
-                uiTools.getSVG('server', 'title-icon'),
-                //cr.svg({ class: 'feather' }, cr.use({ 'xlink:href': '' })),
-                cr.p({ class: 'title' }, 'Add share'),
-                cr.div({ class: 'field' },
-                  cr.div({ class: 'control' },
-                    cr.input({ class: 'input address', type: 'text', placeholder: 'Server address' })
-                  ),
-                  cr.p({ class: 'help is-danger' })
-                ),
-                cr.div({ class: 'field' },
-                  cr.div({ class: 'control' },
-                    cr.input({ class: 'input path', type: 'text', placeholder: 'Path (e.g. /export/music)' })
-                  ),
-                  cr.p({ class: 'help is-danger' })
-                ),
-                cr.div({ class: 'field' },
-                  cr.div({ class: 'control' },
-                    cr.div({ class: 'select is-fullwidth' },
-                      cr.select({ class: 'type' },
-                        cr.option({ value: 'nfs' }, 'NFS'),
-                        cr.option({ value: 'smb' }, 'SMB')
-                      )
-                    )
-                  ),
-                  cr.p({ class: 'help is-danger' })
-                ),
-                cr.div({ class: 'columns buttons' },
-                  cr.div({ class: 'column '},
-                    cr.div({ class: 'field' },
-                      cr.div({ class: 'control' },
-                        cr.button({ class: 'button is-dark is-rounded is-fullwidth', on: { click: function () { this.closest('.modal').classList.remove('is-active') } } }, 'Close')
-                      )
-                    )
-                  ),
-                  cr.div({ class: 'column' },
-                    cr.div({ class: 'field first-button' },
-                      cr.div({ class: 'control' },
-                        cr.button({ class: 'button is-primary is-rounded is-fullwidth', on: { click: function () { uiTools.handlers.addShare(this) } } }, 'Add')
-                      )
-                    )
+            uiTools.getSVG('server', 'title-icon'),
+            cr.p({ class: 'title' }, 'Add share'),
+            cr.div({ class: 'field' },
+              cr.div({ class: 'control' },
+                cr.input({ class: 'input address', type: 'text', placeholder: 'Server address' })
+              ),
+              cr.p({ class: 'help is-danger' })
+            ),
+            cr.div({ class: 'field' },
+              cr.div({ class: 'control' },
+                cr.input({ class: 'input path', type: 'text', placeholder: 'Path (e.g. /export/music)' })
+              ),
+              cr.p({ class: 'help is-danger' })
+            ),
+            cr.div({ class: 'field' },
+              cr.div({ class: 'control' },
+                cr.div({ class: 'select is-fullwidth' },
+                  cr.select({ class: 'type' },
+                    cr.option({ value: 'nfs' }, 'NFS'),
+                    cr.option({ value: 'smb' }, 'SMB')
                   )
                 )
+              ),
+              cr.p({ class: 'help is-danger' })
+            ),
+            cr.div({ class: 'columns buttons' },
+              cr.div({ class: 'column ' },
+                cr.div({ class: 'field' },
+                  cr.div({ class: 'control' },
+                    cr.button({ class: 'button is-dark is-rounded is-fullwidth', on: { click: function () { this.closest('.modal').classList.remove('is-active') } } }, 'Close')
+                  )
+                )
+              ),
+              cr.div({ class: 'column' },
+                cr.div({ class: 'field first-button' },
+                  cr.div({ class: 'control' },
+                    cr.button({ class: 'button is-primary is-rounded is-fullwidth', on: { click: function () { uiTools.handlers.addShare(this) } } }, 'Add')
+                  )
+                )
+              )
+            )
           )
         )
       )
-      //modal.querySelector('.feather use').setAttribute('xlink:href', '/img/feather-sprite.svg#server')
       uiTools.clearNodes('#modal-container').appendChild(modal)
 
       // wait for the element to be added to the DOM so we get our nice effects!

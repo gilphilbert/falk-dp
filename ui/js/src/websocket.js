@@ -2,67 +2,65 @@
 
 var webSocket = (function () {
   /* ----------- PRIVATE VARIABLES ----------- */
-  var _functions = []
   var _host = ''
   var server
 
   /* ----------- PRIVATE FUNCTIONS ----------- */
 
-  var ServerEventsDispatcher = function(url){
-    var url = url
+  var ServerEventsDispatcher = function (url) {
     var conn = new WebSocket(url)
 
     var callbacks = {}
     var cbOnce = {}
 
-    this.bind = function(event_name, callback){
-      callbacks[event_name] = callbacks[event_name] || []
-      callbacks[event_name].push(callback)
-      return this;// chainable
+    this.bind = function (eventName, callback) {
+      callbacks[eventName] = callbacks[eventName] || []
+      callbacks[eventName].push(callback)
+      return this
     }
 
-    this.bindOnce = function(event_name, callback){
-      cbOnce[event_name] = callback
-      return this;// chainable
+    this.bindOnce = function (eventName, callback) {
+      cbOnce[eventName] = callback
+      return this
     }
 
-    this.send = function(event_name, event_data){
-      var payload = JSON.stringify({event:event_name, data: event_data})
-      conn.send( payload )
-      return this;
+    this.send = function (eventName, eventData) {
+      var payload = JSON.stringify({ event: eventName, data: eventData })
+      conn.send(payload)
+      return this
     }
 
-    var startup = function() {
-      conn.onmessage = function(evt){
+    var startup = function () {
+      conn.onmessage = function (evt) {
         var json = JSON.parse(evt.data)
         dispatch(json.event, json.data)
       }
 
-      conn.onclose = function(e){dispatch('close',e)}
-      conn.onopen = function(){dispatch('open',null)}
+      conn.onclose = function (e) { dispatch('close', e) }
+      conn.onopen = function () { dispatch('open', null) }
     }
     startup()
 
-    this.bind("close", (e) => {
-      if (e.code!=1000) {
-        setTimeout(function(){
+    this.bind('close', (e) => {
+      if (e.code !== 1000) {
+        setTimeout(function () {
           conn = new WebSocket(url)
           startup()
         }, 3000)
       }
     })
 
-    var dispatch = function(event_name, message){
-      var chain = callbacks[event_name]
-      if(typeof chain !== 'undefined') {
-        for(var i = 0; i < chain.length; i++){
-          chain[i]( message )
+    var dispatch = function (eventName, message) {
+      var chain = callbacks[eventName]
+      if (typeof chain !== 'undefined') {
+        for (var i = 0; i < chain.length; i++) {
+          chain[i](message)
         }
       }
-      var once = cbOnce[event_name]
-      if(typeof once !== 'undefined') {
-        once( message )
-        cbOnce[event_name] = undefined
+      var once = cbOnce[eventName]
+      if (typeof once !== 'undefined') {
+        once(message)
+        cbOnce[eventName] = undefined
       }
     }
   }
@@ -95,7 +93,7 @@ var webSocket = (function () {
       server.send('getOutputs')
     },
     playlists: function () {
-      server.send("getPlaylists")
+      server.send('getPlaylists')
     },
     playlist: function (name) {
       server.send('getPlaylist', { name: name })
@@ -106,7 +104,7 @@ var webSocket = (function () {
     artistAlbums: function (name) {
       server.send('getArtistAlbums', { artist: name })
     },
-    album: function(artist, title) {
+    album: function (artist, title) {
       server.send('getAlbum', { artist: artist, title: title })
     },
     albums: function () {
@@ -126,10 +124,10 @@ var webSocket = (function () {
     //   on('pushDeviceName', func)
     //   sendOnly('getDeviceName')
     // },
-     audioDevices: function (func) {
+    audioDevices: function (func) {
       server.bindOnce('pushOutputs', func)
-       server.send('getOutputs')
-    },
+      server.send('getOutputs')
+    }
     // version: function (func) {
     //   if (func !== undefined) {
     //     _socket.once('pushSystemVersion', func)
@@ -149,7 +147,7 @@ var webSocket = (function () {
       server.send('clearQueue')
     },
     addPlay: function (tracks, pos) {
-      index = index || 0
+      pos = pos || 0
       server.send('addPlay', { songs: tracks, pos: pos })
     },
     replaceAndPlay: function (songs, pos) {
@@ -195,16 +193,16 @@ var webSocket = (function () {
     },
     toggleRepeat: function () {
       var state = dataTools.getState()
-       if (state.single === true) {
+      if (state.single === true) {
         server.send('repeat', { state: false })
         server.send('single', { state: false })
-       } else {
-         if (state.repeat === true) {
+      } else {
+        if (state.repeat === true) {
           server.send('single', { state: true })
-         } else {
+        } else {
           server.send('repeat', { state: true })
-         }
-       }
+        }
+      }
     },
     updateLibrary: function () {
       server.send('updateDB')
@@ -237,14 +235,14 @@ var webSocket = (function () {
 
   var start = function () {
     server.bind('pushArtists', domBuilder.page.build)
-    .bind('pushAlbums', domBuilder.page.build)
-    .bind('pushGenres', domBuilder.page.build)
-    .bind('pushArtistAlbums', domBuilder.page.build)
-    .bind('pushAlbum', domBuilder.page.build)
-    .bind('pushPlaylists', domBuilder.page.build)
-    .bind('pushPlaylist', domBuilder.page.build)
-    .bind('pushStatus', domBuilder.page.updateState)
-    .bind('pushQueue', domBuilder.queueTable)
+      .bind('pushAlbums', domBuilder.page.build)
+      .bind('pushGenres', domBuilder.page.build)
+      .bind('pushArtistAlbums', domBuilder.page.build)
+      .bind('pushAlbum', domBuilder.page.build)
+      .bind('pushPlaylists', domBuilder.page.build)
+      .bind('pushPlaylist', domBuilder.page.build)
+      .bind('pushStatus', domBuilder.page.updateState)
+      .bind('pushQueue', domBuilder.queueTable)
     get.state()
   }
 
@@ -267,16 +265,11 @@ var webSocket = (function () {
   }
   */
 
-  var getSocket = function () {
-    return _socket
-  }
-
   return {
     init: init,
     get: get,
     set: set,
     action: action,
-    getURL: getURL,
-    getSocket: getSocket
+    getURL: getURL
   }
 })()
