@@ -11378,7 +11378,7 @@ aside.menu .detail {
   white-space: nowrap;
 }
 
-#queue-list .columns:hover .column {
+#queue-list .columns:hover {
   background: rgba(0, 0, 0, 0.08);
 }
 #queue-list .column.is-fixed-size {
@@ -11397,8 +11397,6 @@ aside.menu .detail {
 }
 #queue-list .is-playing {
   font-weight: bold;
-}
-#queue-list .is-playing .column {
   background: rgba(0, 0, 0, 0.08);
 }
 #queue-list .is-playing .column:first-child {
