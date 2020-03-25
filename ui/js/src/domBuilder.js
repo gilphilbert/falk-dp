@@ -80,13 +80,14 @@ var domBuilder = (function () {
       els.appendChild(cr.div({ class: 'columns is-mobile is-vcentered' + ((song.pos == queuePos) ? ' is-playing' : ''), 'data-pos': song.pos, 'data-id': song.id },
         cr.div({ class: 'column is-narrow' }, cr.figure({ class: 'image is-32x32' }, cr.img({ src: song.albumart }))),
         cr.div({ class: 'column has-no-overflow pointer', on: { click: function () { webSocket.action.play(this.closest('.columns').dataset.pos) } }}, song.title, cr.p({ class: 'is-hidden-desktop' }, song.artist + ' - ' + uiTools.formatTime(song.duration))),
-        cr.div({ class: 'column has-no-overflow is-fixed-size is-hidden-touch'}, song.artist),
-        cr.div({ class: 'column has-no-overflow is-fixed-size is-hidden-touch'}, song.album),
+        cr.div({ class: 'column has-no-overflow is-fixed-size is-hidden-touch'}, cr.a({ href: 'artist/' + song.artist, 'data-navigo': '' }, song.artist)),
+        cr.div({ class: 'column has-no-overflow is-fixed-size is-hidden-touch'}, cr.a({ href: 'album/' + song.artist + '/' + song.album, 'data-navigo': '' }, song.album)),
         cr.div({ class: 'column is-fixed-size is-hidden-touch'}, uiTools.formatTime(song.duration)),
         cr.div({ class: 'column remove is-narrow', on: { click: uiTools.handlers.removeSong } }, cr.span({ class: 'delete' }))
       ))
     })
     uiTools.clearNodes(el).appendChild(els)
+    router.update()
   }
 
   var page = {

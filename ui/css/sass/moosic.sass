@@ -259,7 +259,11 @@ aside.menu
   white-space: nowrap
 
 #queue-list
-  //cursor: pointer
+  a
+    color: $white
+    &:hover
+      color: $white
+      text-decoration: underline
   .columns:hover
     background: rgba(0,0,0,0.08)
   .column.is-fixed-size

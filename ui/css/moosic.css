@@ -11378,6 +11378,13 @@ aside.menu .detail {
   white-space: nowrap;
 }
 
+#queue-list a {
+  color: #ffffff;
+}
+#queue-list a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
 #queue-list .columns:hover {
   background: rgba(0, 0, 0, 0.08);
 }
