@@ -11084,6 +11084,11 @@ a:hover p {
   }
 }
 
+body {
+  background: radial-gradient(#4c4746, #221F1F);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
 @media screen and (max-width: 1023px) {
   body {
     font-size: 0.9em;
@@ -11188,12 +11193,6 @@ a:hover p {
   text-align: center;
 }
 
-#page-container {
-  height: 100vh;
-  overflow: hidden;
-  margin: 0;
-}
-
 aside.menu {
   box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15);
   -webkit-box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15);
@@ -11250,13 +11249,13 @@ aside.menu .detail {
   visibility: hidden;
 }
 
-.navbar.is-fixed-top {
+.navbar {
   z-index: 1;
   background-color: transparent;
   transition: background-color 0.25s ease;
   display: none;
 }
-.navbar.is-fixed-top .navbar-menu {
+.navbar .navbar-menu {
   display: block;
   opacity: 0;
   position: absolute;
@@ -11266,27 +11265,27 @@ aside.menu .detail {
   transition: all 0.4s ease-in-out;
   pointer-events: none;
 }
-.navbar.is-fixed-top.is-active {
+.navbar.is-active {
   background-color: #221F1F;
 }
-.navbar.is-fixed-top.is-active .navbar-menu {
+.navbar.is-active .navbar-menu {
   opacity: 1;
   transform: none;
   pointer-events: auto;
 }
 @media screen and (max-width: 1023px) {
-  .navbar.is-fixed-top {
+  .navbar {
     display: block;
   }
 }
-.navbar.is-fixed-top .navbar-burger {
+.navbar .navbar-burger {
   color: #ffffff;
   width: 5rem;
 }
-.navbar.is-fixed-top .navbar-menu {
+.navbar .navbar-menu {
   background-color: #221F1F;
 }
-.navbar.is-fixed-top .navbar-menu .navbar-item, .navbar.is-fixed-top .navbar-menu .navbar-link {
+.navbar .navbar-menu .navbar-item, .navbar .navbar-menu .navbar-link {
   color: #ffffff;
 }
 
@@ -11301,14 +11300,11 @@ aside.menu .detail {
 }
 
 #content-container {
-  height: 100vh;
   padding: 2.5em 1.5em calc(100px + .75em) calc(1.5em + 90px);
-  overflow-y: scroll;
-  background: radial-gradient(#4c4746, #221F1F);
 }
 @media screen and (max-width: 1023px) {
   #content-container {
-    padding: 55px 0.75em calc(100px + .75em) 0.75em;
+    padding: 0 0.75em calc(100px + .75em) 0.75em;
   }
 }
 @media screen and (max-width: 1023px) {

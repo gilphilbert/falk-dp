@@ -20,6 +20,9 @@ a
       font-size: 1.25em
 
 body
+  background: radial-gradient(#4c4746, #221F1F)
+  background-attachment: fixed
+  min-height: 100vh
   @include until($desktop)
     font-size: .9em
 
@@ -102,12 +105,6 @@ body
     .title, .subtitle
       text-align: center
 
-// this contains the entire page
-#page-container
-  height: 100vh
-  overflow: hidden
-  margin: 0
-
 //this contains the left hand menu
 aside.menu
   box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
@@ -158,7 +155,7 @@ aside.menu
     margin-top: 5px
     visibility: hidden
 
-.navbar.is-fixed-top
+.navbar
   z-index: 1
   background-color: transparent
   transition: background-color 0.25s ease
@@ -197,12 +194,9 @@ aside.menu
 
 // this contains the right hand content pane
 #content-container
-  height: 100vh
   padding: 2.5em 1.5em calc(100px + .75em) calc(1.5em + 90px)
   @include until($desktop)
-    padding:  55px .75em calc(100px + .75em) .75em
-  overflow-y: scroll
-  background: radial-gradient(#4c4746, #221F1F)
+    padding:  0 .75em calc(100px + .75em) .75em
 
   >.container.is-fluid
     @include until($desktop)
