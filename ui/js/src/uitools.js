@@ -254,7 +254,7 @@ var uiTools = (function () {
       this.closest('.dropdown').classList.toggle('is-active')
     },
     removeSong: function (e) {
-      var pos = this.closest('tr').dataset.position
+      var pos = this.closest('.columns').dataset.pos
       webSocket.action.removeFromQueue(pos)
     },
     playSong: function (e) {

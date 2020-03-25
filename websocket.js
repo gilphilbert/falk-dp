@@ -58,12 +58,12 @@ async function setup() {
     switch(e) {
       case "playlist":
         mpdc.api.queue.info()
-          .then(d => {
-            d.forEach((i) => {
-	            i.albumart = "/art/album/" + encodeURIComponent(i.artist) + "/" + encodeURIComponent(i.album)
-	          })
-	          broadcast("pushQueue", { queue: d })
-	        })
+        .then((d) => {
+          d.forEach((i) => {
+            i.albumart = "/art/album/" + encodeURIComponent(i.artist) + "/" + encodeURIComponent(i.album)
+          })
+          broadcast("pushQueue", d)
+        })
         break
       case "player":
       case "options":
@@ -245,8 +245,8 @@ async function setup() {
     })
 
     disp.bind("removeFromQueue", function (data) {
-      if (data.id) {
-        mpdc.api.queue.deleteid(data.id)
+      if (data.pos) {
+        mpdc.api.queue.delete(data.pos)
       }
     })
 
@@ -282,8 +282,12 @@ async function setup() {
     })
 
     // actions
-    disp.bind("play", function () {
-      mpdc.api.playback.play()
+    disp.bind("play", function (pos) {
+      if (pos !== undefined) {
+        mpdc.api.playback.play(pos)
+      } else {
+        mpdc.api.playback.play()
+      }
     })
     disp.bind("pause", function () {
       mpdc.api.playback.pause()

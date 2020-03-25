@@ -69,39 +69,24 @@ var domBuilder = (function () {
   }
 
   var queueTable = function (queue) {
-    var el = document.querySelector('#queue-table')
+    var el = document.querySelector('#queue-list')
     if (el === null) {
       return
     }
-    el = uiTools.clearNodes(el)
-    var frag = document.createDocumentFragment()
-    var queuePos = dataTools.getState().song
 
-    for (var i = 0; i <= queue.length - 1; i++) {
-      frag.appendChild(cr.tr({ class: ((i === queuePos) ? 'is-playing' : '') },
-        cr.td({ class: 'is-narrow' },
-          cr.figure({ class: 'image albumart is-32x32' },
-            cr.img({ src: queue[i].albumart })
-          )
-        ),
-        cr.td({ class: 'title-cell', 'data-position': i, on: { click: function () { webSocket.action.play(this.dataset.position) } } },
-          cr.span({ class: 'song-title' }, queue[i].title),
-          cr.p({ class: 'is-hidden-desktop' }, queue[i].artist + ' - ' + uiTools.formatTime(queue[i].duration))
-        ),
-        cr.td({ class: 'is-hidden-touch' },
-          queue[i].artist
-        ),
-        cr.td({ class: 'is-hidden-touch' },
-          queue[i].album
-        ),
-        cr.td({ class: 'is-hidden-touch' },
-          uiTools.formatTime(queue[i].duration)
-        ),
-        cr.td({ class: 'remove', on: { click: uiTools.handlers.removeSong } }, cr.span({ class: 'delete' }))
+    var queuePos = dataTools.getState().song
+    var els = document.createDocumentFragment()
+    queue.forEach((song) => {
+      els.appendChild(cr.div({ class: 'columns is-vcentered' + ((song.pos == queuePos) ? ' is-playing' : ''), 'data-pos': song.pos, 'data-id': song.id },
+        cr.div({ class: 'column is-narrow' }, cr.figure({ class: 'image is-32x32' }, cr.img({ src: song.albumart }))),
+        cr.div({ class: 'column has-no-overflow pointer', on: { click: function () { webSocket.action.play(this.closest('.columns').dataset.pos) } }}, song.title),
+        cr.div({ class: 'column has-no-overflow is-fixed-size'}, song.artist),
+        cr.div({ class: 'column has-no-overflow is-fixed-size'}, song.album),
+        cr.div({ class: 'column is-fixed-size'}, uiTools.formatTime(song.duration)),
+        cr.div({ class: 'column remove is-narrow', on: { click: uiTools.handlers.removeSong } }, cr.span({ class: 'delete' }))
       ))
-    }
-    // return frag
-    el.appendChild(frag)
+    })
+    uiTools.clearNodes(el).appendChild(els)
   }
 
   var page = {
@@ -159,7 +144,7 @@ var domBuilder = (function () {
           webSocket.get.queue()
 
           frag.appendChild(
-            cr.table({ id: 'queue-table', class: 'table is-fullwidth' })
+            cr.table({ id: 'queue-list', class: 'table is-fullwidth' })
           )
 
           main.appendChild(frag)

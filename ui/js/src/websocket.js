@@ -159,8 +159,8 @@ var webSocket = (function () {
     enqueue: function (songs) {
       server.send('addToQueue', { songs: songs })
     },
-    removeFromQueue: function (position) {
-      server.send('removeFromQueue', { value: position })
+    removeFromQueue: function (pos) {
+      server.send('removeFromQueue', { pos: pos })
     },
     saveQueue: function (name) {
       if (name !== undefined) {
@@ -171,7 +171,13 @@ var webSocket = (function () {
       if (pos === undefined) {
         server.send('play')
       } else {
-        server.send('play', { pos: pos })
+        server.send('play', parseInt(pos))
+      }
+    },
+    playid: function (id) {
+      console.log(id)
+      if (id !== undefined) {
+        server.send('playid', parseInt(id))
       }
     },
     pause: function () {

@@ -11371,53 +11371,43 @@ aside.menu .detail {
     padding: 0;
   }
 }
-#content-container #queue-table {
-  border-collapse: separate;
+
+.has-no-overflow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-#content-container #queue-table tr td {
-  vertical-align: middle;
-  padding: 9px 0;
+
+#queue-list .columns:hover .column {
+  background: rgba(0, 0, 0, 0.08);
 }
-@media screen and (max-width: 1023px) {
-  #content-container #queue-table tr td {
-    width: 0%;
-    white-space: nowrap;
-  }
+#queue-list .column.is-fixed-size {
+  flex: none;
+  width: 13%;
 }
-@media screen and (max-width: 1023px) {
-  #content-container #queue-table tr td.title-cell {
-    width: 100%;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    max-width: 1px;
-  }
-}
-#content-container #queue-table tr td:first-child {
-  padding-left: 9px;
-  padding-right: 10px;
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
+#queue-list .column:first-child {
   border-left: 3px solid transparent;
+  border-top-left-radius: 5%;
+  border-bottom-left-radius: 5%;
+  padding: 0.5rem 0.75rem;
 }
-#content-container #queue-table tr td:last-child {
-  padding-right: 5px;
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
+#queue-list .column:last-child {
+  border-top-right-radius: 5%;
+  border-bottom-right-radius: 5%;
 }
-#content-container #queue-table tr:last-child td {
-  border-bottom: none;
-}
-#content-container #queue-table tr.is-playing {
-  background-color: rgba(255, 255, 255, 0.05);
+#queue-list .is-playing {
   font-weight: bold;
 }
-#content-container #queue-table tr.is-playing td:first-child {
-  border-left: 3px solid #4BBE87;
+#queue-list .is-playing .column {
+  background: rgba(0, 0, 0, 0.08);
 }
-#content-container #setting-page .title {
+#queue-list .is-playing .column:first-child {
+  border-color: #4BBE87;
+}
+#queue-list #setting-page .title {
   margin-top: 1em;
 }
-#content-container #setting-page .title:first-child {
+#queue-list #setting-page .title:first-child {
   margin-top: inherit;
 }
 
@@ -11433,10 +11423,6 @@ aside.menu .detail {
 @media screen and (max-width: 1023px) {
   #control-bar {
     height: 78px;
-  }
-}
-@media screen and (max-width: 1023px) {
-  #control-bar {
     left: 100%;
     transition: left 250ms ease 0s;
   }
@@ -11447,6 +11433,10 @@ aside.menu .detail {
 }
 #control-bar .columns {
   height: 100%;
+}
+#control-bar .feather {
+  height: 20px;
+  width: 20px;
 }
 #control-bar .now-playing {
   width: 300px;
@@ -11470,30 +11460,31 @@ aside.menu .detail {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-#control-bar .columns.play-progress .column:first-child p {
-  margin-right: 10px;
+#control-bar .playing-controls {
+  display: flex;
+  align-items: center;
 }
-#control-bar .columns.play-progress .column:last-child p {
-  margin-left: 10px;
-}
-#control-bar .playing-controls > svg {
-  position: relative;
-  top: 11px;
-}
-#control-bar .play-button {
+#control-bar .playing-controls .play-button {
   height: 48px;
   width: 48px;
   background: #4BBE87;
   display: inline-block;
   border-radius: 3em;
+  display: flex;
+  align-items: center;
 }
-#control-bar .play-button svg {
-  position: relative;
-  top: 11px;
-  left: 13px;
+#control-bar .playing-controls .play-button svg {
+  margin: 0 auto;
 }
-#control-bar .misc-controls svg {
-  margin: 0 5px;
+#control-bar .play-progress .column:first-child p {
+  margin-right: 10px;
+}
+#control-bar .play-progress .column:last-child p {
+  margin-left: 10px;
+}
+#control-bar progress.progress {
+  margin-top: 3px;
+  background: #2A2727;
 }
 #control-bar progress.progress::-moz-progress-value {
   background: #2A2727;
@@ -11507,6 +11498,9 @@ aside.menu .detail {
 }
 #control-bar progress.progress::-webkit-progress-bar {
   background: #393535;
+}
+#control-bar .misc-controls svg {
+  margin: 0 5px;
 }
 
 /*# sourceMappingURL=moosic.css.map */
