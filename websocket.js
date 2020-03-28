@@ -26,7 +26,7 @@ async function setup () {
   async function getStatus () {
     var status = await mpdc.api.status.get()
     var queue = await mpdc.api.queue.info()
-    if (status.song !== undefined && status.state !== 'stop') {
+    if (status.song !== undefined && queue.length > 0) {
       var songdetail = queue.filter((qs) => {
         return qs.pos === status.song
       })[0]
@@ -38,19 +38,28 @@ async function setup () {
       status.date = songdetail.date
       status.albumart = '/art/album/' + songdetail.artist + '/' + songdetail.album
 
-      status.duration = status.time.total
-      status.elapsed = status.time.elapsed
-      delete (status.time)
-
-      status.sampleRate = status.audio.sampleRate
-      status.bits = status.audio.bits
-      status.channels = status.audio.channels
-      delete (status.audio)
+      if (status.time) {
+        status.duration = status.time.total
+        status.elapsed = status.time.elapsed
+        delete (status.time)
+      } else {
+        status.duration = songdetail.duration
+        status.elapsed = 0
+      }
+      if (status.audio) {
+        status.sampleRate = status.audio.sampleRate
+        status.bits = status.audio.bits
+        status.channels = status.audio.channels
+        delete (status.audio)
+      } else {
+        status.sampleRate = 0
+        status.bits = 0
+        status.channels = 0
+      }
       delete (status.playlist)
       delete (status.songid)
     }
     return status
-    // disp.send('pushStatus', status)
   }
 
   mpdc.on('system', (e) => {

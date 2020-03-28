@@ -80,8 +80,8 @@ var domBuilder = (function () {
       els.appendChild(cr.div({ class: 'columns is-mobile is-vcentered' + ((song.pos === queuePos) ? ' is-playing' : ''), 'data-pos': song.pos, 'data-id': song.id },
         cr.div({ class: 'column is-narrow' }, cr.figure({ class: 'image is-32x32' }, cr.img({ src: song.albumart }))),
         cr.div({ class: 'column has-no-overflow pointer', on: { click: function () { webSocket.action.play(this.closest('.columns').dataset.pos) } } }, song.title, cr.p({ class: 'is-hidden-desktop' }, song.artist + ' - ' + uiTools.formatTime(song.duration))),
-        cr.div({ class: 'column has-no-overflow is-fixed-size is-hidden-touch' }, cr.a({ href: 'artist/' + song.artist, 'data-navigo': '' }, song.artist)),
-        cr.div({ class: 'column has-no-overflow is-fixed-size is-hidden-touch' }, cr.a({ href: 'album/' + song.artist + '/' + song.album, 'data-navigo': '' }, song.album)),
+        cr.div({ class: 'column has-no-overflow is-fixed-size is-hidden-touch' }, cr.a({ href: '/artist/' + song.artist, 'data-navigo': '' }, song.artist)),
+        cr.div({ class: 'column has-no-overflow is-fixed-size is-hidden-touch' }, cr.a({ href: '/album/' + song.artist + '/' + song.album, 'data-navigo': '' }, song.album)),
         cr.div({ class: 'column is-fixed-size is-hidden-touch' }, uiTools.formatTime(song.duration)),
         cr.div({ class: 'column remove is-narrow', on: { click: uiTools.handlers.removeSong } }, cr.span({ class: 'delete' }))
       ))
@@ -114,11 +114,6 @@ var domBuilder = (function () {
           var state = dataTools.getState()
           var frag = cr.div({ class: 'container is-fluid' })
 
-          var quality = ''
-          if (state.sampleRate && state.bits) {
-            quality = (state.sampleRate / 1000) + 'kHz' + ' ' + state.bits + 'bit'
-          }
-
           frag.appendChild(
             cr.div({ class: 'columns home' },
               cr.div({ class: 'column is-3 is-2-fullhd' },
@@ -127,10 +122,10 @@ var domBuilder = (function () {
                 )
               ),
               cr.div({ class: 'column' },
-                cr.p({ class: 'title is-1-touch is-3-desktop has-text-centered-touch' }, state.title),
-                cr.p({ class: 'artist has-text-centered-touch subtitle has-text-weight-bold' }, cr.span({ class: 'is-hidden-touch' }, 'By '), cr.a({ href: 'artist/' + state.artist, 'data-navigo': '' }, state.artist)),
-                cr.p({ class: 'detail has-text-centered-touch' }, ((quality !== '') ? cr.span({ class: 'tag' }, quality) : null)),
-                cr.p({ class: 'album has-text-centered-touch subtitle is-marginless' }, cr.span({ class: 'is-hidden-touch' }, 'From the album '), cr.a({ href: 'album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album))
+                cr.p({ class: 'title is-1-touch is-3-desktop has-text-centered-touch' }, state.title || 'Not playing'),
+                cr.p({ class: 'artist has-text-centered-touch subtitle has-text-weight-bold' }, cr.a({ href: '/artist/' + state.artist, 'data-navigo': '' }, state.artist || '')),
+                cr.p({ class: 'detail has-text-centered-touch' }, cr.span({ class: 'tag quality' }, uiTools.getQuality(state))),
+                cr.p({ class: 'album has-text-centered-touch subtitle is-marginless' }, cr.a({ href: '/album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album || ''))
               ),
               cr.div({ class: 'column mobile-controls is-hidden-desktop is-12' },
                 uiTools.getSVG('shuffle', 'is-small'),
@@ -199,7 +194,7 @@ var domBuilder = (function () {
                   cr.div({ class: 'column is-8-mobile is-12-desktop' },
                     cr.p({ class: 'is-uppercase has-text-weight-semibold is-hidden-mobile' }, 'Album'),
                     cr.p({ class: 'title is-3 album-title has-text-weight-semibold' }, data.title),
-                    cr.p('By ', cr.a({ class: 'artist has-text-weight-semibold', 'data-navigo': '', href: 'artist/' + encodeURIComponent(data.artist) }, data.artist)),
+                    cr.p('By ', cr.a({ class: 'artist has-text-weight-semibold', 'data-navigo': '', href: '/artist/' + encodeURIComponent(data.artist) }, data.artist)),
                     cr.p({ class: 'detail' }, data.songs.length + ' Song' + ((data.songs.length > 1) ? 's' : '') + ' - ' + duration + ((data.songs[0].date) ? ' - ' + data.songs[0].date : '')),
                     cr.div({ class: 'tags' },
                       ((format !== '') ? cr.span({ class: 'tag is-rounded' }, format) : null),
@@ -247,9 +242,9 @@ var domBuilder = (function () {
                 return buildTile({
                   title: album.title,
                   subtitle: album.artist,
-                  subtitleHref: 'artist/' + encodeURIComponent(album.artist),
+                  subtitleHref: '/artist/' + encodeURIComponent(album.artist),
                   image: album.albumart,
-                  href: 'album/' + encodeURIComponent(album.artist) + '/' + encodeURIComponent(album.title)
+                  href: '/album/' + encodeURIComponent(album.artist) + '/' + encodeURIComponent(album.title)
                 })
               })
             )
@@ -307,7 +302,7 @@ var domBuilder = (function () {
                 return buildTile({
                   title: album.title,
                   image: album.albumart,
-                  href: 'album/' + encodeURIComponent(data.artist.title) + '/' + encodeURIComponent(album.title)
+                  href: '/album/' + encodeURIComponent(data.artist.title) + '/' + encodeURIComponent(album.title)
                 })
               })
             )
@@ -353,7 +348,7 @@ var domBuilder = (function () {
                 return buildTile({
                   title: artist.title,
                   image: artist.albumart,
-                  href: 'artist/' + encodeURIComponent(artist.title)
+                  href: '/artist/' + encodeURIComponent(artist.title)
                 })
               })
             )
@@ -377,7 +372,7 @@ var domBuilder = (function () {
                 return buildTile({
                   title: genre,
                   image: '/img/genre.png',
-                  href: 'genre/' + encodeURIComponent(genre)
+                  href: '/genre/' + encodeURIComponent(genre)
                 })
               })
             )
@@ -414,7 +409,7 @@ var domBuilder = (function () {
                 container.appendChild(buildTile({
                   title: item.title,
                   image: webSocket.getURL(item.albumart),
-                  href: tlnk + '/' + encodeURIComponent(item.title)
+                  href: '/' + tlnk + '/' + encodeURIComponent(item.title)
                 }))
               })
             } else {
@@ -446,7 +441,7 @@ var domBuilder = (function () {
                 return buildTile({
                   title: playlist,
                   image: '/img/icons/playlist-padded.svg',
-                  href: 'playlist/' + encodeURIComponent(playlist)
+                  href: '/playlist/' + encodeURIComponent(playlist)
                 })
               })
             )
@@ -498,10 +493,10 @@ var domBuilder = (function () {
                         ),
                         cr.td(song.title),
                         cr.td(
-                          cr.a({ href: 'artist/' + encodeURIComponent(song.artist) }, song.artist)
+                          cr.a({ href: '/artist/' + encodeURIComponent(song.artist) }, song.artist)
                         ),
                         cr.td(
-                          cr.a({ href: 'album/' + encodeURIComponent(song.artist) + '/' + encodeURIComponent(song.album) }, song.album)
+                          cr.a({ href: '/album/' + encodeURIComponent(song.artist) + '/' + encodeURIComponent(song.album) }, song.album)
                         ),
                         cr.td(
                           cr.span({ class: 'delete', on: { click: function () { webSocket.action.removeFromPlaylist({ name: `${name}` }) } } })
@@ -586,9 +581,18 @@ var domBuilder = (function () {
       } else if (changed.includes('status') || changed.includes('title')) {
         // update the queue when state or track changes
         webSocket.get.queue()
-        // <!-------------------------------------------------------------------------------ALSO UPDATE THE HOMEPAGE-----------------------> //
-        // <!-------------------------------------------------------------------------------ALSO UPDATE THE HOMEPAGE-----------------------> //
-        // <!-------------------------------------------------------------------------------ALSO UPDATE THE HOMEPAGE-----------------------> //
+        // shortcut to find if we're on the homepage
+        if (router.lastRoute().url.match(/\//g || []).length === 2) {
+          console.log('on home')
+          var home = document.querySelector('#content-container .home')
+          home.querySelector('.title').textContent = state.title
+          home.querySelector('.artist').textContent = state.artist
+          home.querySelector('.detail .tag.quality').textContent = uiTools.getQuality(state)
+          var album = home.querySelector('.album a')
+          album.textContent = state.album
+          album.href = '/' + state.artist + '/' + state.album
+          // can simply rebuild home, but makes more sense to update home instead
+        }
       }
     },
     settings: function () {

@@ -18,6 +18,14 @@ var uiTools = (function () {
     return (s - (s %= 60)) / 60 + (s > 9 ? ':' : ':0') + s
   }
 
+  var getQuality = function (state) {
+    var quality = 'unknown'
+    if (state.sampleRate && state.bits) {
+      quality = (state.sampleRate / 1000) + 'kHz' + ' ' + state.bits + 'bit'
+    }
+    return quality
+  }
+
   var getSVG = function (iconName, cls) {
     var svgElem = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
     svgElem.classList.add('feather')
@@ -293,6 +301,7 @@ var uiTools = (function () {
   return {
     clearNodes: clearNodes,
     getSVG: getSVG,
+    getQuality: getQuality,
     setPageTitle: setPageTitle,
     progress: progress,
     formatTime: formatTime,
