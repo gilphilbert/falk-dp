@@ -196,7 +196,7 @@ aside.menu
 #content-container
   padding: 2.5em 1.5em calc(100px + .75em) calc(1.5em + 90px)
   @include until($desktop)
-    padding:  0 .75em calc(100px + .75em) .75em
+    padding:  0 .75em .75em .75em
 
   >.container.is-fluid
     @include until($desktop)
@@ -220,6 +220,8 @@ aside.menu
 
   .home
     padding-top: 1.25em
+    @include until($desktop)
+      height: 100vh
     .artist
       margin-bottom: 0.5rem
   .albumart img
@@ -252,6 +254,12 @@ aside.menu
   overflow: hidden
   text-overflow: ellipsis
   white-space: nowrap
+.has-no-overflow-touch
+  @include until($desktop)
+    overflow: hidden
+    text-overflow: ellipsis
+    white-space: nowrap
+    
 
 .mobile-controls
   display: flex
@@ -267,14 +275,16 @@ aside.menu
       width: 17px
   .button
     height: 48px
-    width: 48px
+    min-width: 48px
+    max-width: 48px
     padding: 0
     .feather
       margin: 0
 
 .play-button
   height: 48px
-  width: 48px
+  min-width: 48px
+  max-width: 48px
   background: #4BBE87
   border-radius: 3em
   display: inline-flex

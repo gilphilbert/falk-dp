@@ -122,10 +122,10 @@ var domBuilder = (function () {
                 )
               ),
               cr.div({ class: 'column' },
-                cr.p({ class: 'title is-1-touch is-3-desktop has-text-centered-touch' }, state.title || 'Not playing'),
-                cr.p({ class: 'artist has-text-centered-touch subtitle has-text-weight-bold' }, cr.a({ href: '/artist/' + state.artist, 'data-navigo': '' }, state.artist || '')),
-                cr.p({ class: 'detail has-text-centered-touch' }, cr.span({ class: 'tag quality' }, uiTools.getQuality(state))),
-                cr.p({ class: 'album has-text-centered-touch subtitle is-marginless' }, cr.a({ href: '/album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album || ''))
+                cr.p({ class: 'title is-3 has-text-centered-touch has-no-overflow-touch' }, state.title || 'Not playing'),
+                cr.p({ class: 'artist has-text-centered-touch subtitle has-text-weight-bold has-no-overflow-touch' }, cr.a({ href: '/artist/' + state.artist, 'data-navigo': '' }, state.artist || '')),
+                cr.p({ class: 'detail has-text-centered-touch has-no-overflow-touch' }, cr.span({ class: 'tag quality' }, uiTools.getQuality(state))),
+                cr.p({ class: 'album has-text-centered-touch subtitle is-marginless has-no-overflow-touch' }, cr.a({ href: '/album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album || ''))
               ),
               cr.div({ class: 'column mobile-controls is-hidden-desktop is-12' },
                 uiTools.getSVG('shuffle', 'is-small'),
@@ -591,6 +591,7 @@ var domBuilder = (function () {
           var album = home.querySelector('.album a')
           album.textContent = state.album
           album.href = '/' + state.artist + '/' + state.album
+          home.querySelector('.albumart img').src = state.albumart
           // can simply rebuild home, but makes more sense to update home instead
         }
       }

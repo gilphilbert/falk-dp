@@ -338,7 +338,7 @@ a strong {
   color: currentColor;
 }
 a:hover {
-  color: #363636;
+  color: #4BBE87;
 }
 
 code {
@@ -1503,7 +1503,7 @@ a.box:active {
 }
 .button:hover, .button.is-hovered {
   border-color: #b5b5b5;
-  color: #363636;
+  color: #4BBE87;
 }
 .button:focus, .button.is-focused {
   border-color: #3273dc;
@@ -4678,7 +4678,7 @@ a.tag:hover {
   padding: 0 0.75em;
 }
 .breadcrumb a:hover {
-  color: #363636;
+  color: #4BBE87;
 }
 .breadcrumb li {
   align-items: center;
@@ -6448,7 +6448,7 @@ body.has-spaced-navbar-fixed-bottom {
 .pagination-next:hover,
 .pagination-link:hover {
   border-color: #b5b5b5;
-  color: #363636;
+  color: #4BBE87;
 }
 .pagination-previous:focus,
 .pagination-next:focus,
@@ -11304,7 +11304,7 @@ aside.menu .detail {
 }
 @media screen and (max-width: 1023px) {
   #content-container {
-    padding: 0 0.75em calc(100px + .75em) 0.75em;
+    padding: 0 0.75em 0.75em 0.75em;
   }
 }
 @media screen and (max-width: 1023px) {
@@ -11330,6 +11330,11 @@ aside.menu .detail {
 }
 #content-container .home {
   padding-top: 1.25em;
+}
+@media screen and (max-width: 1023px) {
+  #content-container .home {
+    height: 100vh;
+  }
 }
 #content-container .home .artist {
   margin-bottom: 0.5rem;
@@ -11375,6 +11380,14 @@ aside.menu .detail {
   white-space: nowrap;
 }
 
+@media screen and (max-width: 1023px) {
+  .has-no-overflow-touch {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
 .mobile-controls {
   display: flex;
   align-items: center;
@@ -11389,7 +11402,8 @@ aside.menu .detail {
 }
 .mobile-controls .button {
   height: 48px;
-  width: 48px;
+  min-width: 48px;
+  max-width: 48px;
   padding: 0;
 }
 .mobile-controls .button .feather {
@@ -11398,7 +11412,8 @@ aside.menu .detail {
 
 .play-button {
   height: 48px;
-  width: 48px;
+  min-width: 48px;
+  max-width: 48px;
   background: #4BBE87;
   border-radius: 3em;
   display: inline-flex;
