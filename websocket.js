@@ -1,6 +1,7 @@
-async function setup () {
+async function setup (server) {
   var WebSocket = require('ws')
   var mpdapi = require('mpd-api')
+  const wss = new WebSocket.Server({ server: server })
 
   const { mpd } = mpdapi
   const { cmd, MPDError } = mpd
@@ -11,8 +12,6 @@ async function setup () {
       console.log('no permission to connect, probably invalid/missing password')
     }
   }
-
-  var wss = await new WebSocket.Server({ port: '8080' })
 
   function broadcast (eventName, eventData) {
     var payload = JSON.stringify({ event: eventName, data: eventData })
@@ -429,4 +428,6 @@ var Dispatcher = function (ws) {
   }
 }
 
-setup()
+module.exports = {
+  setup: setup
+}

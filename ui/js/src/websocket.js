@@ -69,7 +69,7 @@ var webSocket = (function () {
 
   // initiate the connection to the host
   var init = function (host, onConnect) {
-    server = new ServerEventsDispatcher('ws://' + host + ':8080')
+    server = new ServerEventsDispatcher('ws://' + host)
     server.bind('open', () => {
       onConnect()
       start()
