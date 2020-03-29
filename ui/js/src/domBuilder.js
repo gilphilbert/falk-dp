@@ -128,7 +128,7 @@ var domBuilder = (function () {
                 cr.p({ class: 'album has-text-centered-touch subtitle is-marginless has-no-overflow-touch' }, cr.a({ href: '/album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album || ''))
               ),
               cr.div({ class: 'column mobile-controls is-hidden-desktop is-12' },
-                uiTools.getSVG('shuffle', 'is-small'),
+                cr.a(uiTools.getSVG('shuffle', 'is-small')),
                 uiTools.getSVG('skip-back'),
                 cr.button({ class: 'button is-primary is-rounded' }, uiTools.getSVG('play')),
                 uiTools.getSVG('skip-forward'),

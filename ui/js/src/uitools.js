@@ -196,12 +196,6 @@ var uiTools = (function () {
       })
     })
 
-    document.querySelector('.menu-trigger').addEventListener('click', (e) => {
-      e.preventDefault()
-      e.stopPropagation()
-      showMenu()
-    })
-
     document.addEventListener('click', function (e) {
       var state = document.querySelector('aside.menu').classList.contains('is-active')
       if (state) {

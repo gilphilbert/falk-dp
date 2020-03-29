@@ -11392,6 +11392,7 @@ aside.menu .detail {
   display: flex;
   align-items: center;
   justify-content: center;
+  line-height: 0.8;
 }
 .mobile-controls svg.feather {
   margin: 0 25px;
