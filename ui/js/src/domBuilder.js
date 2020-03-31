@@ -128,11 +128,11 @@ var domBuilder = (function () {
                 cr.p({ class: 'album has-text-centered-touch subtitle is-marginless has-no-overflow-touch' }, cr.a({ href: '/album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album || ''))
               ),
               cr.div({ class: 'column mobile-controls is-hidden-desktop is-12' },
-                cr.a(uiTools.getSVG('shuffle', 'is-small')),
-                uiTools.getSVG('skip-back'),
-                cr.button({ class: 'button is-primary is-rounded' }, uiTools.getSVG('play')),
-                uiTools.getSVG('skip-forward'),
-                uiTools.getSVG('repeat', 'is-small')
+                cr.span({ on: { click: webSocket.action.toggleRandom } }, uiTools.getSVG('shuffle', 'random is-small' + ((state.random) ? ' is-active' : ''))),
+                cr.span({ on: { click: webSocket.action.prev } }, uiTools.getSVG('skip-back')),
+                cr.button({ class: 'button is-primary is-rounded', on: { click: uiTools.handlers.mobileButtons.play } }, uiTools.getSVG('play')),
+                cr.span({ on: { click: webSocket.action.next } }, uiTools.getSVG('skip-forward')),
+                cr.span({ on: { click: webSocket.action.toggleRepeat } }, uiTools.getSVG('repeat' + ((state.single) ? '-one' : ''), 'repeat is-small' + ((state.repeat) ? ' is-active' : '')))
               )
             )
           )
@@ -518,6 +518,8 @@ var domBuilder = (function () {
       var changed = dataTools.changeState(newState)
       var state = dataTools.getState()
 
+      var mc = document.querySelector('.home .mobile-controls')
+
       // this whole section updates the footer (now playing) banner
       if (changed.includes('albumart')) {
         document.querySelector('#control-bar .now-playing img').src = state.albumart
@@ -536,8 +538,14 @@ var domBuilder = (function () {
       if (changed.includes('repeat')) {
         if (state.repeat === true) {
           document.querySelector('#control-bar .misc-controls .repeat').classList.add('is-active')
+          if (mc) {
+            document.querySelector('.mobile-controls .repeat').classList.add('is-active')
+          }
         } else {
           document.querySelector('#control-bar .misc-controls .repeat').classList.remove('is-active')
+          if (mc) {
+            document.querySelector('.mobile-controls .repeat').classList.remove('is-active')
+          }
         }
       }
       if (changed.includes('single')) {
@@ -546,12 +554,21 @@ var domBuilder = (function () {
           rpt += '-one'
         }
         document.querySelector('#control-bar .repeat use').setAttribute('xlink:href', '/img/feather-sprite.svg#' + rpt)
+        if (mc) {
+          document.querySelector('.mobile-controls .repeat use').setAttribute('xlink:href', '/img/feather-sprite.svg#' + rpt)
+        }
       }
       if (changed.includes('random')) {
         if (state.random === true) {
           document.querySelector('#control-bar .misc-controls .random').classList.add('is-active')
+          if (mc) {
+            document.querySelector('.mobile-controls .random').classList.add('is-active')
+          }
         } else {
           document.querySelector('#control-bar .misc-controls .random').classList.remove('is-active')
+          if (mc) {
+            document.querySelector('.mobile-controls .random').classList.remove('is-active')
+          }
         }
       }
 
@@ -583,7 +600,6 @@ var domBuilder = (function () {
         webSocket.get.queue()
         // shortcut to find if we're on the homepage
         if (router.lastRoute().url.match(/\//g || []).length === 2) {
-          console.log('on home')
           var home = document.querySelector('#content-container .home')
           home.querySelector('.title').textContent = state.title
           home.querySelector('.artist').textContent = state.artist
@@ -592,7 +608,6 @@ var domBuilder = (function () {
           album.textContent = state.album
           album.href = '/' + state.artist + '/' + state.album
           home.querySelector('.albumart img').src = state.albumart
-          // can simply rebuild home, but makes more sense to update home instead
         }
       }
     },

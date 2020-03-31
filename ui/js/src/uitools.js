@@ -33,7 +33,7 @@ var uiTools = (function () {
     useElem.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '/img/feather-sprite.svg#' + iconName)
     svgElem.appendChild(useElem)
     if (cls) {
-      svgElem.classList.add(cls)
+      cls.split(' ').forEach(c => svgElem.classList.add(c))
     }
     return svgElem
   }
@@ -278,6 +278,16 @@ var uiTools = (function () {
         type: box.querySelector('.type').value
       }
       webSocket.action.addShare(vals)
+    },
+    mobileButtons: {
+      play: () => {
+        var state = dataTools.getState().state
+        if (state === 'play') {
+          webSocket.action.pause()
+        } else {
+          webSocket.action.play()
+        }
+      }
     }
   }
 
