@@ -113,7 +113,6 @@ var domBuilder = (function () {
         case 'home':
           var state = dataTools.getState()
           var frag = cr.div({ class: 'container is-fluid' })
-
           frag.appendChild(
             cr.div({ class: 'columns home' },
               cr.div({ class: 'column is-3 is-2-fullhd' },
@@ -130,7 +129,7 @@ var domBuilder = (function () {
               cr.div({ class: 'column mobile-controls is-hidden-desktop is-12' },
                 cr.span({ on: { click: webSocket.action.toggleRandom } }, uiTools.getSVG('shuffle', 'random is-small' + ((state.random) ? ' is-active' : ''))),
                 cr.span({ on: { click: webSocket.action.prev } }, uiTools.getSVG('skip-back')),
-                cr.button({ class: 'button is-primary is-rounded', on: { click: uiTools.handlers.mobileButtons.play } }, uiTools.getSVG('play')),
+                cr.button({ class: 'button is-primary is-rounded', on: { click: uiTools.handlers.mobileButtons.play } }, uiTools.getSVG(((state.state !== 'play') ? 'play' : 'pause'))),
                 cr.span({ on: { click: webSocket.action.next } }, uiTools.getSVG('skip-forward')),
                 cr.span({ on: { click: webSocket.action.toggleRepeat } }, uiTools.getSVG('repeat' + ((state.single) ? '-one' : ''), 'repeat is-small' + ((state.repeat) ? ' is-active' : '')))
               )
@@ -578,13 +577,18 @@ var domBuilder = (function () {
       }
 
       if (changed.includes('state')) {
-        var btn = document.querySelector('.playing-controls .play-button')
-        var use = btn.querySelector('use')
+        var use = document.querySelector('.playing-controls .play-button use')
         if (state.state === 'play') {
           use.setAttribute('xlink:href', '/img/feather-sprite.svg#pause')
+          if (mc) {
+            mc.querySelector('.button use').setAttribute('xlink:href', '/img/feather-sprite.svg#pause')
+          }
           uiTools.progress.start()
         } else {
           use.setAttribute('xlink:href', '/img/feather-sprite.svg#play')
+          if (mc) {
+            mc.querySelector('.button use').setAttribute('xlink:href', '/img/feather-sprite.svg#play')
+          }
           uiTools.progress.stop()
           uiTools.progress.update()
         }
