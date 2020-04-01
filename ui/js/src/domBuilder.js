@@ -56,7 +56,7 @@ var domBuilder = (function () {
           ),
           cr.div({ class: 'dropdown-menu', role: 'menu' },
             cr.div({ class: 'dropdown-content' },
-              cr.span({ class: 'dropdown-item', on: { click: uiTools.handlers.playSong } }, 'Play'),
+              cr.span({ class: 'dropdown-item', on: { click: uiTools.handlers.addPlay } }, 'Play'),
               cr.span({ class: 'dropdown-item', on: { click: uiTools.handlers.queueSong } }, 'Add to queue'),
               cr.span({ class: 'dropdown-item', on: { click: uiTools.handlers.replaceWithSong } }, 'Clear and play'),
               cr.span({ class: 'dropdown-item', on: { click: (e) => { modals.addToPlaylist(e) } } }, 'Add to playlist')

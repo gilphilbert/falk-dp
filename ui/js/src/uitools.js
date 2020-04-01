@@ -256,13 +256,13 @@ var uiTools = (function () {
       var pos = this.closest('.columns').dataset.pos
       webSocket.action.removeFromQueue(pos)
     },
-    playSong: function (e) {
-      webSocket.action.addPlay({ uri: this.closest('tr').dataset.uri })
+    addPlay: function () {
+      webSocket.action.addPlay([{ uri: this.closest('tr').dataset.uri }])
       this.closest('.dropdown').classList.remove('is-active')
     },
     queueSong: function (e) {
-      var track = [{ uri: this.closest('tr').dataset.uri }]
-      webSocket.action.enqueue(track)
+      var uri = [{ uri: this.closest('tr').dataset.uri }]
+      webSocket.action.enqueue(uri)
       this.closest('.dropdown').classList.remove('is-active')
     },
     replaceWithSong: function (e) {

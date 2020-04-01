@@ -230,8 +230,19 @@ async function setup (server) {
         })
     })
 
+    // data = { uri: <URI> }
+    // or
+    // data = { songs: [{ uri: '<URI>' }, { uri: '<URI>' }] }
     disp.bind('enqueue', function (data) {
-      mpdc.api.queue.addid(data.uri)
+      if (data.uri) {
+        mpdc.api.queue.addid(data.uri)
+      } else if (data.songs) {
+        data.songs.forEach((s) => {
+          if (s.uri) {
+            mpdc.api.queue.addid(s.uri)
+          }
+        })
+      }
     })
 
     disp.bind('clearQueue', function () {
@@ -239,7 +250,10 @@ async function setup (server) {
     })
 
     disp.bind('addPlay', function (data) {
+      var pos = data.pos || 0
       if (data.uri) {
+        var id = mpdc.api.queue.addid(data.uri)
+        mpdc.api.playback.playid(id)
       } else if (data.songs) {
         var songs = data.songs
         var promises = []
@@ -247,7 +261,7 @@ async function setup (server) {
           promises[i] = mpdc.api.queue.addid(songs[i].uri)
         }
         Promise.all(promises).then((values) => {
-          mpdc.api.playback.playid(values[0])
+          mpdc.api.playback.playid(values[pos])
         })
       }
     })
@@ -265,7 +279,7 @@ async function setup (server) {
             mpdc.api.queue.addid(data.uri)
               .then(id => mpdc.api.playback.playid(id))
           })
-      } else if (data.songs.length) {
+      } else if (Array.isArray(data.songs)) {
         mpdc.api.queue.clear()
           .then(() => {
             var promises = []
@@ -364,11 +378,11 @@ async function setup (server) {
         mpdc.api.playlists.add(data.name, data.uri)
       }
     })
-    disp.bind('addToPlaylist', function (data) {
-      if (data.uri) {
-        mpdc.api.playlists.add(data.name, data.uri)
-      }
-    })
+    //  disp.bind('addToPlaylist', function (data) {
+    //    if (data.uri) {
+    //      mpdc.api.playlists.add(data.name, data.uri)
+    //    }
+    //  })
     disp.bind('removeFromPlaylist', function (data) {
       if (data.name && data.pos) {
         mpdc.api.playlists.deleteAt(data.name, data.pos)

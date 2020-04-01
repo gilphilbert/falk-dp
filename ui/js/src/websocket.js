@@ -146,16 +146,28 @@ var webSocket = (function () {
     clearQueue: function () {
       server.send('clearQueue')
     },
-    addPlay: function (tracks, pos) {
+    addPlay: function (songs, pos) {
       pos = pos || 0
-      server.send('addPlay', { songs: tracks, pos: pos })
+      server.send('addPlay', { songs: songs, pos: pos })
     },
     replaceAndPlay: function (songs, pos) {
       pos = pos || 0
       server.send('replaceAndPlay', { songs: songs, pos: pos })
     },
-    enqueue: function (songs) {
-      server.send('addToQueue', { songs: songs })
+    enqueue: function (data) {
+      var songs = {}
+      // if we're given a straight URI as a string
+      if (typeof data === 'string') {
+        songs = [{ uri: data }]
+      // if we're given an object with a URI
+      } else if (data.uri) {
+        songs = [data]
+      // if we're passed an array
+      } else if (Array.isArray(data)) {
+        songs = data
+      }
+      console.log(songs)
+      server.send('enqueue', { songs: songs })
     },
     removeFromQueue: function (pos) {
       server.send('removeFromQueue', { pos: pos })
