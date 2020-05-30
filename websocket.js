@@ -5,13 +5,53 @@ async function setup (server) {
 
   const { mpd } = mpdapi
   const { cmd, MPDError } = mpd
-  try {
-    var mpdc = await mpdapi.connect({ host: 'localhost', port: 6600 })
-  } catch (e) {
-    if (e.errno === MPDError.CODES.PERMISSION) {
-      console.log('no permission to connect, probably invalid/missing password')
+
+  var mpdc = null
+  async function connectMPD () {
+    console.log('Connecting to MPD...')
+    try {
+      mpdc = await mpdapi.connect({ host: 'localhost', port: 6600 })
+      console.log('Connected to MPD')
+    } catch (e) {
+      if (e.errno === MPDError.CODES.PERMISSION) {
+        console.log('no permission to connect, probably invalid/missing password')
+      } else {
+        console.log('Couldn\'t connect to MPD')
+      }
     }
+
+    mpdc.on('system', (e) => {
+      switch (e) {
+        case 'playlist':
+          mpdc.api.queue.info()
+            .then((d) => {
+              d.forEach((i) => {
+                i.albumart = '/art/album/' + encodeURIComponent(i.artist) + '/' + encodeURIComponent(i.album)
+              })
+              broadcast('pushQueue', d)
+            })
+          break
+        case 'player':
+        case 'options':
+          getStatus().then(status => broadcast('pushStatus', status))
+          break
+        case 'stored_playlist':
+          mpdc.api.playlists.get()
+            .then(d => broadcast('pushPlaylist', d))
+          break
+        default:
+          console.log('[MPD] Unknown State Change:' + e)
+      }
+    })
+
+    mpdc.on('close', () => {
+      console.log('MPD connection lost')
+      // now try to reconnect...
+      // <!-----------------%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+      connectMPD()
+    })
   }
+  await connectMPD()
 
   function broadcast (eventName, eventData) {
     var payload = JSON.stringify({ event: eventName, data: eventData })
@@ -60,30 +100,6 @@ async function setup (server) {
     }
     return status
   }
-
-  mpdc.on('system', (e) => {
-    switch (e) {
-      case 'playlist':
-        mpdc.api.queue.info()
-          .then((d) => {
-            d.forEach((i) => {
-              i.albumart = '/art/album/' + encodeURIComponent(i.artist) + '/' + encodeURIComponent(i.album)
-            })
-            broadcast('pushQueue', d)
-          })
-        break
-      case 'player':
-      case 'options':
-        getStatus().then(status => broadcast('pushStatus', status))
-        break
-      case 'stored_playlist':
-        mpdc.api.playlists.get()
-          .then(d => broadcast('pushPlaylist', d))
-        break
-      default:
-        console.log('[MPD] Unknown State Change:' + e)
-    }
-  })
 
   wss.on('connection', function (ws) {
     var disp = new Dispatcher(ws)

@@ -17,6 +17,8 @@ app.use('/dev', express.static('public'))
 
 app.use(express.static('ui'))
 
+app.use('/lcd', express.static('lcd'))
+
 // start the app
 // app.listen(3000, function () {
 //   console.log('Listening on port 3000')
