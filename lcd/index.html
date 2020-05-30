@@ -1,0 +1,303 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Moosic LCD Screen</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Maven+Pro:400,500,700&display=swap" rel="stylesheet">
+    <style>
+      /* reset.css */
+      html, body, div, span, applet, object, iframe,
+      h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+      a, abbr, acronym, address, big, cite, code,
+      del, dfn, em, img, ins, kbd, q, s, samp,
+      small, strike, strong, sub, sup, tt, var,
+      b, u, i, center,
+      dl, dt, dd, ol, ul, li,
+      fieldset, form, label, legend,
+      table, caption, tbody, tfoot, thead, tr, th, td,
+      article, aside, canvas, details, embed, 
+      figure, figcaption, footer, header, hgroup, 
+      menu, nav, output, ruby, section, summary,
+      time, mark, audio, video {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        font-size: 100%;
+        font: inherit;
+        vertical-align: baseline;
+      }
+      /* HTML5 display-role reset for older browsers */
+      article, aside, details, figcaption, figure, 
+      footer, header, hgroup, menu, nav, section {
+        display: block;
+      }
+      body {
+        line-height: 1;
+      }
+      ol, ul {
+        list-style: none;
+      }
+      blockquote, q {
+        quotes: none;
+      }
+      blockquote:before, blockquote:after,
+      q:before, q:after {
+        content: '';
+        content: none;
+      }
+      table {
+        border-collapse: collapse;
+        border-spacing: 0;
+      }
+      /* end of reset */
+
+      @media screen and (width: 1920px) {
+        @media screen and (height: 480px) {
+          #albumart {
+            height: 420px;
+            width: 420px;
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            box-shadow: 0px 0px 7px 0px rgba(0,0,0,0.33);
+            background: #444;
+          }
+          #albumart img {
+            height: 100%;
+            width: 100%;
+          }
+          #albumart.pause:before {
+            content: '';
+            position: absolute;
+            height: 420px;
+            width: 420px;
+            top: 0;
+            left: 0;
+            background-color: rgba(0,0,0,0.2);
+            background-image: url('pause-circle.svg');
+            background-repeat: no-repeat;
+            background-size: cover;
+          }
+          #title {
+            font-size: 60px;
+            position: absolute;
+            top: 30px;
+            left: 503px;
+            font-weight: 700;
+            max-width: 875px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+          #artist {
+            font-size: 35px;
+            position: absolute;
+            top: 115px;
+            left: 503px;
+            font-weight: 600;
+            max-width: 875px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+          #album {
+            font-size: 35px;
+            position: absolute;
+            top: 166px;
+            left: 503px;
+            max-width: 875px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+          #quality {
+            font-size: 22px;
+            position: absolute;
+            top: 230px;
+            left: 503px;
+            padding: 10px;
+            background-color: rgba(255,255,255,0.35);
+            border-radius: 5px;
+          }
+          body.light #quality {
+            background-color: rgba(0,0,0,0.35);
+          }
+          progress {
+            width: 875px;
+            height: 27px;
+            position: absolute;
+            top: 423px;
+            left: 503px;
+            -webkit-appearance: none;
+            appearance: none;
+          }
+          progress::-webkit-progress-bar {
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 1000px;
+          }
+          body.light progress::-webkit-progress-bar {
+            background-color: rgba(0,0,0,0.2);
+          }
+          progress::-webkit-progress-value {
+            background-color: rgb(255,255,255);
+            border-radius: 1000px;
+          }
+          body.light progress::-webkit-progress-value {
+            background-color: rgb(0,0,0);
+          }
+          #queue {
+            position: absolute;
+            top: 0px;
+            left: 1432;
+            width: 483px;
+            height: 480px;
+            border-left: 5px solid white;
+            background: rgba(255,255,255,0.2);
+          }
+          body.light #queue {
+            border-color: black;
+            background: rgba(0,0,0,0.2);
+          }
+          #queue li {
+            position: relative;
+            margin: 0 10px 0 30px;
+            padding: 30px 0px;
+            font-size: 30px;
+          }
+          #queue li:after {
+            content: '';
+            height: 3px;
+            width: 200px;
+            position: absolute;
+            bottom: 0px;
+            left: 0px;
+            background: white;
+          }
+          body.light #queue li:after {
+            background: black;
+          }
+          #queue li.active:before {
+            content: '';
+            width: 0; 
+            height: 0; 
+            border-top: 14px solid transparent;
+            border-bottom: 14px solid transparent;
+            border-left: 14px solid black;
+            position: absolute;
+            top: 45px;
+            left: -30px;
+          }
+          #queue li:last-child:after {
+            display: none;
+          }
+          #queue li .title {
+            font-weight: bold;
+            display: block;
+          }
+        }
+      }
+      body, button, input, select, textarea {
+        font-family: "Maven Pro", sans-serif;
+      }
+      body {
+        color: white;
+      }
+      body.light {
+        color: black;
+      }
+
+    </style>
+  </head>
+  <body>
+    <span id="albumart"><img /></span>
+    <p id="title"></p>
+    <p id="artist"></p>
+    <p id="album"></p>
+    <p id="quality"></p>
+    <ul id="queue">
+      <li><span class="title"></span><span class="artist"></span></li>
+      <li><span class="title"></span><span class="artist"></span></li>
+      <li><span class="title"></span><span class="artist"></span></li>
+      <li><span class="title"></span><span class="artist"></span></li>
+    </ul>
+    <progress id="progress" value="0" max="100"></progress>
+  </body>
+  <script src="color-thief.min.js"></script>
+  <script src="event-dispatcher.min.js"></script>
+  <script>
+    var ColorThief = new ColorThief()
+    var State = null
+
+    function setBackground(el) {
+      var result = null
+      try {
+        result = ColorThief.getPalette(el, 3)
+      } catch(err) {
+        console.log("couldn't get background")
+      }
+      console.log(result);
+      if (result !== null) {
+        document.body.style.backgroundColor = "rgb(" + result[0] + ")"
+      } else {
+        document.body.style.backgroundColor = "#888"
+        document.body.classList.remove("light")   
+      }
+    }
+
+    function updateStatus (state) {
+      document.querySelector('#albumart img').setAttribute('src', "http://localhost:3000" + encodeURI(state.albumart))
+      document.getElementById('title').innerText = state.title
+      document.getElementById('artist').innerText = state.artist
+      document.getElementById('album').innerText = state.album + " (" + state.date + ")"
+      document.getElementById('quality').innerText = state.sampleRate / 1000 + "kHz " + state.bits + "bit"
+      document.getElementById('progress').value = Math.round((state.elapsed / state.duration) * 100)
+      if (state.state !== "play") {
+        document.getElementById("albumart").classList.add("pause")
+      } else {
+        document.getElementById("albumart").classList.remove("pause")
+      }
+      State = state;
+      server.send('getQueue')
+    }
+
+    function updateQueue (queue) {
+      if (State !== null && State !== undefined) {
+        let els = document.querySelectorAll('#queue > *')
+        let p = State.song
+
+        start = p - 1
+        if (start + 4 > queue.length) {
+          start = queue.length - 4
+          if (start < 0) {
+            start = 0
+          }
+        }
+        //if current position is not at the start
+        songs = queue.slice(start, start + 4)
+        for (i=0; i<4 && i<queue.length; i++) {
+          els[i].querySelector('.title').innerText = songs[i].title
+          els[i].querySelector('.artist').innerText = songs[i].artist
+          if (songs[i].pos == p) {
+            els[i].classList.add('active')
+          } else {
+            els[i].classList.remove('active')
+          }
+        }
+      }
+    }
+
+    function start() {
+      document.querySelector('#albumart img').addEventListener('load', function() {
+        setBackground(this);
+      })
+      initWS('localhost:3000', () => {
+        server.send('getStatus')
+      })
+    }
+   
+    document.addEventListener("DOMContentLoaded", start);
+  </script>
+</html>
