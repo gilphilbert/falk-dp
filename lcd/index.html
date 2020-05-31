@@ -65,10 +65,7 @@
             left: 30px;
             box-shadow: 0px 0px 7px 0px rgba(0,0,0,0.33);
             background: #444;
-          }
-          #albumart img {
-            height: 100%;
-            width: 100%;
+            border-radius: 4%;
           }
           #title {
             font-size: 60px;
@@ -218,7 +215,7 @@
     </style>
   </head>
   <body class="">
-    <span id="albumart"><img /></span>
+    <img id="albumart" />
     <p id="title"></p>
     <p id="artist"></p>
     <p id="album"></p>
@@ -304,7 +301,7 @@
     function updateStatus (state) {
       window.clearInterval(Clock)
       State = state;
-      document.querySelector('#albumart img').setAttribute('src', "http://localhost:3000" + encodeURI(state.albumart))
+      document.querySelector('#albumart').setAttribute('src', "http://localhost:3000" + encodeURI(state.albumart))
       document.getElementById('title').innerText = state.title
       document.getElementById('artist').innerText = state.artist
       document.getElementById('album').innerText = state.album + " (" + state.date + ")"
@@ -316,11 +313,9 @@
       if (state.state !== "play") {
         document.getElementById("state-play").classList.add('hidden')
         document.getElementById("state-pause").classList.remove('hidden')
-        document.getElementById("albumart").classList.add("pause")
       } else {
         document.getElementById("state-play").classList.remove('hidden')
         document.getElementById("state-pause").classList.add('hidden')
-        document.getElementById("albumart").classList.remove("pause")
         Clock = window.setInterval(tick, 100)
       }
       server.send('getQueue')
@@ -358,7 +353,7 @@
     }
 
     function start() {
-      document.querySelector('#albumart img').addEventListener('load', function() {
+      document.querySelector('#albumart').addEventListener('load', function() {
         setBackground(this);
       })
       initWS('localhost:3000', () => {
