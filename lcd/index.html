@@ -7,6 +7,7 @@
     <title>Moosic LCD Screen</title>
 
     <link href="https://fonts.googleapis.com/css?family=Maven+Pro:400,500,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Manrope:400,500,700&display=swap" rel="stylesheet">
     <style>
       /* reset.css */
       html, body, div, span, applet, object, iframe,
@@ -69,18 +70,6 @@
             height: 100%;
             width: 100%;
           }
-          #albumart.pause:before {
-            content: '';
-            position: absolute;
-            height: 420px;
-            width: 420px;
-            top: 0;
-            left: 0;
-            background-color: rgba(0,0,0,0.2);
-            background-image: url('pause-circle.svg');
-            background-repeat: no-repeat;
-            background-size: cover;
-          }
           #title {
             font-size: 60px;
             position: absolute;
@@ -93,7 +82,7 @@
             text-overflow: ellipsis;
           }
           #artist {
-            font-size: 35px;
+            font-size: 37px;
             position: absolute;
             top: 115px;
             left: 503px;
@@ -106,7 +95,7 @@
           #album {
             font-size: 35px;
             position: absolute;
-            top: 166px;
+            top: 170px;
             left: 503px;
             max-width: 875px;
             white-space: nowrap;
@@ -116,14 +105,34 @@
           #quality {
             font-size: 22px;
             position: absolute;
-            top: 230px;
+            top: 232px;
             left: 503px;
             padding: 10px;
-            background-color: rgba(255,255,255,0.35);
-            border-radius: 5px;
+            background-color: rgb(255,255,255);
+            border-radius: 6px;
+            font-weight: 600
           }
           body.light #quality {
-            background-color: rgba(0,0,0,0.35);
+            background-color: rgba(0,0,0,0.6);
+          }
+          #state-play, #state-pause {
+            position: absolute;
+            left: 940px;
+            top: 360px;
+            height: 48px;
+            width: 48px;
+          }
+          #elapsed {
+            font-size: 28px;
+            position: absolute;
+            top: 376px;
+            left: 503px;
+          }
+          #duration {
+            font-size: 28px;
+            position: absolute;
+            top: 376px;
+            right: 542px;
           }
           progress {
             width: 875px;
@@ -137,47 +146,39 @@
           progress::-webkit-progress-bar {
             background-color: rgba(255,255,255,0.2);
             border-radius: 1000px;
+            overflow: hidden;
           }
           body.light progress::-webkit-progress-bar {
             background-color: rgba(0,0,0,0.2);
           }
           progress::-webkit-progress-value {
             background-color: rgb(255,255,255);
-            border-radius: 1000px;
           }
           body.light progress::-webkit-progress-value {
-            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.45);
           }
           #queue {
             position: absolute;
             top: 0px;
-            left: 1432;
+            left: 1436;
             width: 483px;
             height: 480px;
-            border-left: 5px solid white;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.12);
           }
           body.light #queue {
-            border-color: black;
-            background: rgba(0,0,0,0.2);
+            background: rgba(0,0,0,0.06);
           }
           #queue li {
             position: relative;
             margin: 0 10px 0 30px;
-            padding: 30px 0px;
+            padding: 23px 0px 27px 0;
             font-size: 30px;
           }
-          #queue li:after {
-            content: '';
-            height: 3px;
-            width: 200px;
-            position: absolute;
-            bottom: 0px;
-            left: 0px;
-            background: white;
-          }
-          body.light #queue li:after {
-            background: black;
+          #queue li span {
+            max-width: 420px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
           }
           #queue li.active:before {
             content: '';
@@ -185,13 +186,13 @@
             height: 0; 
             border-top: 14px solid transparent;
             border-bottom: 14px solid transparent;
-            border-left: 14px solid black;
+            border-left: 14px solid white;
             position: absolute;
             top: 45px;
             left: -30px;
           }
-          #queue li:last-child:after {
-            display: none;
+          body.light #queue li.active:before {
+            border-left: 14px solid rgba(0,0,0,0.6);
           }
           #queue li .title {
             font-weight: bold;
@@ -201,17 +202,22 @@
       }
       body, button, input, select, textarea {
         font-family: "Maven Pro", sans-serif;
+        line-height: normal;
+
       }
       body {
         color: white;
       }
       body.light {
-        color: black;
+        color: rgba(0,0,0,0.6);
+      }
+      .hidden {
+        display: none;
       }
 
     </style>
   </head>
-  <body>
+  <body class="">
     <span id="albumart"><img /></span>
     <p id="title"></p>
     <p id="artist"></p>
@@ -223,13 +229,45 @@
       <li><span class="title"></span><span class="artist"></span></li>
       <li><span class="title"></span><span class="artist"></span></li>
     </ul>
-    <progress id="progress" value="0" max="100"></progress>
+    <p id="elapsed">0:00</p>
+    <p id="duration">0:00</p>
+    <svg id="state-play" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+    <svg id="state-pause" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-pause"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+    <progress id="progress" value="0" max="1000"></progress>
   </body>
   <script src="color-thief.min.js"></script>
   <script src="event-dispatcher.min.js"></script>
   <script>
     var ColorThief = new ColorThief()
     var State = null
+    var Clock = null
+
+    function formatTime(s) {
+      function str_pad_left(string,pad,length) {
+        return (new Array(length+1).join(pad)+string).slice(-length);
+      }
+      var hours = Math.floor(s / 3600)
+      s = s - hours * 3600
+      var minutes = Math.floor(s / 60)
+      var seconds = s - minutes * 60
+      if (hours > 0) {
+        return hours + ':' + str_pad_left(minutes,'0',2) + ':'+str_pad_left(seconds,'0',2)
+      } else {}
+        return minutes + ':'+str_pad_left(seconds,'0',2)
+    }
+
+    function getLightness(rgb){
+      var r = rgb[0] / 255
+      var g = rgb[1] / 255
+      var b = rgb[2] / 255
+
+      var maxColor = Math.max(r,g,b)
+      var minColor = Math.min(r,g,b)
+      //Calculate L:
+      var l = (maxColor + minColor) / 2
+      console.log(Math.round(l * 100))
+      return Math.round(l * 100)
+    }
 
     function setBackground(el) {
       var result = null
@@ -238,28 +276,53 @@
       } catch(err) {
         console.log("couldn't get background")
       }
-      console.log(result);
-      if (result !== null) {
+        if (result !== null) {
+        if(getLightness(result[0]) < 60) {
+          document.body.classList.remove("light")
+        } else {
+          document.body.classList.add("light")
+        }
         document.body.style.backgroundColor = "rgb(" + result[0] + ")"
+        document.getElementById('quality').style.color = "rgb(" + result[0] + ")"
       } else {
         document.body.style.backgroundColor = "#888"
-        document.body.classList.remove("light")   
+        document.getElementById('quality').style.color = "#888"
+        document.body.classList.remove("light")
       }
     }
 
+    function tick() {
+      State.elapsed = State.elapsed + 100
+      setProgress()
+    }
+
+    function setProgress() {
+      document.getElementById('progress').value = Math.round(State.elapsed / State.duration * 1000)
+      document.getElementById('elapsed').innerText = formatTime(Math.round(State.elapsed / 1000))
+    }
+
     function updateStatus (state) {
+      window.clearInterval(Clock)
+      State = state;
       document.querySelector('#albumart img').setAttribute('src', "http://localhost:3000" + encodeURI(state.albumart))
       document.getElementById('title').innerText = state.title
       document.getElementById('artist').innerText = state.artist
       document.getElementById('album').innerText = state.album + " (" + state.date + ")"
       document.getElementById('quality').innerText = state.sampleRate / 1000 + "kHz " + state.bits + "bit"
-      document.getElementById('progress').value = Math.round((state.elapsed / state.duration) * 100)
+      document.getElementById('duration').innerText = formatTime(State.duration)
+      State.elapsed = State.elapsed * 1000
+      State.duration = State.duration * 1000
+      setProgress()
       if (state.state !== "play") {
+        document.getElementById("state-play").classList.add('hidden')
+        document.getElementById("state-pause").classList.remove('hidden')
         document.getElementById("albumart").classList.add("pause")
       } else {
+        document.getElementById("state-play").classList.remove('hidden')
+        document.getElementById("state-pause").classList.add('hidden')
         document.getElementById("albumart").classList.remove("pause")
+        Clock = window.setInterval(tick, 100)
       }
-      State = state;
       server.send('getQueue')
     }
 
@@ -268,7 +331,7 @@
         let els = document.querySelectorAll('#queue > *')
         let p = State.song
 
-        start = p - 1
+        start = ((p === 0) ? p : p - 1)
         if (start + 4 > queue.length) {
           start = queue.length - 4
           if (start < 0) {
@@ -277,13 +340,18 @@
         }
         //if current position is not at the start
         songs = queue.slice(start, start + 4)
-        for (i=0; i<4 && i<queue.length; i++) {
+        for (i=0; i<4; i++) {
+          if (i<queue.length) {
           els[i].querySelector('.title').innerText = songs[i].title
-          els[i].querySelector('.artist').innerText = songs[i].artist
-          if (songs[i].pos == p) {
-            els[i].classList.add('active')
+            els[i].querySelector('.artist').innerText = songs[i].artist
+            if (songs[i].pos == p) {
+              els[i].classList.add('active')
+            } else {
+              els[i].classList.remove('active')
+            }
+            els[i].classList.remove('hidden')
           } else {
-            els[i].classList.remove('active')
+            els[i].classList.add('hidden')
           }
         }
       }

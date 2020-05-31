@@ -3,9 +3,6 @@ async function setup (server) {
   var mpdapi = require('mpd-api')
   const wss = new WebSocket.Server({ server: server })
 
-  const { mpd } = mpdapi
-  const { cmd, MPDError } = mpd
-
   var mpdc = null
   async function connectMPD () {
     console.log('Connecting to MPD...')
@@ -13,11 +10,7 @@ async function setup (server) {
       mpdc = await mpdapi.connect({ host: 'localhost', port: 6600 })
       console.log('Connected to MPD')
     } catch (e) {
-      if (e.errno === MPDError.CODES.PERMISSION) {
-        console.log('no permission to connect, probably invalid/missing password')
-      } else {
-        console.log('Couldn\'t connect to MPD')
-      }
+      console.log('Couldn\'t connect to MPD')
     }
 
     mpdc.on('system', (e) => {
