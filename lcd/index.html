@@ -55,6 +55,115 @@
       }
       /* end of reset */
 
+      progress {
+        -webkit-appearance: none;
+        appearance: none;
+      }
+      progress::-webkit-progress-bar {
+        border-radius: 1000px;
+        overflow: hidden;
+      }
+
+      @media screen and (width: 480px) {
+        @media screen and (height: 320px) {
+          body {
+            color: black!important;
+          }
+          body:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background-color: rgba(255,255,255,0.7);
+            z-index: -1;
+          }
+          #albumart {
+            position: absolute;
+            top: -80px;
+            left: 0;
+            width: 100%;
+            z-index: -2;
+          }
+          #title {
+            width: 100%;
+            text-align: center;
+            font-weight: 700;
+            font-size: 32px;
+            margin-top: 20px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+          #artist {
+            width: 100%;
+            text-align: center;
+            font-weight: 500;
+            font-size: 25px;
+            margin-top: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+          #album {
+            width: 100%;
+            text-align: center;
+            font-weight: 400;
+            font-size: 22px;
+            margin-top: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+          #quality {
+            font-size: 14px;
+            padding: 8px 10px 9px 10px;
+            background-color: black;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-left: auto;
+            margin-right: auto;
+            color: white!important;
+            display: table;
+            margin-top: 12px;
+          }
+          #queue {
+            display: none;
+          }
+          progress::-webkit-progress-bar {
+            background-color: rgba(0,0,0,0.2);
+          }
+          progress::-webkit-progress-value {
+            background-color: rgb(0,0,0);
+          }
+          progress {
+            width: 90vw;
+            height: 15px;
+            position: absolute;
+            bottom: 20px;
+            left: 5vw;
+          }
+          #elapsed {
+            position: absolute;
+            bottom: 45px;
+            left: 5vw;
+          }
+          #state-pause {
+            position: absolute;
+            left: calc(50vw - 15px);
+            bottom: 41px;
+            height: 30px;
+            width: 30px;
+          }
+          #duration {
+            position: absolute;
+            bottom: 45px;
+            right: 5vw;
+          }
+        }
+      }
+
       @media screen and (width: 1920px) {
         @media screen and (height: 480px) {
           #albumart {
@@ -137,8 +246,6 @@
             position: absolute;
             top: 423px;
             left: 503px;
-            -webkit-appearance: none;
-            appearance: none;
           }
           progress::-webkit-progress-bar {
             background-color: rgba(255,255,255,0.2);
@@ -188,6 +295,26 @@
           }
         }
       }
+      #not-playing {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background: #4C4746;
+        transition: left 0.5s ease;
+      }
+      #not-playing img {
+        position: absolute;
+        height: 90vh;
+        top: 5%;
+        left: calc(50% - (90vh / 2));
+        border-radius: 7%;
+      }
+      #not-playing.hide {
+        left: calc(0px - 100vw);
+        transition: left 0.5s ease;
+      }
       body, button, input, select, textarea {
         font-family: "Maven Pro", sans-serif;
         line-height: normal;
@@ -195,6 +322,7 @@
       }
       body {
         color: white;
+        overflow: hidden;
       }
       body.light {
         color: rgba(0,0,0,0.6);
@@ -218,10 +346,13 @@
       <li><span class="title"></span><span class="artist"></span></li>
     </ul>
     <p id="elapsed">0:00</p>
-    <p id="duration">0:00</p>
     <svg id="state-play" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
     <svg id="state-pause" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-pause"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+    <p id="duration">0:00</p>
     <progress id="progress" value="0" max="1000"></progress>
+    <div id="not-playing">
+      <img src="/img/notplaying.png">
+    </div>
   </body>
   <script src="color-thief.min.js"></script>
   <script src="event-dispatcher.min.js"></script>
@@ -292,22 +423,29 @@
     function updateStatus (state) {
       window.clearInterval(Clock)
       State = state;
-      document.querySelector('#albumart').setAttribute('src', "http://localhost:3000" + encodeURI(state.albumart))
-      document.getElementById('title').innerText = state.title
-      document.getElementById('artist').innerText = state.artist
-      document.getElementById('album').innerText = state.album + " (" + state.date + ")"
-      document.getElementById('quality').innerText = state.sampleRate / 1000 + "kHz " + state.bits + "bit"
-      document.getElementById('duration').innerText = formatTime(State.duration)
-      State.elapsed = State.elapsed * 1000
-      State.duration = State.duration * 1000
-      setProgress()
-      if (state.state !== "play") {
-        document.getElementById("state-play").classList.add('hidden')
-        document.getElementById("state-pause").classList.remove('hidden')
+      console.log(state)
+      if (state.title) {
+        document.querySelector('#albumart').setAttribute('src', "http://localhost:3000" + encodeURI(state.albumart))
+        document.getElementById('title').innerText = state.title
+        document.getElementById('artist').innerText = state.artist
+        document.getElementById('album').innerText = state.album + " (" + state.date + ")"
+        document.getElementById('quality').innerText = state.sampleRate / 1000 + "kHz " + state.bits + "bit"
+        document.getElementById('duration').innerText = formatTime(State.duration)
+        State.elapsed = State.elapsed * 1000
+        State.duration = State.duration * 1000
+        setProgress()
+        if (state.state !== "play") {
+          document.getElementById("state-play").classList.add('hidden')
+          document.getElementById("state-pause").classList.remove('hidden')
+        } else {
+          document.getElementById("state-play").classList.remove('hidden')
+          document.getElementById("state-pause").classList.add('hidden')
+          Clock = window.setInterval(tick, 100)
+        }
+        document.getElementById('not-playing').classList.add('hide')
       } else {
-        document.getElementById("state-play").classList.remove('hidden')
-        document.getElementById("state-pause").classList.add('hidden')
-        Clock = window.setInterval(tick, 100)
+        // nothing playing
+        document.getElementById('not-playing').classList.remove('hide')
       }
       server.send('getQueue')
     }
