@@ -167,8 +167,7 @@
           }
           #queue li {
             position: relative;
-            margin: 0 10px 0 30px;
-            padding: 23px 0px 27px 0;
+            padding: 23px 10px 27px 25px;
             font-size: 30px;
           }
           #queue li span {
@@ -177,19 +176,11 @@
             overflow: hidden;
             text-overflow: ellipsis;
           }
-          #queue li.active:before {
-            content: '';
-            width: 0; 
-            height: 0; 
-            border-top: 14px solid transparent;
-            border-bottom: 14px solid transparent;
-            border-left: 14px solid white;
-            position: absolute;
-            top: 45px;
-            left: -30px;
+          #queue li.active {
+            background: rgba(255,255,255,0.1);
           }
-          body.light #queue li.active:before {
-            border-left: 14px solid rgba(0,0,0,0.6);
+          body.light #queue li.active {
+            background: rgba(0,0,0,0.1);
           }
           #queue li .title {
             font-weight: bold;
