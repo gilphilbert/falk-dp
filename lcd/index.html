@@ -425,7 +425,7 @@
       State = state;
       console.log(state)
       if (state.title) {
-        document.querySelector('#albumart').setAttribute('src', "http://localhost:3000" + encodeURI(state.albumart))
+        document.querySelector('#albumart').setAttribute('src', window.location.origin + encodeURI(state.albumart))
         document.getElementById('title').innerText = state.title
         document.getElementById('artist').innerText = state.artist
         document.getElementById('album').innerText = state.album + " (" + state.date + ")"
@@ -485,7 +485,7 @@
       document.querySelector('#albumart').addEventListener('load', function() {
         setBackground(this);
       })
-      initWS('localhost:3000', () => {
+      initWS(window.location.host, () => {
         server.send('getStatus')
       })
     }
