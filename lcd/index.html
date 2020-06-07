@@ -55,6 +55,18 @@
       }
       /* end of reset */
 
+      #albumart {
+        background: #444;
+        border-radius: 4%;
+      }
+      #quality {
+        padding: 10px;
+        background-color: rgb(255,255,255);
+        border-radius: 6px;
+        font-weight: 600;
+        display: inline;
+      }
+
       progress {
         -webkit-appearance: none;
         appearance: none;
@@ -64,235 +76,324 @@
         overflow: hidden;
       }
 
-      @media screen and (width: 480px) {
-        @media screen and (height: 320px) {
-          body {
-            color: black!important;
-          }
-          body:after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 100%;
-            background-color: rgba(255,255,255,0.7);
-            z-index: -1;
-          }
-          #albumart {
-            position: absolute;
-            top: -80px;
-            left: 0;
-            width: 100%;
-            z-index: -2;
-          }
-          #title {
-            width: 100%;
-            text-align: center;
-            font-weight: 700;
-            font-size: 32px;
-            margin-top: 20px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-          }
-          #artist {
-            width: 100%;
-            text-align: center;
-            font-weight: 500;
-            font-size: 25px;
-            margin-top: 10px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-          }
-          #album {
-            width: 100%;
-            text-align: center;
-            font-weight: 400;
-            font-size: 22px;
-            margin-top: 14px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-          }
-          #quality {
-            font-size: 14px;
-            padding: 8px 10px 9px 10px;
-            background-color: black;
-            border-radius: 6px;
-            font-weight: 600;
-            margin-left: auto;
-            margin-right: auto;
-            color: white!important;
-            display: table;
-            margin-top: 12px;
-          }
-          #queue {
-            display: none;
-          }
-          progress::-webkit-progress-bar {
-            background-color: rgba(0,0,0,0.2);
-          }
-          progress::-webkit-progress-value {
-            background-color: rgb(0,0,0);
-          }
-          progress {
-            width: 90vw;
-            height: 15px;
-            position: absolute;
-            bottom: 20px;
-            left: 5vw;
-          }
-          #elapsed {
-            position: absolute;
-            bottom: 45px;
-            left: 5vw;
-          }
-          #state-pause {
-            position: absolute;
-            left: calc(50vw - 15px);
-            bottom: 41px;
-            height: 30px;
-            width: 30px;
-          }
-          #duration {
-            position: absolute;
-            bottom: 45px;
-            right: 5vw;
-          }
+      @media screen and (width: 480px) and (height: 320px) {
+        body {
+          color: white!important;
+        }
+        body:after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100%;
+          width: 100%;
+          /*background-color: rgba(0,0,0,0.6);*/
+          background: linear-gradient(0.25turn, rgba(0,0,0,.35), rgba(0,0,0,.8), rgb(0,0,0));
+          z-index: -1;
+        }
+        #albumart {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 320px;
+          z-index: -2;
+          border-radius: 0;
+        }
+        #title {
+          width: 100%;
+          text-align: center;
+          font-weight: 700;
+          font-size: 32px;
+          margin-top: 24px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        #artist {
+          width: 100%;
+          text-align: center;
+          font-weight: 500;
+          font-size: 25px;
+          margin-top: 10px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        #album {
+          width: 100%;
+          text-align: center;
+          font-weight: 400;
+          font-size: 22px;
+          margin-top: 10px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        #quality {
+          font-size: 15px;
+          padding: 6px 8px 7px 8px;
+          background-color: white;
+          border-radius: 6px;
+          font-weight: 600;
+          margin-left: auto;
+          margin-right: auto;
+          color: black!important;
+          display: table;
+          margin-top: 16px;
+        }
+        #state-play, #state-pause {
+          position: absolute;
+          left: calc(50vw - 16px);
+          height: 32px;
+          width: 32px;
+          top: 210px;
+        }
+        #queue {
+          display: none;
+        }
+        progress::-webkit-progress-bar {
+          background-color: rgba(255,255,255,0.2);
+        }
+        progress::-webkit-progress-value {
+          background-color: rgb(255,255,255);
+        }
+        progress {
+          width: 90vw;
+          height: 15px;
+          position: absolute;
+          bottom: 20px;
+          left: 5vw;
+        }
+        #elapsed {
+          position: absolute;
+          bottom: 45px;
+          left: 5vw;
+        }
+        #state-pause {
+          position: absolute;
+          left: calc(50vw - 15px);
+          bottom: 41px;
+          height: 30px;
+          width: 30px;
+        }
+        #duration {
+          position: absolute;
+          bottom: 45px;
+          right: 5vw;
+        }
+        #queue-pos {
+          display: none;
         }
       }
 
-      @media screen and (width: 1920px) {
-        @media screen and (height: 480px) {
-          #albumart {
-            height: 420px;
-            width: 420px;
-            position: absolute;
-            top: 30px;
-            left: 30px;
-            box-shadow: 0px 0px 7px 0px rgba(0,0,0,0.33);
-            background: #444;
-            border-radius: 4%;
-          }
-          #title {
-            font-size: 60px;
-            position: absolute;
-            top: 30px;
-            left: 503px;
-            font-weight: 700;
-            max-width: 875px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-          }
-          #artist {
-            font-size: 37px;
-            position: absolute;
-            top: 115px;
-            left: 503px;
-            font-weight: 600;
-            max-width: 875px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-          }
-          #album {
-            font-size: 35px;
-            position: absolute;
-            top: 170px;
-            left: 503px;
-            max-width: 875px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-          }
-          #quality {
-            font-size: 22px;
-            position: absolute;
-            top: 232px;
-            left: 503px;
-            padding: 10px;
-            background-color: rgb(255,255,255);
-            border-radius: 6px;
-            font-weight: 600
-          }
-          body.light #quality {
-            background-color: rgba(0,0,0,0.6);
-          }
-          #state-play, #state-pause {
-            position: absolute;
-            left: 940px;
-            top: 360px;
-            height: 48px;
-            width: 48px;
-          }
-          #elapsed {
-            font-size: 28px;
-            position: absolute;
-            top: 376px;
-            left: 503px;
-          }
-          #duration {
-            font-size: 28px;
-            position: absolute;
-            top: 376px;
-            right: 542px;
-          }
-          progress {
-            width: 875px;
-            height: 27px;
-            position: absolute;
-            top: 423px;
-            left: 503px;
-          }
-          progress::-webkit-progress-bar {
-            background-color: rgba(255,255,255,0.2);
-            border-radius: 1000px;
-            overflow: hidden;
-          }
-          body.light progress::-webkit-progress-bar {
-            background-color: rgba(0,0,0,0.2);
-          }
-          progress::-webkit-progress-value {
-            background-color: rgb(255,255,255);
-          }
-          body.light progress::-webkit-progress-value {
-            background-color: rgba(0,0,0,0.45);
-          }
-          #queue {
-            position: absolute;
-            top: 0px;
-            left: 1436;
-            width: 483px;
-            height: 480px;
-            background: rgba(255,255,255,0.12);
-          }
-          body.light #queue {
-            background: rgba(0,0,0,0.06);
-          }
-          #queue li {
-            position: relative;
-            padding: 23px 10px 27px 25px;
-            font-size: 30px;
-          }
-          #queue li span {
-            max-width: 420px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-          }
-          #queue li.active {
-            background: rgba(255,255,255,0.1);
-          }
-          body.light #queue li.active {
-            background: rgba(0,0,0,0.1);
-          }
-          #queue li .title {
-            font-weight: bold;
-            display: block;
-          }
+      @media screen and (width: 1920px)  and (height: 480px) {
+        #albumart {
+          height: 420px;
+          width: 420px;
+          position: absolute;
+          top: 30px;
+          left: 30px;
+          box-shadow: 0px 0px 7px 0px rgba(0,0,0,0.33);
+        }
+        #title {
+          font-size: 50px;
+          position: absolute;
+          top: 50px;
+          left: 503px;
+          font-weight: 700;
+          max-width: 875px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        #artist {
+          font-size: 37px;
+          position: absolute;
+          top: 115px;
+          left: 503px;
+          font-weight: 600;
+          max-width: 875px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        #album {
+          font-size: 35px;
+          position: absolute;
+          top: 170px;
+          left: 503px;
+          max-width: 875px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        #quality {
+          font-size: 22px;
+          position: absolute;
+          top: 232px;
+          left: 503px;
+        }
+        body.light #quality {
+          background-color: rgba(0,0,0,0.6);
+        }
+        #state-play, #state-pause {
+          position: absolute;
+          left: 940px;
+          top: 350px;
+          height: 48px;
+          width: 48px;
+        }
+        #elapsed {
+          font-size: 28px;
+          position: absolute;
+          top: 366px;
+          left: 503px;
+        }
+        #duration {
+          font-size: 28px;
+          position: absolute;
+          top: 366px;
+          right: 542px;
+        }
+        progress {
+          width: 875px;
+          height: 27px;
+          position: absolute;
+          top: 413px;
+          left: 503px;
+        }
+        progress::-webkit-progress-bar {
+          background-color: rgba(255,255,255,0.2);
+          border-radius: 1000px;
+          overflow: hidden;
+        }
+        body.light progress::-webkit-progress-bar {
+          background-color: rgba(0,0,0,0.2);
+        }
+        progress::-webkit-progress-value {
+          background-color: rgb(255,255,255);
+        }
+        body.light progress::-webkit-progress-value {
+          background-color: rgba(0,0,0,0.45);
+        }
+        #queue {
+          position: absolute;
+          top: 0px;
+          left: 1436;
+          width: 483px;
+          height: 480px;
+          background: rgba(255,255,255,0.12);
+        }
+        body.light #queue {
+          background: rgba(0,0,0,0.06);
+        }
+        #queue li {
+          position: relative;
+          padding: 23px 10px 27px 25px;
+          font-size: 30px;
+        }
+        #queue li span {
+          max-width: 420px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        #queue li.active {
+          background: rgba(255,255,255,0.1);
+        }
+        body.light #queue li.active {
+          background: rgba(0,0,0,0.1);
+        }
+        #queue li .title {
+          font-weight: bold;
+          display: block;
+        }
+        #queue-pos {
+          display: none;
+        }
+      }
+      @media screen and (width: 800px) and (height: 480px) {
+        #albumart {
+          height: 250px;
+          box-shadow: 0px 0px 7px 0px rgba(0,0,0,0.33);
+          margin: 40px;
+        }
+        #title, #artist, #album, #quality {
+          position: absolute;
+          left: 330px;
+          max-width: 430px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        #title {
+          top: 90px;
+          font-size: 30px;
+          font-weight: 700;
+        }
+        #artist {
+          top: 130px;
+          font-size: 23px;
+          font-weight: 500;
+        }
+        #album {
+          top: 160px;
+          font-size: 20px;
+        }
+        #quality {
+          top: 205px;
+          font-size: 17px;
+          padding: 7px 9px;
+        }
+        #progress {
+          position: absolute;
+          left: 40px;
+          width: 720px;
+          top: 423px;
+        }
+        #elapsed {
+          position: absolute;
+          left: 40px;
+          top: 394px;
+          font-size: 18px;
+        }
+        #duration {
+          position: absolute;
+          right: 40px;
+          top: 394px;
+          font-size: 18px;
+        }
+        #state-play, #state-pause {
+          height: 48px;
+          width: 48px;
+          position: absolute;
+          left: calc(50vw - 24px);
+          top: 330px;
+        }
+        progress::-webkit-progress-bar {
+          background-color: rgba(255,255,255,0.2);
+          border-radius: 1000px;
+          overflow: hidden;
+        }
+        body.light progress::-webkit-progress-bar {
+          background-color: rgba(0,0,0,0.2);
+        }
+        progress::-webkit-progress-value {
+          background-color: rgb(255,255,255);
+        }
+        body.light progress::-webkit-progress-value {
+          background-color: rgba(0,0,0,0.45);
+        }
+        #queue {
+          display: none;
+        }
+        #queue-pos {
+          position: absolute;
+          width: 100%;
+          top: 446px;
+          left: 0;
+          text-align: center;
+          font-weight: 500;
         }
       }
       #not-playing {
@@ -345,6 +446,7 @@
       <li><span class="title"></span><span class="artist"></span></li>
       <li><span class="title"></span><span class="artist"></span></li>
     </ul>
+    <p id="queue-pos"></p>
     <p id="elapsed">0:00</p>
     <svg id="state-play" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
     <svg id="state-pause" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-pause"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
@@ -478,6 +580,8 @@
             els[i].classList.add('hidden')
           }
         }
+
+        document.getElementById('queue-pos').innerText = (p + 1) + "/" + queue.length;
       }
     }
 

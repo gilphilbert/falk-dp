@@ -13,26 +13,40 @@ a
       text-decoration: underline
 
 .title, .subtitle
+  //font-family: 'Rubik Mono One', sans-serif
   @include until($desktop)
     &.is-3
-      font-size: 1.5em
+      font-size: 1.7em
+    &.is-4
+      font-size: 1.4em
     &.is-5
       font-size: 1.25em
+.title
+  font-weight: 600
 
 body
-  background: radial-gradient(#4c4746, #221F1F)
+  background: $white
   background-attachment: fixed
   min-height: 100vh
+  color: $grey-darker
+
   @include until($desktop)
-    font-size: .9em
+    font-size: 12px
+    background: $blue
+    color: $white
+    a, .title, .subtitle
+      color: $white
+    .tag.quality
+      background: $white
+      color: $blue
 
 .pointer
   cursor: pointer
 
 .title
-  color: $white
+  color: $grey-darker
 .subtitle
-  color: $grey-light
+  color: $grey-darker
 
 .label
   color: $white
@@ -67,9 +81,9 @@ body
     margin-top: 1em
 
 .tag:not(body)
-  background-color: #ffffff26
+  background-color: $blue
   &.is-24
-    background-color: #4BBE8726
+    background-color: $grey-dark
 
 .feather
   width: 24px
@@ -80,7 +94,7 @@ body
   stroke-linejoin: round
   fill: none
   &.is-active
-    stroke: $green
+    stroke: $blue
   &.is-small
     height: 20px
     width: 20px
@@ -92,8 +106,10 @@ body
       // @include until($desktop)
       //  padding: 1em .5em
     img
-      border-radius: 5%
-      background-color: rgba(255,255,255,0.1)
+      border-radius: 7px
+      background-color: $blue
+      @include until($desktop)
+        background-color: rgba(255,255,255,0.1)
     .title
       margin-top: 10px
       font-weight: 500
@@ -111,7 +127,7 @@ aside.menu
   -webkit-box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
   -moz-box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
   height: 100%
-  background: #393535
+  background: $blue
   position: fixed
   top: 0
   left: 0
@@ -120,11 +136,14 @@ aside.menu
   transition: width 250ms
 
   @include until($desktop)
+    background: $white
     left: -90px
     transition: 250ms
     &.is-active
       transition: 250ms
       left: 0
+    .feather
+      stroke: $blue
 
   &:hover
     @include from($desktop)
@@ -136,6 +155,12 @@ aside.menu
     width: 55px
     height: auto
     margin: 40px auto
+    svg
+      width: 100%
+      height: auto
+      path
+        @include until($desktop)
+          fill: $blue
  
   .menu-label, .menu-list a
     color: #ffffff
@@ -196,7 +221,7 @@ aside.menu
 #content-container
   padding: 2.5em 1.5em calc(100px + .75em) calc(1.5em + 90px)
   @include until($desktop)
-    padding:  0 .75em .75em .75em
+    padding:  2em .75em .75em .75em
 
   >.container.is-fluid
     @include until($desktop)
@@ -207,8 +232,9 @@ aside.menu
       margin-top: 25px
 
   .artist-info
-    padding-top: 50px
     padding-bottom: 50px
+    @include from($desktop)
+      padding-top: 50px
     figure
       img
         border-radius: 100%
@@ -220,12 +246,21 @@ aside.menu
 
   .home
     padding-top: 1.25em
-    @include until($desktop)
-      height: 100vh
     .artist
       margin-bottom: 0.5rem
+    @include until($desktop)
+      height: 100vh
+      .title
+        margin-bottom: 15px
+      .artist
+        margin-bottom: 15px
+        margin-top: 0
   .albumart img
-    border-radius: 5%
+    border-radius: 7px
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3)
+    -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3)
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3)
+    
 
   table.table.songs
     tr
@@ -239,7 +274,11 @@ aside.menu
         border-bottom-right-radius: 4px
       &:hover
         td
-          background: #00000018
+          background: $blue
+          color: $white
+        .tag:not(body)
+          background-color: $white
+          color: $blue
     td
       @include until($desktop)
         padding-left: 0
@@ -282,42 +321,24 @@ aside.menu
     .feather
       margin: 0
 
-.play-button
-  height: 48px
-  min-width: 48px
-  max-width: 48px
-  background: #4BBE87
-  border-radius: 3em
-  display: inline-flex
-  align-items: center
-  svg
-    margin: 0 auto
-
 #queue-list
+  color: $grey-darker
   a
-    color: $white
+    color: $grey-darker
     &:hover
-      color: $white
+      color: $orange
       text-decoration: underline
+  .columns
+    border-radius: 5px
   .columns:hover
     background: rgba(0,0,0,0.08)
   .column.is-fixed-size
     flex: none
     width: 13%
-  .column:first-child
-    border-left: 3px solid transparent
-    border-top-left-radius: 5%
-    border-bottom-left-radius: 5%
-    padding: 0.5rem 0.75rem
-  .column:last-child
-    border-top-right-radius: 5%
-    border-bottom-right-radius: 5%
   .is-playing
-    font-weight: bold
-    background: rgba(0,0,0,0.08)
-    .column
-      &:first-child
-        border-color: $primary
+    font-weight: 500
+    color: $blue
+
   
   //#queue-table
     border-collapse: separate
@@ -347,7 +368,7 @@ aside.menu
           border-bottom: none
       &.is-playing
         background-color: rgba(255,255,255,0.05)
-        font-weight: bold
+        font-weight: 500
         td:first-child
           border-left: 3px solid $primary
 
@@ -363,9 +384,15 @@ aside.menu
   height: 100px
   width: 100%
   bottom: 0
-  background: #4C4746
+  background: $grey-lighter
   z-index: 3
   line-height: 1
+  color: $grey-darker
+  .title, .subtitle
+    color: $grey-darker
+  box-shadow: 0px -2px 3px 0px rgba(0, 0, 0, 0.15)
+  -webkit-box-shadow: 0px -2px 3px 0px rgba(0,0,0,0.15)
+  -moz-box-shadow: 0px -2px 3px 0px rgba(0,0,0,0.15)
   @include until($desktop)
     height: 78px
     left: 100%
@@ -379,10 +406,24 @@ aside.menu
   // make all columns full height
   .columns
     height: 100%
+  //round play button
+  .play-button
+    height: 48px
+    min-width: 48px
+    max-width: 48px
+    background: $blue
+    border-radius: 5000px
+    display: inline-flex
+    align-items: center
+    .feather
+      stroke: $white
+    svg
+      margin: 0 auto
   //icons
   .feather
     height: 20px
     width: 20px
+    stroke: $grey-darker
   // currently playing song detail
   .now-playing
     width: 300px
@@ -390,6 +431,9 @@ aside.menu
       height: 70px
       width: 70px
       border-radius: 4px
+      -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3)
+      -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3)
+      box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3)
     .column:not(:first-child)
       padding-left: 0
     @include until($desktop)
@@ -412,16 +456,16 @@ aside.menu
       margin-left: 10px
   progress.progress
     margin-top: 3px
-    background: #2A2727
+    background: $darken
     &::-moz-progress-value
-      background: #2A2727
+      background: $blue
     &::-moz-progress-bar
-      background: #2A2727
+      background: $darken
     &::-webkit-progress-value
-      background: #4BBE87
-      border-radius: 3em
+      background: $blue
+      border-radius: none
     &::-webkit-progress-bar
-      background: #393535
+      background: $darken
   //random, repeat
   .misc-controls
     svg

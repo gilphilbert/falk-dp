@@ -1,25 +1,31 @@
 @charset "utf-8";
 
-@import url('/fonts/sen.css');
-
 // Set your brand colors
 $green: #4BBE87;
+$blue: #255C99;
+$yellow: #E3B505;
+$orange: #FF6B35;
+$white: #FCFFFF;
+
+$grey-dark: #7D869C;
+$grey-darker: #4A5A67;
+$grey-lighter: #F2F6F6;
+
+$darken: rgba(0,0,0,0.1);
 
 // Update Bulma's global variables
-$family-sans-serif: 'Maven Pro', sans-serif;
-$grey-dark: #393535;
-$grey-lighter: #eeeeee;
-$primary: $green;
-$link: $green;
-$link-hover: $green;
+//$family-sans-serif: 'Maven Pro', sans-serif;
+$family-sans-serif: 'Rubik', sans-serif;
+$primary: $blue;
+$link: $orange;
+$link-hover: $blue;
 
 
-$white: #ffffff;
 $text: $white;
 $title-color: $white;
 $subtitle-color: $white;
 
-$table-color: $white !default;
+$table-color: $grey-darker !default;
 $table-background-color: transparent !default;
 $table-cell-border: 1px solid transparent !default;
 

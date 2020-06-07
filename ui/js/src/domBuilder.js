@@ -115,23 +115,23 @@ var domBuilder = (function () {
           var frag = cr.div({ class: 'container is-fluid' })
           frag.appendChild(
             cr.div({ class: 'columns home' },
-              cr.div({ class: 'column is-3 is-2-fullhd' },
+              cr.div({ class: 'column is-10-touch is-offset-1-touch is-3 is-2-fullhd' },
                 cr.figure({ class: 'image albumart' },
                   cr.img()
                 )
               ),
               cr.div({ class: 'column' },
                 cr.p({ class: 'title is-3 has-text-centered-touch has-no-overflow-touch' }, state.title || 'Not playing'),
-                cr.p({ class: 'artist has-text-centered-touch subtitle has-text-weight-bold has-no-overflow-touch' }, cr.a({ href: '/artist/' + state.artist, 'data-navigo': '' }, state.artist || '')),
-                cr.p({ class: 'detail has-text-centered-touch has-no-overflow-touch' }, cr.span({ class: 'tag quality' }, uiTools.getQuality(state))),
-                cr.p({ class: 'album has-text-centered-touch subtitle is-marginless has-no-overflow-touch' }, cr.a({ href: '/album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album || ''))
+                cr.p({ class: 'artist has-text-centered-touch subtitle is-4 has-text-weight-bold has-no-overflow-touch' }, cr.a({ href: '/artist/' + state.artist, 'data-navigo': '' }, state.artist || '')),
+                cr.p({ class: 'album has-text-centered-touch subtitle is-4 has-no-overflow-touch' }, cr.a({ href: '/album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album || '')),
+                cr.p({ class: 'detail has-text-centered-touch has-no-overflow-touch' }, cr.span({ class: 'tag is-medium quality' }, uiTools.getQuality(state)))
               ),
               cr.div({ class: 'column mobile-controls is-hidden-desktop is-12' },
-                cr.span({ on: { click: webSocket.action.toggleRandom } }, uiTools.getSVG('shuffle', 'random is-small' + ((state.random) ? ' is-active' : ''))),
+                // cr.span({ on: { click: webSocket.action.toggleRandom } }, uiTools.getSVG('shuffle', 'random is-small' + ((state.random) ? ' is-active' : ''))),
                 cr.span({ on: { click: webSocket.action.prev } }, uiTools.getSVG('skip-back')),
                 cr.button({ class: 'button is-primary is-rounded', on: { click: uiTools.handlers.mobileButtons.play } }, uiTools.getSVG(((state.state !== 'play') ? 'play' : 'pause'))),
-                cr.span({ on: { click: webSocket.action.next } }, uiTools.getSVG('skip-forward')),
-                cr.span({ on: { click: webSocket.action.toggleRepeat } }, uiTools.getSVG('repeat' + ((state.single) ? '-one' : ''), 'repeat is-small' + ((state.repeat) ? ' is-active' : '')))
+                cr.span({ on: { click: webSocket.action.next } }, uiTools.getSVG('skip-forward'))//,
+                // cr.span({ on: { click: webSocket.action.toggleRepeat } }, uiTools.getSVG('repeat' + ((state.single) ? '-one' : ''), 'repeat is-small' + ((state.repeat) ? ' is-active' : '')))
               )
             )
           )
@@ -607,7 +607,7 @@ var domBuilder = (function () {
           var home = document.querySelector('#content-container .home')
           home.querySelector('.title').textContent = state.title
           home.querySelector('.artist').textContent = state.artist
-          home.querySelector('.detail .tag.quality').textContent = uiTools.getQuality(state)
+          home.querySelector('.detail .tag .quality').textContent = uiTools.getQuality(state)
           var album = home.querySelector('.album a')
           album.textContent = state.album
           album.href = '/' + state.artist + '/' + state.album
