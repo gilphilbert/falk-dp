@@ -183,12 +183,12 @@ var domBuilder = (function () {
           // append the details and list of tracks to the fragment
           frag.appendChild(
             cr.div({ class: 'columns is-multiline is-mobile album-detail' },
-              cr.div({ class: 'column is-3-desktop is-12-mobile' },
+              cr.div({ class: 'column is-3-desktop is-10-touch is-offset-1-touch' },
                 cr.figure({ class: 'image is-1by1 albumart' },
                   cr.img({ src: data.albumart })
                 )
               ),
-              cr.div({ class: 'column is-8-desktop is-12-mobile' },
+              cr.div({ class: 'column is-8-desktop is-10-touch is-offset-1-touch' },
                 cr.div({ class: 'columns is-multiline is-mobile' },
                   cr.div({ class: 'column is-8-mobile is-12-desktop' },
                     cr.p({ class: 'is-uppercase has-text-weight-semibold is-hidden-mobile' }, 'Album'),

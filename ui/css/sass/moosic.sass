@@ -281,6 +281,7 @@ aside.menu
           color: $blue
     td
       @include until($desktop)
+        color: $white
         padding-left: 0
         padding-right: 0
       .dropdown button
@@ -328,6 +329,13 @@ aside.menu
     &:hover
       color: $orange
       text-decoration: underline
+  @include until($desktop)
+    color: $white
+    a
+      color: $white
+      &:hover
+        color: $orange
+        text-decoration: underline
   .columns
     border-radius: 5px
   .columns:hover
@@ -337,10 +345,10 @@ aside.menu
     width: 13%
   .is-playing
     font-weight: 500
+
+  @include from($desktop)
     color: $blue
 
-  
-  //#queue-table
     border-collapse: separate
     tr
       td

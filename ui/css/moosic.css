@@ -11413,6 +11413,7 @@ aside.menu .detail {
 }
 @media screen and (max-width: 1023px) {
   #content-container table.table.songs td {
+    color: #FCFFFF;
     padding-left: 0;
     padding-right: 0;
   }
@@ -11474,6 +11475,18 @@ aside.menu .detail {
   color: #FF6B35;
   text-decoration: underline;
 }
+@media screen and (max-width: 1023px) {
+  #queue-list {
+    color: #FCFFFF;
+  }
+  #queue-list a {
+    color: #FCFFFF;
+  }
+  #queue-list a:hover {
+    color: #FF6B35;
+    text-decoration: underline;
+  }
+}
 #queue-list .columns {
   border-radius: 5px;
 }
@@ -11486,7 +11499,45 @@ aside.menu .detail {
 }
 #queue-list .is-playing {
   font-weight: 500;
-  color: #255C99;
+}
+@media screen and (min-width: 1024px) {
+  #queue-list {
+    color: #255C99;
+    border-collapse: separate;
+  }
+  #queue-list tr td {
+    vertical-align: middle;
+    width: 0%;
+    white-space: nowrap;
+  }
+  #queue-list tr td.title-cell {
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 1px;
+  }
+  #queue-list tr td:first-child {
+    padding-left: 9px;
+    padding-right: 10px;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border-left: 3px solid transparent;
+  }
+  #queue-list tr td:last-child {
+    padding-right: 5px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+  }
+  #queue-list tr:last-child td {
+    border-bottom: none;
+  }
+  #queue-list tr.is-playing {
+    background-color: rgba(255, 255, 255, 0.05);
+    font-weight: 500;
+  }
+  #queue-list tr.is-playing td:first-child {
+    border-left: 3px solid #255C99;
+  }
 }
 #queue-list #setting-page .title {
   margin-top: 1em;
