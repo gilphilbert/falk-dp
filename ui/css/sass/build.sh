@@ -1,3 +1,3 @@
 #!/bin/bash
-sass master.scss:../moosic.css
-sass --style=compressed master.scss:../moosic.min.css
+sass master.scss:../falk.css
+sass --style=compressed master.scss:../falk.min.css

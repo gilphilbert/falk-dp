@@ -64,7 +64,7 @@ var uiTools = (function () {
       t = 'Audiophile Music Player'
     }
     // set the title
-    document.title = t + ' | Moosic'
+    document.title = t + ' | FALK'
   }
 
   var progress = {

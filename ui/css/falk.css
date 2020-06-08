@@ -11353,11 +11353,6 @@ aside.menu .detail {
 #content-container .artist-info {
   padding-bottom: 50px;
 }
-@media screen and (min-width: 1024px) {
-  #content-container .artist-info {
-    padding-top: 50px;
-  }
-}
 #content-container .artist-info figure img {
   border-radius: 100%;
 }
@@ -11410,6 +11405,9 @@ aside.menu .detail {
 #content-container table.table.songs tr:hover .tag:not(body) {
   background-color: #FCFFFF;
   color: #255C99;
+}
+#content-container table.table.songs td {
+  vertical-align: middle;
 }
 @media screen and (max-width: 1023px) {
   #content-container table.table.songs td {
@@ -11551,7 +11549,7 @@ aside.menu .detail {
   height: 100px;
   width: 100%;
   bottom: 0;
-  background: #F2F6F6;
+  background: #EAEDEF;
   z-index: 3;
   line-height: 1;
   color: #4A5A67;
@@ -11652,4 +11650,4 @@ aside.menu .detail {
   margin: 0 5px;
 }
 
-/*# sourceMappingURL=moosic.css.map */
+/*# sourceMappingURL=falk.css.map */
