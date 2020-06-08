@@ -209,6 +209,18 @@ var uiTools = (function () {
     document.addEventListener('swiped-left', function (e) {
       hideMenu()
     })
+    document.addEventListener('swiped-up', function (e) {
+      var ql = document.querySelector('#queue-list')
+      if (ql != null) {
+        ql.classList.add('is-active')
+      }
+    })
+    document.addEventListener('swiped-down', function (e) {
+      var ql = document.querySelector('#queue-list')
+      if (ql != null) {
+        ql.classList.remove('is-active')
+      }
+    })
   }
 
   var hideMenu = function () {

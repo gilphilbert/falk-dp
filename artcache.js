@@ -1,7 +1,7 @@
 var express = require('express')
 var router = express.Router()
 
-var app = express()
+// var app = express()
 
 const crypto = require('crypto')
 const fs = require('fs')
@@ -10,10 +10,10 @@ const rootdir = path.resolve(__dirname)
 const axios = require('axios')
 const MusicBrainzApi = require('musicbrainz-api').MusicBrainzApi
 const mbApi = new MusicBrainzApi({
-  appName: 'Moosic',
+  appName: 'FALK',
   appVersion: '0.0.1',
   appContactInfo: 'gil.philbert@gmail.com'
-});
+})
 
 // the albumart service
 router.get('/artist/:artist', function (req, res) {
@@ -40,20 +40,20 @@ router.get('/album/:artist/:album', function (req, res) {
   getArt({ artist: q.artist, album: q.album }, res)
 })
 
-function getArt({ artist, album }={}, res) {
-  const artcache = rootdir + "/artcache/"
+function getArt ({ artist, album } = {}, res) {
+  const artcache = rootdir + '/artcache/'
 
   // generate a hash from the request
   var cs = artist
-  var pre = "artist/"
+  var pre = 'artist/'
   if (album) {
     cs = cs + album
-    pre = "album/"
+    pre = 'album/'
   }
-  const hash = crypto.createHash("sha1").update(cs).digest("hex")
+  const hash = crypto.createHash('sha1').update(cs).digest('hex')
 
   // now convert the hash to a file name ./artcache/${filename}
-  const imgpath = artcache + pre + hash + ".jpg"
+  const imgpath = artcache + pre + hash + '.jpg'
 
   try {
     if (fs.existsSync(imgpath)) {
@@ -68,10 +68,10 @@ function getArt({ artist, album }={}, res) {
             // we got a file, let's serve it
             res.sendFile(imgpath)
           })
-	  .catch((e) => {
+          .catch((e) => {
             // there's no art, serve the default artistart
-            res.sendFile(artcache + "artist.png")
-	  })
+            res.sendFile(artcache + 'artist.png')
+          })
       } else {
         // we're looking for albumart let's look for some!
         getAlbumArt(artist, album, imgpath)
@@ -79,29 +79,29 @@ function getArt({ artist, album }={}, res) {
             // we got a file, let's serve it
             res.sendFile(imgpath)
           })
-	  .catch((e) => {
+          .catch((e) => {
             // there's no art, serve the default artistart
-            res.sendFile(artcache + "album.png")
-	  })
+            res.sendFile(artcache + 'album.png')
+          })
       }
     }
-  } catch(err) {
+  } catch (err) {
     res.json({ error: 'unable to generate image' })
   }
 }
 
-async function getArtistArt(artist, imgpath) {
-  var _artist = encodeURIComponent(artist)
+async function getArtistArt (artist, imgpath) {
+  // var _artist = encodeURIComponent(artist)
   // get the mbid from audioscrobbler...
-/*
-  info = await axios.get("https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=" + _artist + "&api_key=250b1448a91894d0f7542cbcdedc936e&format=json")
-  const mbid = info.data.artist.mbid
-*/
-  info = await mbApi.searchArtist(artist, 0, 1)
-  mbid = info.artists[0].id
+  /*
+    info = await axios.get("https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=" + _artist + "&api_key=250b1448a91894d0f7542cbcdedc936e&format=json")
+    const mbid = info.data.artist.mbid
+  */
+  var info = await mbApi.searchArtist(artist, 0, 1)
+  var mbid = info.artists[0].id
 
   // now get the fanart from fanart.tv
-  fanart = await axios.get("https://webservice.fanart.tv/v3/music/" + mbid + "&?api_key=fd55f4282969cb8b8d09f470e3d18c51&format=json")
+  var fanart = await axios.get('https://webservice.fanart.tv/v3/music/' + mbid + '&?api_key=fd55f4282969cb8b8d09f470e3d18c51&format=json')
   const data = fanart.data
 
   // check to see if we actually got any art URLs back
@@ -120,14 +120,14 @@ async function getArtistArt(artist, imgpath) {
     })
   } else {
     // we didn't get any image urls back, send an error
-    throw new Error(1);
+    throw new Error(1)
   }
 }
 
-async function getAlbumArt(artist, album, imgpath) {
+async function getAlbumArt (artist, album, imgpath) {
   var _artist = encodeURIComponent(artist)
   var _album = encodeURIComponent(album)
-  info = await axios.get(`http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=250b1448a91894d0f7542cbcdedc936e&artist=${_artist}&album=${_album}&format=json`)
+  var info = await axios.get(`http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=250b1448a91894d0f7542cbcdedc936e&artist=${_artist}&album=${_album}&format=json`)
 
   const images = info.data.album.image
   /*
@@ -141,11 +141,11 @@ async function getAlbumArt(artist, album, imgpath) {
   }
   */
   var _img = images.filter(img => {
-    return img.size == "extralarge"
+    return img.size === 'extralarge'
   })
   var imageurl = false
   if (_img && _img.length > 0) {
-    imageurl = _img[0]["#text"]
+    imageurl = _img[0]['#text']
   }
 
   if (imageurl) {
@@ -163,8 +163,8 @@ async function getAlbumArt(artist, album, imgpath) {
     })
   }
 
-  //we didn't find an image, panic!
-  throw new Error(1);
+  // we didn't find an image, panic!
+  throw new Error(1)
 }
 
 module.exports = router

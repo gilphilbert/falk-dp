@@ -40,6 +40,9 @@ body
       background: $white
       color: $blue
 
+.container
+  position: inherit
+
 .pointer
   cursor: pointer
 
@@ -67,12 +70,13 @@ body
     color: $grey-light
 
 .modal
+  color: $white
   &.is-small
     .modal-content, .modal-card
       width: 400px
   .box
     padding: 3rem
-    background: #595453
+    background: $blue
   .title-icon
     margin-bottom: 1em
   .title
@@ -247,7 +251,6 @@ aside.menu
     .artist
       margin-bottom: 0.5rem
     @include until($desktop)
-      height: 100vh
       .title
         margin-bottom: 15px
       .artist
@@ -328,13 +331,6 @@ aside.menu
     &:hover
       color: $orange
       text-decoration: underline
-  @include until($desktop)
-    color: $white
-    a
-      color: $white
-      &:hover
-        color: $orange
-        text-decoration: underline
   .columns
     border-radius: 5px
   .columns:hover
@@ -344,6 +340,27 @@ aside.menu
     width: 13%
   .is-playing
     font-weight: 500
+  @include until($desktop)
+    position: fixed
+    top: 100vh
+    left: 0
+    height: 100vh
+    width: 100vw
+    display: block
+    background: $white
+    color: $grey-darker
+    transition: top 250ms ease 0s
+    .columns
+      margin: 0
+    a
+      color: $orange
+      &:hover
+        color: $orange
+        text-decoration: underline
+    &.is-active
+        top: 0
+        transition: top 250ms ease 0s
+
 
   @include from($desktop)
     color: $blue
@@ -379,11 +396,11 @@ aside.menu
         td:first-child
           border-left: 3px solid $primary
 
-  #setting-page
-    .title
-      margin-top: 1em
-    .title:first-child
-      margin-top: inherit
+#setting-page
+  .title
+    margin-top: 1em
+  .title:first-child
+    margin-top: inherit
 
 // this contains the fixed-bottom play bar
 #control-bar

@@ -11111,6 +11111,10 @@ body {
   }
 }
 
+.container {
+  position: inherit;
+}
+
 .pointer {
   cursor: pointer;
 }
@@ -11147,12 +11151,15 @@ body {
   color: #b5b5b5;
 }
 
+.modal {
+  color: #FCFFFF;
+}
 .modal.is-small .modal-content, .modal.is-small .modal-card {
   width: 400px;
 }
 .modal .box {
   padding: 3rem;
-  background: #595453;
+  background: #255C99;
 }
 .modal .title-icon {
   margin-bottom: 1em;
@@ -11368,9 +11375,6 @@ aside.menu .detail {
   margin-bottom: 0.5rem;
 }
 @media screen and (max-width: 1023px) {
-  #content-container .home {
-    height: 100vh;
-  }
   #content-container .home .title {
     margin-bottom: 15px;
   }
@@ -11473,18 +11477,6 @@ aside.menu .detail {
   color: #FF6B35;
   text-decoration: underline;
 }
-@media screen and (max-width: 1023px) {
-  #queue-list {
-    color: #FCFFFF;
-  }
-  #queue-list a {
-    color: #FCFFFF;
-  }
-  #queue-list a:hover {
-    color: #FF6B35;
-    text-decoration: underline;
-  }
-}
 #queue-list .columns {
   border-radius: 5px;
 }
@@ -11497,6 +11489,33 @@ aside.menu .detail {
 }
 #queue-list .is-playing {
   font-weight: 500;
+}
+@media screen and (max-width: 1023px) {
+  #queue-list {
+    position: fixed;
+    top: 100vh;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    display: block;
+    background: #FCFFFF;
+    color: #4A5A67;
+    transition: top 250ms ease 0s;
+  }
+  #queue-list .columns {
+    margin: 0;
+  }
+  #queue-list a {
+    color: #FF6B35;
+  }
+  #queue-list a:hover {
+    color: #FF6B35;
+    text-decoration: underline;
+  }
+  #queue-list.is-active {
+    top: 0;
+    transition: top 250ms ease 0s;
+  }
 }
 @media screen and (min-width: 1024px) {
   #queue-list {
@@ -11537,10 +11556,11 @@ aside.menu .detail {
     border-left: 3px solid #255C99;
   }
 }
-#queue-list #setting-page .title {
+
+#setting-page .title {
   margin-top: 1em;
 }
-#queue-list #setting-page .title:first-child {
+#setting-page .title:first-child {
   margin-top: inherit;
 }
 
