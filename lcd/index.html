@@ -7,6 +7,9 @@
     <title>FALK LCD Screen</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+Semi+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+
     <style>
       /* reset.css */
       html, body, div, span, applet, object, iframe,
@@ -74,10 +77,55 @@
         border-radius: 1000px;
         overflow: hidden;
       }
+      #not-playing {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background: #255C99;
+        transition: left 0.5s ease;
+      }
+      #not-playing img {
+        position: absolute;
+        height: 60vh;
+        top: calc(50% - (60vh / 2));
+        left: calc(50% - (60vh / 2));
+        border-radius: 7%;
+      }
+      #not-playing.hide {
+        left: calc(0px - 100vw);
+        transition: left 0.5s ease;
+      }
+
+      body, button, input, select, textarea {
+        font-family: "Rubik", sans-serif;
+        line-height: normal;
+
+      }
+      body {
+        color: white;
+        overflow: hidden;
+      }
+      body.light {
+        color: rgba(0,0,0,0.6);
+      }
+      #quality {
+        background-color: white;
+      }
+      body.light #quality {
+        background-color: rgba(0,0,0,0.6);
+      }
+      .hidden {
+        display: none;
+      }
 
       @media screen and (width: 480px) and (height: 320px) {
         body {
           --body-background: white;
+        }
+        body, button, input, select, textarea {
+          font-family: 'Encode Sans Semi Condensed', sans-serif!important;
         }
         body:before {
           content: '';
@@ -140,10 +188,10 @@
           top: 123px;
           left: 180px;
           font-size: 12px;
-          font-weight: 600;
+          font-weight: 600; font-weight: 700;
           padding: 6px 8px 7px 8px;
           background-color: white;
-          border-radius: 6px;
+          border-radius: 4px;
         }
         body.light #quality {
           background-color: rgba(0,0,0,0.6);
@@ -321,6 +369,24 @@
         }
       }
       @media screen and (width: 800px) and (height: 480px) {
+        body {
+          --body-background: white;
+        }
+        body:before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100vh;
+          width: 100vw;
+          z-index: -1;
+          background: var(--body-background);
+          background-repeat: no-repeat;
+          background-size: cover;
+          background-position-y: center;
+          filter: grayscale(100%);
+          opacity: 0.07;
+        }
         #albumart {
           height: 250px;
           box-shadow: 0px 0px 7px 0px rgba(0,0,0,0.33);
@@ -403,47 +469,6 @@
           text-align: center;
           font-weight: 500;
         }
-      }
-      #not-playing {
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: 100%;
-        background: #255C99;
-        transition: left 0.5s ease;
-      }
-      #not-playing img {
-        position: absolute;
-        height: 60vh;
-        top: calc(50% - (60vh / 2));
-        left: calc(50% - (60vh / 2));
-        border-radius: 7%;
-      }
-      #not-playing.hide {
-        left: calc(0px - 100vw);
-        transition: left 0.5s ease;
-      }
-      body, button, input, select, textarea {
-        font-family: "Rubik", sans-serif;
-        line-height: normal;
-
-      }
-      body {
-        color: white;
-        overflow: hidden;
-      }
-      body.light {
-        color: rgba(0,0,0,0.6);
-      }
-      #quality {
-        background-color: white;
-      }
-      body.light #quality {
-        background-color: rgba(0,0,0,0.6);
-      }
-      .hidden {
-        display: none;
       }
 
     </style>

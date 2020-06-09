@@ -1,20 +1,7 @@
+const port = 3000
 const http = require('http')
 const express = require('express')
 const app = express()
-
-var port = 3000
-
-/*
-process.argv.forEach((val, index, array) => {
-  console.log(val)
-  if (index > 1) {
-    if (val.indexOf('port=') === 0) {
-      port = val.substr(5)
-    }
-  }
-})
-console.log(port)
-*/
 
 // include the webservice
 const httpServer = http.createServer(app)
