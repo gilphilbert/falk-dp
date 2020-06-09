@@ -2,9 +2,9 @@ const http = require('http')
 const express = require('express')
 const app = express()
 
-var port = 80
+var port = 3000
 
-console.log(process.argv)
+/*
 process.argv.forEach((val, index, array) => {
   console.log(val)
   if (index > 1) {
@@ -14,6 +14,7 @@ process.argv.forEach((val, index, array) => {
   }
 })
 console.log(port)
+*/
 
 // include the webservice
 const httpServer = http.createServer(app)
