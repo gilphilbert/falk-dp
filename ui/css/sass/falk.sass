@@ -225,7 +225,7 @@ aside.menu
 #content-container
   padding: 2.5em 1.5em calc(100px + .75em) calc(1.5em + 90px)
   @include until($desktop)
-    padding:  2em .75em .75em .75em
+    padding:  24px 9px 100px 9px
 
   >.container.is-fluid
     @include until($desktop)
@@ -310,9 +310,7 @@ aside.menu
   line-height: 0.8
   svg.feather
     margin: 0 25px
-    //&:first-child,
-    //&:last-child
-      stroke: $grey-light
+      stroke: $white
     &.is-small
       height: 17px
       width: 17px
@@ -321,8 +319,10 @@ aside.menu
     min-width: 48px
     max-width: 48px
     padding: 0
+    background: $white
     .feather
       margin: 0
+      stroke: $blue
 
 #queue-list
   color: $grey-darker
@@ -453,7 +453,8 @@ aside.menu
     stroke: $grey-darker
   // currently playing song detail
   .now-playing
-    width: 300px
+    @include from($desktop)
+      width: 300px
     figure img
       height: 70px
       width: 70px
