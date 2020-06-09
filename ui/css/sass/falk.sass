@@ -399,10 +399,11 @@ aside.menu
 #setting-page
   .label
     color: $grey-darker
-  .title
-    margin-top: 1em
-  .title:first-child
-    margin-top: inherit
+  p.title
+    border-bottom: 2px solid $orange
+    &:not(:first-child)
+      padding-top: 17px
+      margin-top: 17px
 
 // this contains the fixed-bottom play bar
 #control-bar

@@ -620,7 +620,7 @@ var domBuilder = (function () {
       var main = uiTools.clearNodes('#content-container')
 
       var cont = cr.div({ class: 'container is-fluid', id: 'setting-page' },
-        cr.p({ class: 'title' }, 'Database'),
+        cr.p({ class: 'title is-4' }, 'Database'),
         cr.div({ class: 'field is-horizontal' },
           cr.div({ class: 'field-label' },
             cr.label({ class: 'label' }, 'Songs')
@@ -658,7 +658,22 @@ var domBuilder = (function () {
             )
           )
         ),
-        cr.p({ class: 'title' }, 'Network shares'),
+        cr.p({ class: 'title is-4' }, 'Network shares'),
+        cr.div({ class: 'field is-horizontal' },
+          cr.div({ class: 'field-label' },
+            cr.label({ class: 'label' }, 'Shares')
+          ),
+          cr.div({ class: 'field-body' },
+            cr.table({ id: 'mount-table', class: 'table is-fullwidth' },
+              cr.thead(
+                cr.tr(
+                  cr.th('Name'), cr.th('Server'), cr.th('Share'), cr.th('Type')
+                )
+              ),
+              cr.tbody()
+            )
+          )
+        ),
         cr.div({ class: 'field is-horizontal' },
           cr.div({ class: 'field-label' }),
           cr.div({ class: 'field-body' },
@@ -671,35 +686,6 @@ var domBuilder = (function () {
             )
           )
         ),
-        cr.p({ class: 'title' }, 'Audio'),
-        cr.div({ class: 'field is-horizontal' },
-          cr.div({ class: 'field-label' },
-            cr.label({ class: 'label' }, 'Playback device')
-          ),
-          cr.div({ class: 'field-body' },
-            cr.div({ class: 'field' },
-              cr.div({ class: 'select', id: 'playback-device' })
-            )
-          )
-        ),
-        /*
-        cr.p({ class: 'title' }, 'General'),
-        cr.div({ class: 'field is-horizontal' },
-          cr.div({ class: 'field-label' },
-            cr.label({ class: 'label' }, 'Device name')
-          ),
-          cr.div({ class: 'field-body' },
-            cr.div({ class: 'field  has-addons', id: 'device-name' },
-              cr.div({ class: 'control' },
-                cr.input({ class: 'input', type: 'text', on: { keyup: function () { this.parentNode.querySelector('button').classList.remove('is-hidden') } } })
-              ),
-              cr.div({ class: 'control' },
-                cr.button({ class: 'button is-primary', on: { click: function () { webSocket.set.deviceName(this.parentNode.querySelector('input').value) } } }, uiTools.getSVG('save'))
-              )
-            )
-          )
-        ),
-        */
         /*
         cr.div({ class: 'field is-horizontal' },
           cr.div({ class: 'field-label' },
@@ -715,7 +701,7 @@ var domBuilder = (function () {
           )
         ),
         */
-        cr.p({ class: 'title' }, 'System'),
+        cr.p({ class: 'title is-4' }, 'System'),
         cr.div({ class: 'field is-horizontal' },
           cr.div({ class: 'field-label is-normal' },
             cr.label({ class: 'label' }, 'Power')
@@ -738,18 +724,26 @@ var domBuilder = (function () {
         cont.querySelector('.field.artist-count').innerText = data.artists
         cont.querySelector('.field.album-count').innerText = data.albums
       })
-
-      // load the audio devices
-      webSocket.get.audioDevices((data) => {
-        var el = document.querySelector('#playback-device')
-        if (el !== undefined && data) {
-          // var active = data.outputenabled
-          var options = data.filter((i) => i.outputname !== undefined).map((i) => {
-            return cr.option({ 'data-id': i.outputid, selected: ((i.outputenabled === true) ? 'true' : 'false') }, i.outputname)
-          })
-          uiTools.clearNodes(el)
-          el.appendChild(cr.select(options))
-        }
+      webSocket.get.shares((data) => {
+        var tbl = document.querySelector('#mount-table tbody')
+        data.forEach((m) => {
+          var type = m.storage.substr(0, 3)
+          var host = m.storage.substr(6, m.storage.substr(6).indexOf('/'))
+          var share = m.storage.substr(6 + host.length)
+          tbl.appendChild(
+            cr.tr({ 'data-id': m.mount },
+              cr.td(m.mount), cr.td(host), cr.td(share), cr.td(type.toUpperCase()), cr.td(cr.span({ class: 'delete' }))
+            )
+          )
+        })
+        tbl.addEventListener('click', (e) => {
+          if (e.target.className === 'delete') {
+            var tr = e.target.closest('tr')
+            var id = tr.dataset.id
+            webSocket.action.removeShare(id)
+            tr.remove()
+          }
+        })
       })
       // load the system version
       // webSocket.get.version((data) => {

@@ -89,9 +89,6 @@ var webSocket = (function () {
     queue: function () {
       server.send('getQueue')
     },
-    shares: function () {
-      server.send('getOutputs')
-    },
     playlists: function () {
       server.send('getPlaylists')
     },
@@ -117,17 +114,14 @@ var webSocket = (function () {
       server.bindOnce('pushStats', callback)
       server.send('getStats')
     },
-    outputDevices: function () {
-      server.send('getOutputs')
-    },
+    shares: function (callback) {
+      server.bindOnce('pushMounts', callback)
+      server.send('getMounts')
+    }
     // deviceName: function (func) {
     //   on('pushDeviceName', func)
     //   sendOnly('getDeviceName')
     // },
-    audioDevices: function (func) {
-      server.bindOnce('pushOutputs', func)
-      server.send('getOutputs')
-    }
     // version: function (func) {
     //   if (func !== undefined) {
     //     _socket.once('pushSystemVersion', func)
@@ -223,11 +217,19 @@ var webSocket = (function () {
       server.send('rescanDB')
     },
     addShare: function ({ host, path, type } = {}) {
+      if (path.indexOf('/') === 0) {
+        path = path.substr(1)
+      }
       if (host && path && type) {
         server.send('addMount', { host, path, type })
       }
     },
-    shudown: function () {
+    removeShare: function (mount) {
+      if (mount) {
+        server.send('unmount', { mountpoint: mount })
+      }
+    },
+    shutdown: function () {
       server.send('shutdown')
     },
     reboot: function () {

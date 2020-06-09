@@ -11557,11 +11557,15 @@ aside.menu .detail {
   }
 }
 
-#setting-page .title {
-  margin-top: 1em;
+#setting-page .label {
+  color: #4A5A67;
 }
-#setting-page .title:first-child {
-  margin-top: inherit;
+#setting-page p.title {
+  border-bottom: 2px solid #FF6B35;
+}
+#setting-page p.title:not(:first-child) {
+  padding-top: 17px;
+  margin-top: 17px;
 }
 
 #control-bar {

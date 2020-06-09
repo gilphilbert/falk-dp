@@ -38,10 +38,6 @@ var uiTools = (function () {
     return svgElem
   }
 
-  var showBackground = function (visible) {
-    // document.getElementById('background').style.visibility = ((visible === true) ? 'visible' : 'hidden')
-  }
-
   var setPageTitle = function ({ title, state } = {}) {
     var t = ''
     if (title !== undefined) { // if there's a title
@@ -321,7 +317,6 @@ var uiTools = (function () {
     setPageTitle: setPageTitle,
     progress: progress,
     formatTime: formatTime,
-    showBackground: showBackground,
     handlers: handlers,
     closeModal: closeModal,
     hideMenu: hideMenu,
