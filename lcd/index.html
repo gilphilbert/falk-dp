@@ -77,93 +77,116 @@
 
       @media screen and (width: 480px) and (height: 320px) {
         body {
-          color: #faffff!important;
-          background-color: #255C99!important;
+          --body-background: white;
+        }
+        body:before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100vh;
+          width: 100vw;
+          z-index: -1;
+          background: var(--body-background);
+          background-repeat: no-repeat;
+          background-size: cover;
+          background-position-y: center;
+          filter: grayscale(100%);
+          opacity: 0.07;
         }
         #albumart {
           position: absolute;
-          top: 11px;
-          left: 173px;
-          height: 134px;
-          border-radius: 0;
+          top: 17px;
+          left: 17px;
+          height: 145px;
+          border-radius: 3px;
+          box-shadow: 0px 0px 7px 0px rgba(0,0,0,0.33);
         }
         #title {
-          width: 100%;
-          text-align: center;
+          position: absolute;
+          top: 22px;
+          left: 180px;
+          font-size: 22px;
           font-weight: 600;
-          font-size: 18px;
-          margin-top: 158px;
+          max-width: 285px;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
         }
         #artist {
-          width: 100%;
-          text-align: center;
+          position: absolute;
+          top: 56px;
+          left: 180px;
+          font-size: 16px;
           font-weight: 600;
-          font-size: 15px;
-          margin-top: 6px;
+          max-width: 285px;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
         }
         #album {
-          width: 100%;
-          text-align: center;
+          position: absolute;
+          top: 86px;
+          left: 180px;
+          font-size: 16px;
           font-weight: 400;
-          font-size: 15px;
-          margin-top: 6px;
+          max-width: 285px;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
         }
         #quality {
-          font-size: 12px;
-          padding: 6px 8px 7px 8px;
-          background-color: #faffff;
-          border-radius: 6px;
-          font-weight: 600;
-          margin-left: auto;
-          margin-right: auto;
-          color: #255C99!important;
-          display: table;
-          margin-top: 11px;
-        }
-        #state-play {
-          display: none;
-        }
-        #state-pause {
           position: absolute;
-          left: calc(50vw - 16px);
+          top: 123px;
+          left: 180px;
+          font-size: 12px;
+          font-weight: 600;
+          padding: 6px 8px 7px 8px;
+          background-color: white;
+          border-radius: 6px;
+        }
+        body.light #quality {
+          background-color: rgba(0,0,0,0.6);
+        }
+        #state-play, #state-pause {
+          position: absolute;
           height: 32px;
           width: 32px;
-          top: 60px;
-          stroke: #faffff;
+          top: 202px;
+          left: calc(50vw - 16px);
         }
         #queue {
           display: none;
         }
         progress {
           width: 90vw;
-          height: 13px;
+          height: 15px;
           position: absolute;
-          top: 290px;
+          top: 280px;
           left: 5vw;
         }
         progress::-webkit-progress-bar {
           background-color: rgba(255,255,255,0.2);
+          border-radius: 1000px;
+          overflow: hidden;
+        }
+        body.light progress::-webkit-progress-bar {
+          background-color: rgba(0,0,0,0.2);
         }
         progress::-webkit-progress-value {
           background-color: rgb(255,255,255);
         }
+        body.light progress::-webkit-progress-value {
+          background-color: rgba(0,0,0,0.45);
+        }
         #elapsed {
           position: absolute;
-          bottom: 40px;
+          bottom: 47px;
           left: 5vw;
         }
         #duration {
           position: absolute;
-          bottom: 40px;
+          bottom: 47px;
           right: 5vw;
         }
         #queue-pos {
@@ -413,6 +436,12 @@
       body.light {
         color: rgba(0,0,0,0.6);
       }
+      #quality {
+        background-color: white;
+      }
+      body.light #quality {
+        background-color: rgba(0,0,0,0.6);
+      }
       .hidden {
         display: none;
       }
@@ -472,7 +501,6 @@
       var minColor = Math.min(r,g,b)
       //Calculate L:
       var l = (maxColor + minColor) / 2
-      console.log(Math.round(l * 100))
       return Math.round(l * 100)
     }
 
@@ -511,12 +539,12 @@
     function updateStatus (state) {
       window.clearInterval(Clock)
       State = state;
-      console.log(state)
       if (state.title) {
         document.querySelector('#albumart').setAttribute('src', window.location.origin + encodeURI(state.albumart))
         document.getElementById('title').innerText = state.title
         document.getElementById('artist').innerText = state.artist
         document.getElementById('album').innerText = state.album + " (" + state.date + ")"
+        console.log(state.sampleRate)
         document.getElementById('quality').innerText = state.sampleRate / 1000 + "kHz " + state.bits + "bit"
         document.getElementById('duration').innerText = formatTime(State.duration)
         State.elapsed = State.elapsed * 1000
@@ -573,7 +601,8 @@
 
     function start() {
       document.querySelector('#albumart').addEventListener('load', function() {
-        setBackground(this);
+        setBackground(this)
+        document.body.style.setProperty('--body-background', "url('" + this.src + "')")
       })
       initWS(window.location.host, () => {
         server.send('getStatus')
