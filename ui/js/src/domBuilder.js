@@ -132,6 +132,9 @@ var domBuilder = (function () {
                 cr.button({ class: 'button is-primary is-rounded', on: { click: uiTools.handlers.mobileButtons.play } }, uiTools.getSVG(((state.state !== 'play') ? 'play' : 'pause'))),
                 cr.span({ on: { click: webSocket.action.next } }, uiTools.getSVG('skip-forward'))//,
                 // cr.span({ on: { click: webSocket.action.toggleRepeat } }, uiTools.getSVG('repeat' + ((state.single) ? '-one' : ''), 'repeat is-small' + ((state.repeat) ? ' is-active' : '')))
+              ),
+              cr.div({ class: 'column is-10-touch is-offset-1-touch' },
+                cr.progress({ id: 'mobile-progress', class: 'progress', value: 0, max: 1000 })
               )
             )
           )
@@ -800,14 +803,14 @@ var domBuilder = (function () {
               cr.div({ class: 'column ' },
                 cr.div({ class: 'field' },
                   cr.div({ class: 'control' },
-                    cr.button({ class: 'button is-dark is-rounded is-fullwidth', on: { click: function () { this.closest('.modal').classList.remove('is-active') } } }, 'Close')
+                    cr.button({ class: 'button is-text is-rounded is-fullwidth', on: { click: function () { this.closest('.modal').classList.remove('is-active') } } }, 'Close')
                   )
                 )
               ),
               cr.div({ class: 'column' },
                 cr.div({ class: 'field first-button' },
                   cr.div({ class: 'control' },
-                    cr.button({ class: 'button is-primary is-rounded is-fullwidth', on: { click: function () { uiTools.handlers.addShare(this) } } }, 'Add')
+                    cr.button({ class: 'button is-white is-rounded is-fullwidth', on: { click: function () { uiTools.handlers.addShare(this) } } }, 'Add')
                   )
                 )
               )

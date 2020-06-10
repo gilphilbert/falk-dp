@@ -3147,7 +3147,7 @@ a.box:active {
 }
 .table {
   background-color: transparent;
-  color: #4A5A67;
+  color: inherit;
 }
 .table td,
 .table th {
@@ -3233,7 +3233,7 @@ a.box:active {
   color: currentColor;
 }
 .table th {
-  color: #4A5A67;
+  color: inherit;
 }
 .table th:not([align]) {
   text-align: left;
@@ -3257,7 +3257,7 @@ a.box:active {
 .table thead td,
 .table thead th {
   border-width: 0 0 2px;
-  color: #4A5A67;
+  color: inherit;
 }
 .table tfoot {
   background-color: transparent;
@@ -11151,6 +11151,24 @@ body {
   color: #b5b5b5;
 }
 
+progress.progress {
+  margin-top: 3px;
+  background: rgba(0, 0, 0, 0.1);
+}
+progress.progress::-moz-progress-value {
+  background: #255C99;
+}
+progress.progress::-moz-progress-bar {
+  background: rgba(0, 0, 0, 0.1);
+}
+progress.progress::-webkit-progress-value {
+  background: #255C99;
+  border-radius: none;
+}
+progress.progress::-webkit-progress-bar {
+  background: rgba(0, 0, 0, 0.1);
+}
+
 .modal {
   color: #FCFFFF;
 }
@@ -11169,6 +11187,9 @@ body {
 }
 .modal .buttons {
   margin-top: 1em;
+}
+.modal .select select option {
+  color: #255C99;
 }
 
 .tag:not(body) {
@@ -11200,7 +11221,6 @@ body {
 }
 .columns.albumart img, .columns.artistart img {
   border-radius: 7px;
-  background-color: #255C99;
 }
 @media screen and (max-width: 1023px) {
   .columns.albumart img, .columns.artistart img {
@@ -11470,6 +11490,28 @@ aside.menu .detail {
   stroke: #255C99;
 }
 
+#mobile-progress {
+  background: rgba(0, 0, 0, 0.1);
+}
+@media screen and (min-width: 1024px) {
+  #mobile-progress {
+    display: none;
+  }
+}
+#mobile-progress::-moz-progress-value {
+  background: #FCFFFF;
+}
+#mobile-progress::-moz-progress-bar {
+  background: rgba(0, 0, 0, 0.1);
+}
+#mobile-progress::-webkit-progress-value {
+  background: #FCFFFF;
+  border-radius: none;
+}
+#mobile-progress::-webkit-progress-bar {
+  background: rgba(0, 0, 0, 0.1);
+}
+
 #queue-list {
   color: #4A5A67;
 }
@@ -11561,7 +11603,7 @@ aside.menu .detail {
 }
 
 #setting-page .label {
-  color: #4A5A67;
+  color: inherit;
 }
 #setting-page p.title {
   border-bottom: 2px solid #FF6B35;
@@ -11590,13 +11632,9 @@ aside.menu .detail {
 @media screen and (max-width: 1023px) {
   #control-bar {
     height: 78px;
-    left: 100%;
+    left: 0;
     transition: left 250ms ease 0s;
   }
-}
-#control-bar.is-active {
-  left: 0;
-  transition: left 250ms ease 0s;
 }
 #control-bar .columns {
   height: 100%;
@@ -11660,23 +11698,19 @@ aside.menu .detail {
 }
 #control-bar progress.progress {
   margin-top: 3px;
-  background: rgba(0, 0, 0, 0.1);
-}
-#control-bar progress.progress::-moz-progress-value {
-  background: #255C99;
-}
-#control-bar progress.progress::-moz-progress-bar {
-  background: rgba(0, 0, 0, 0.1);
-}
-#control-bar progress.progress::-webkit-progress-value {
-  background: #255C99;
-  border-radius: none;
-}
-#control-bar progress.progress::-webkit-progress-bar {
-  background: rgba(0, 0, 0, 0.1);
 }
 #control-bar .misc-controls svg {
   margin: 0 5px;
+}
+
+@media screen and (max-width: 1023px) {
+  body.no-controls #content-container {
+    padding-bottom: 10px;
+  }
+  body.no-controls #control-bar {
+    left: 100vw;
+    transition: left 250ms ease 0s;
+  }
 }
 
 /*# sourceMappingURL=falk.css.map */

@@ -20,12 +20,13 @@ $primary: $blue;
 $link: $orange;
 $link-hover: $blue;
 
-
 $text: $white;
 $title-color: $white;
 $subtitle-color: $white;
 
-$table-color: $grey-darker !default;
+$table-color: inherit;
+$table-cell-heading-color: inherit;
+$table-head-cell-color: inherit;
 $table-background-color: transparent !default;
 $table-cell-border: 1px solid transparent !default;
 

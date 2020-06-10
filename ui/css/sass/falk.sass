@@ -69,6 +69,20 @@ body
   &:-ms-input-placeholder
     color: $grey-light
 
+
+progress.progress
+  margin-top: 3px
+  background: $darken
+  &::-moz-progress-value
+    background: $blue
+  &::-moz-progress-bar
+    background: $darken
+  &::-webkit-progress-value
+    background: $blue
+    border-radius: none
+  &::-webkit-progress-bar
+    background: $darken
+
 .modal
   color: $white
   &.is-small
@@ -83,6 +97,8 @@ body
     color: $white
   .buttons
     margin-top: 1em
+  .select select option
+    color: $blue
 
 .tag:not(body)
   background-color: $blue
@@ -111,7 +127,6 @@ body
       //  padding: 1em .5em
     img
       border-radius: 7px
-      background-color: $blue
       @include until($desktop)
         background-color: rgba(255,255,255,0.1)
     .title
@@ -225,7 +240,7 @@ aside.menu
 #content-container
   padding: 2.5em 1.5em calc(100px + .75em) calc(1.5em + 90px)
   @include until($desktop)
-    padding:  24px 9px 100px 9px
+    padding: 24px 9px 100px 9px
 
   >.container.is-fluid
     @include until($desktop)
@@ -323,6 +338,19 @@ aside.menu
     .feather
       margin: 0
       stroke: $blue
+#mobile-progress
+  background: $darken
+  @include from($desktop)
+    display: none
+  &::-moz-progress-value
+    background: $white
+  &::-moz-progress-bar
+    background: $darken
+  &::-webkit-progress-value
+    background: $white
+    border-radius: none
+  &::-webkit-progress-bar
+    background: $darken
 
 #queue-list
   color: $grey-darker
@@ -398,7 +426,7 @@ aside.menu
 
 #setting-page
   .label
-    color: $grey-darker
+    color: inherit
   p.title
     border-bottom: 2px solid $orange
     &:not(:first-child)
@@ -422,14 +450,8 @@ aside.menu
   -moz-box-shadow: 0px -2px 3px 0px rgba(0,0,0,0.15)
   @include until($desktop)
     height: 78px
-    left: 100%
+    left: 0
     transition: left 250ms ease 0s
-  //-webkit-box-shadow: 0px -2px 3px 0px rgba(0,0,0,0.15)
-  //-moz-box-shadow: 0px -2px 3px 0px rgba(0,0,0,0.15)
-  //box-shadow: 0px -2px 3px 0px rgba(0,0,0,0.15)
-  &.is-active
-      left: 0
-      transition: left 250ms ease 0s
   // make all columns full height
   .columns
     height: 100%
@@ -484,17 +506,14 @@ aside.menu
       margin-left: 10px
   progress.progress
     margin-top: 3px
-    background: $darken
-    &::-moz-progress-value
-      background: $blue
-    &::-moz-progress-bar
-      background: $darken
-    &::-webkit-progress-value
-      background: $blue
-      border-radius: none
-    &::-webkit-progress-bar
-      background: $darken
   //random, repeat
   .misc-controls
     svg
       margin: 0 5px
+body.no-controls
+  @include until($desktop)
+    #content-container
+      padding-bottom: 10px
+    #control-bar
+      left: 100vw
+      transition: left 250ms ease 0s

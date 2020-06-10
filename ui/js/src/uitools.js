@@ -88,6 +88,10 @@ var uiTools = (function () {
       var p = this._seek / this._duration * 1000
       if (!isNaN(p) && p !== Infinity) {
         document.querySelector('#control-bar .play-progress progress').value = p
+        var el = document.getElementById('mobile-progress')
+        if (el !== null) {
+          el.value = p
+        }
       }
     }
   }
@@ -229,9 +233,11 @@ var uiTools = (function () {
   var control = {
     hide: () => {
       document.querySelector('#control-bar').classList.remove('is-active')
+      document.body.classList.add('no-controls')
     },
     show: () => {
       document.querySelector('#control-bar').classList.add('is-active')
+      document.body.classList.remove('no-controls')
     }
   }
 
