@@ -205,21 +205,21 @@ var uiTools = (function () {
 
     document.addEventListener('swiped-right', function (e) {
       e.preventDefault()
-      e.cancelBubble()
       showMenu()
     })
     document.addEventListener('swiped-left', function (e) {
       e.preventDefault()
-      e.cancelBubble()
       hideMenu()
     })
     document.addEventListener('swiped-up', function (e) {
+      e.preventDefault()
       var ql = document.querySelector('#queue-list')
       if (ql != null) {
         ql.classList.add('is-active')
       }
     })
     document.addEventListener('swiped-down', function (e) {
+      e.preventDefault()
       var ql = document.querySelector('#queue-list')
       if (ql != null) {
         ql.classList.remove('is-active')
