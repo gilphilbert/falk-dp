@@ -204,9 +204,13 @@ var uiTools = (function () {
     })
 
     document.addEventListener('swiped-right', function (e) {
+      e.preventDefault()
+      e.cancelBubble()
       showMenu()
     })
     document.addEventListener('swiped-left', function (e) {
+      e.preventDefault()
+      e.cancelBubble()
       hideMenu()
     })
     document.addEventListener('swiped-up', function (e) {

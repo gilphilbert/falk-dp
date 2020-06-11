@@ -146,7 +146,7 @@ var domBuilder = (function () {
             )
           )
           frag.appendChild(
-            cr.div({ id: 'swipe-up-queue' }, uiTools.getSVG('chevron-up'))
+            cr.div({ id: 'swipe-up-queue', on: { click: () => { document.querySelector('#queue-list').classList.add('is-active') } } }, uiTools.getSVG('chevron-up'))
           )
 
           if ('albumart' in state) {
