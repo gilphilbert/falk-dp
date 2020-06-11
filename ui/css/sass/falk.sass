@@ -69,7 +69,6 @@ body
   &:-ms-input-placeholder
     color: $grey-light
 
-
 progress.progress
   margin-top: 3px
   background: $darken
@@ -82,6 +81,10 @@ progress.progress
     border-radius: none
   &::-webkit-progress-bar
     background: $darken
+
+.has-no-vpadding
+  padding-top: 0
+  padding-bottom: 0
 
 .modal
   color: $white
@@ -261,16 +264,43 @@ aside.menu
       @include until($desktop)
         margin-bottom: 0
 
-  .home
-    padding-top: 1.25em
-    .artist
-      margin-bottom: 0.5rem
+  .is-reversed-touch
     @include until($desktop)
-      .title
-        margin-bottom: 15px
-      .artist
-        margin-bottom: 15px
-        margin-top: 0
+      display: flex
+      flex-direction: column-reverse
+
+  @include from($desktop)
+    #home-album
+      margin-top: 15px
+      margin-bottom: 8px
+    #home-title
+      margin-bottom: 14px
+    #home-artist
+      margin-bottom: 11px
+    #home-quality
+      padding: 8px 12px
+      border-radius: 4px
+      background-color: $blue
+      color: $white
+      font-weight: normal
+  @include until($desktop)
+    #home-album
+      margin-bottom: 8px
+    #home-title
+      margin-bottom: 14px
+    #home-artist
+      margin-bottom: 11px
+    #home-quality
+      padding: 5px 8px
+      border-radius: 4px
+      background-color: $white
+      color: $blue
+      font-weight: bold
+    #swipe-up-queue
+      position: absolute
+      left: calc(50vw - 12px)
+      bottom: 10px
+
   .albumart img
     border-radius: 7px
     -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3)
@@ -340,8 +370,6 @@ aside.menu
       stroke: $blue
 #mobile-progress
   background: $darken
-  @include from($desktop)
-    display: none
   &::-moz-progress-value
     background: $white
   &::-moz-progress-bar

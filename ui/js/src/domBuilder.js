@@ -114,19 +114,26 @@ var domBuilder = (function () {
           var state = dataTools.getState()
           var frag = cr.div({ class: 'container is-fluid' })
           frag.appendChild(
-            cr.div({ class: 'columns home' },
+            cr.div({ class: 'columns is-reversed-touch' },
               cr.div({ class: 'column is-10-touch is-offset-1-touch is-3 is-2-fullhd' },
-                cr.figure({ class: 'image albumart' },
+                cr.figure({ id: 'home-albumart', class: 'image albumart' },
                   cr.img()
                 )
               ),
-              cr.div({ class: 'column' },
-                cr.p({ class: 'title is-3 has-text-centered-touch has-no-overflow-touch' }, state.title || 'Not playing'),
-                cr.p({ class: 'artist has-text-centered-touch subtitle is-4 has-text-weight-bold has-no-overflow-touch' }, cr.a({ href: '/artist/' + state.artist, 'data-navigo': '' }, state.artist || '')),
-                cr.p({ class: 'album has-text-centered-touch subtitle is-4 has-no-overflow-touch' }, cr.a({ href: '/album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album || '')),
-                cr.p({ class: 'detail has-text-centered-touch has-no-overflow-touch' }, cr.span({ class: 'tag is-medium quality' }, uiTools.getQuality(state)))
+              cr.div({ class: 'column is-10-desktop' },
+                cr.p({ id: 'home-album', class: 'has-text-centered-touch subtitle is-4 has-no-overflow' }, cr.a({ href: '/album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album || '')),
+                cr.p({ id: 'home-artist', class: 'has-text-centered-touch subtitle is-4 has-text-weight-bold has-no-overflow' }, cr.a({ href: '/artist/' + state.artist, 'data-navigo': '' }, state.artist || '')),
+                cr.p({ id: 'home-title', class: 'subtitle is-3 has-text-weight-bold has-text-centered-touch has-no-overflow' }, state.title || 'Not playing'),
+                cr.p({ class: 'has-text-centered-touch' }, cr.span({ id: 'home-quality', class: 'is-small' }, uiTools.getQuality(state)))
+              )
+            )
+          )
+          frag.appendChild(
+            cr.div({ class: 'columns is-hidden-desktop' },
+              cr.div({ class: 'column is-10-touch is-offset-1-touch has-no-vpadding' },
+                cr.span({}, uiTools.getSVG('heart'))
               ),
-              cr.div({ class: 'column mobile-controls is-hidden-desktop is-12' },
+              cr.div({ class: 'column mobile-controls is-12' },
                 // cr.span({ on: { click: webSocket.action.toggleRandom } }, uiTools.getSVG('shuffle', 'random is-small' + ((state.random) ? ' is-active' : ''))),
                 cr.span({ on: { click: webSocket.action.prev } }, uiTools.getSVG('skip-back')),
                 cr.button({ class: 'button is-primary is-rounded', on: { click: uiTools.handlers.mobileButtons.play } }, uiTools.getSVG(((state.state !== 'play') ? 'play' : 'pause'))),
@@ -137,6 +144,9 @@ var domBuilder = (function () {
                 cr.progress({ id: 'mobile-progress', class: 'progress', value: 0, max: 1000 })
               )
             )
+          )
+          frag.appendChild(
+            cr.div({ id: 'swipe-up-queue' }, uiTools.getSVG('chevron-up'))
           )
 
           if ('albumart' in state) {
@@ -520,11 +530,16 @@ var domBuilder = (function () {
       var changed = dataTools.changeState(newState)
       var state = dataTools.getState()
 
+      const isHome = ((document.getElementById('home-albumart') !== null) ? true : false)
+
       var mc = document.querySelector('.home .mobile-controls')
 
       // this whole section updates the footer (now playing) banner
       if (changed.includes('albumart')) {
         document.querySelector('#control-bar .now-playing img').src = state.albumart
+        if (isHome) {
+          document.getElementById('home-albumart').src = state.albumart
+        }
       }
       if (!state.albumart) {
         document.querySelector('#control-bar .now-playing img').src = '/img/notplaying.png'
@@ -532,10 +547,19 @@ var domBuilder = (function () {
 
       if (changed.includes('title')) {
         document.querySelector('#control-bar .now-playing .title').innerText = state.title
+        if (isHome) {
+          document.getElementById('home-title').innerText = state.title
+        }
         uiTools.progress.stop()
       }
       if (changed.includes('artist')) {
         document.querySelector('#control-bar .now-playing .subtitle').innerText = state.artist
+        if (isHome) {
+          document.getElementById('home-artist').innerText = state.artist
+        }
+      }
+      if (changed.includes('album') && isHome) {
+        document.getElementById('home-album').innerText = state.album
       }
       if (changed.includes('repeat')) {
         if (state.repeat === true) {
