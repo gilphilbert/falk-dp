@@ -197,8 +197,8 @@ var uiTools = (function () {
     })
 
     document.addEventListener('click', function (e) {
-      var state = document.querySelector('aside.menu').classList.contains('is-active')
-      if (state) {
+      var cl = e.target.classList
+      if (! cl.contains('burger')) {
         hideMenu()
       }
     })
@@ -224,6 +224,11 @@ var uiTools = (function () {
       if (ql != null) {
         ql.classList.remove('is-active')
       }
+    })
+
+    document.getElementById('burger').addEventListener('click', e => {
+      e.preventDefault()
+      document.querySelector('aside.menu').classList.add('is-active')
     })
   }
 
@@ -310,10 +315,9 @@ var uiTools = (function () {
   }
 
   var closeModal = function () {
-    var el = document.querySelector('#modal-container .modal')
-    if (el !== undefined) {
-      el.classList.remove('is-active')
-    }
+    document.querySelectorAll('#modal-container .modal').forEach(m => {
+      m.classList.remove('is-active')
+    })
   }
 
   var init = function () {

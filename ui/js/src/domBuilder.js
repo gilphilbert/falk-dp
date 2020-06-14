@@ -69,7 +69,7 @@ var domBuilder = (function () {
   }
 
   var queueTable = function (queue) {
-    var el = document.querySelector('#queue-list')
+    var el = document.querySelector('#queue-items')
     if (el === null) {
       return
     }
@@ -78,7 +78,8 @@ var domBuilder = (function () {
     var els = document.createDocumentFragment()
     queue.forEach((song) => {
       els.appendChild(cr.div({ class: 'columns is-mobile is-vcentered' + ((song.pos === queuePos) ? ' is-playing' : ''), 'data-pos': song.pos, 'data-id': song.id },
-        cr.div({ class: 'column is-narrow' }, cr.figure({ class: 'image is-32x32' }, cr.img({ src: song.albumart }))),
+        cr.div({ class: 'column is-narrow is-hidden-touch' }, cr.figure({ class: 'image is-32x32' }, cr.img({ src: song.albumart }))),
+        cr.div({ class: 'column is-narrow is-hidden-desktop' }, uiTools.getSVG(((song.pos === queuePos) ? 'pause' : 'play-circle'))),
         cr.div({ class: 'column has-no-overflow pointer', on: { click: function () { webSocket.action.play(this.closest('.columns').dataset.pos) } } }, song.title, cr.p({ class: 'is-hidden-desktop' }, song.artist + ' - ' + uiTools.formatTime(song.duration))),
         cr.div({ class: 'column has-no-overflow is-fixed-size is-hidden-touch' }, cr.a({ href: '/artist/' + song.artist, 'data-navigo': '' }, song.artist)),
         cr.div({ class: 'column has-no-overflow is-fixed-size is-hidden-touch' }, cr.a({ href: '/album/' + song.artist + '/' + song.album, 'data-navigo': '' }, song.album)),
@@ -130,7 +131,7 @@ var domBuilder = (function () {
           )
           frag.appendChild(
             cr.div({ class: 'columns is-hidden-desktop' },
-              cr.div({ class: 'column is-10-touch is-offset-1-touch has-no-vpadding' },
+              cr.div({ id: 'mobile-toolbar', class: 'column is-10-touch is-offset-1-touch has-no-vpadding' },
                 cr.span({}, uiTools.getSVG('heart'))
               ),
               cr.div({ class: 'column mobile-controls is-12' },
@@ -158,7 +159,12 @@ var domBuilder = (function () {
           webSocket.get.queue()
 
           frag.appendChild(
-            cr.div({ id: 'queue-list' })
+            cr.div({ id: 'queue-list' },
+              cr.div({ class: 'container-fluid' },
+                cr.p({ class: 'title is-3 is-hidden-desktop' }, 'Play queue'),
+                cr.div({ id: 'queue-items' })
+              )
+            )
           )
 
           main.appendChild(frag)
@@ -877,8 +883,19 @@ var domBuilder = (function () {
     }
   }
 
+  var mounts = function (data) {
+    console.log(data)
+    uiTools.closeModal()
+  }
+
+  var database = function (data) {
+    console.log(database)
+  }
+
   return {
     queueTable: queueTable,
+    mounts: mounts,
+    database: database,
     page: page
   }
 })()

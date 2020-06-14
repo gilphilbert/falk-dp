@@ -125,7 +125,7 @@ progress.progress
 .columns
   &.albumart, &.artistart
     .column
-      padding: 1.5em
+      padding: 35px
       // @include until($desktop)
       //  padding: 1em .5em
     img
@@ -299,7 +299,7 @@ aside.menu
     #swipe-up-queue
       position: absolute
       padding: 8px 12px
-      left: calc(50vw - 12px)
+      left: calc(50vw - 24px)
       bottom: 10px
 
   .albumart img
@@ -347,7 +347,10 @@ aside.menu
     overflow: hidden
     text-overflow: ellipsis
     white-space: nowrap
-    
+  
+#mobile-toolbar
+  @media screen and (max-height: 600px)
+    display: none
 
 .mobile-controls
   display: flex
@@ -388,8 +391,6 @@ aside.menu
     &:hover
       color: $orange
       text-decoration: underline
-  .columns
-    border-radius: 5px
   .columns:hover
     background: rgba(0,0,0,0.08)
   .column.is-fixed-size
@@ -407,16 +408,29 @@ aside.menu
     background: $white
     color: $grey-darker
     transition: top 250ms ease 0s
+    .title
+      color: $white
+      background: $blue
+      margin: 0
+      padding: 35px 25px
     .columns
       margin: 0
+      padding: 0 10px
     a
       color: $orange
       &:hover
         color: $orange
         text-decoration: underline
+    .feather
+      stroke: $grey-light
+    .is-playing
+      background: $grey-lighter
+      .feather
+        stroke: $blue
     &.is-active
         top: 0
         transition: top 250ms ease 0s
+      
 
 
   @include from($desktop)
@@ -546,3 +560,11 @@ body.no-controls
     #control-bar
       left: 100vw
       transition: left 250ms ease 0s
+
+#burger
+  position: absolute
+  top: 4px
+  right: 8px
+  .feather
+    height: 32px
+    width: 32px

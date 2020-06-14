@@ -257,6 +257,8 @@ var webSocket = (function () {
       .bind('pushPlaylist', domBuilder.page.build)
       .bind('pushStatus', domBuilder.page.updateState)
       .bind('pushQueue', domBuilder.queueTable)
+      .bind('pushMounts', domBuilder.mounts)
+      .bind('database', domBuilder.database)
     get.state()
   }
 

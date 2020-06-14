@@ -7,42 +7,46 @@ async function setup (server) {
   async function connectMPD () {
     console.log('Connecting to MPD...')
     try {
-      mpdc = await mpdapi.connect({ host: 'localhost', port: 6600 })
+      //mpdc = await mpdapi.connect({ path: '/var/lib/mpd/socket' })
+      mpdc = await mpdapi.connect({ path: '/run/mpd/socket' })
       console.log('Connected to MPD')
+
+      mpdc.on('system', (e) => {
+        switch (e) {
+          case 'playlist':
+            mpdc.api.queue.info()
+              .then((d) => {
+                d.forEach((i) => {
+                  i.albumart = '/art/album/' + encodeURIComponent(i.artist) + '/' + encodeURIComponent(i.album)
+                })
+                broadcast('pushQueue', d)
+              })
+            break
+          case 'player':
+          case 'options':
+            getStatus().then(status => broadcast('pushStatus', status))
+            break
+          case 'stored_playlist':
+            mpdc.api.playlists.get()
+              .then(d => broadcast('pushPlaylist', d))
+            break
+          case 'database':
+            //what do we do here? pushStatus seems most logical. How do the clients know when new files have been found?
+          default:
+            console.log('[MPD] Unknown State Change:' + e)
+        }
+      })
+  
+      mpdc.on('close', () => {
+        console.log('MPD connection lost')
+        // now try to reconnect...
+        // <!-----------------%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        connectMPD()
+      })
     } catch (e) {
       console.log('Couldn\'t connect to MPD')
+      console.log(e)
     }
-
-    mpdc.on('system', (e) => {
-      switch (e) {
-        case 'playlist':
-          mpdc.api.queue.info()
-            .then((d) => {
-              d.forEach((i) => {
-                i.albumart = '/art/album/' + encodeURIComponent(i.artist) + '/' + encodeURIComponent(i.album)
-              })
-              broadcast('pushQueue', d)
-            })
-          break
-        case 'player':
-        case 'options':
-          getStatus().then(status => broadcast('pushStatus', status))
-          break
-        case 'stored_playlist':
-          mpdc.api.playlists.get()
-            .then(d => broadcast('pushPlaylist', d))
-          break
-        default:
-          console.log('[MPD] Unknown State Change:' + e)
-      }
-    })
-
-    mpdc.on('close', () => {
-      console.log('MPD connection lost')
-      // now try to reconnect...
-      // <!-----------------%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-      connectMPD()
-    })
   }
   await connectMPD()
 
@@ -131,9 +135,10 @@ async function setup (server) {
 
     // db listing
     disp.bind('getArtists', function () {
-      mpdc.api.db.list('artist')
+      mpdc.api.db.list('albumartist')
         .then(async (d) => {
-          var mod = d.map(i => { return { title: i.artist, albumart: '/art/artist/' + encodeURIComponent(i.artist) } })
+          console.log(d)
+          var mod = d.map(i => { return { title: i.albumartist, albumart: '/art/artist/' + encodeURIComponent(i.albumartist) } })
           disp.send('pushArtists', mod)
         })
     })
