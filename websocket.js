@@ -115,10 +115,21 @@ async function setup (server) {
 
     disp.bind('rescanDB', function () {
       mpdc.api.db.rescan()
-        .then(d => disp.send('notification', d))
-    })
+      mpdc.api.mounts.list()
+        .then((mounts) => {
+          var netmount = mounts.filter((m) => {
+            if ('storage' in m) {
+              return m.storage.startsWith('smb') || m.storage.startsWith('nfs')
+            }
+            return false
+          }).map((m) => {
+            return m.mount
+          })
+          netmount.forEach(i => mpdc.api.db.rescan(i).then(d => console.log(d)))
+        })    })
 
     disp.bind('updateDB', function () {
+      mpdc.api.db.update()
       mpdc.api.mounts.list()
         .then((mounts) => {
           var netmount = mounts.filter((m) => {
@@ -176,7 +187,7 @@ async function setup (server) {
           var out = {
             artist: data.artist,
             title: data.title,
-            albumart: '/art/album/' + encodeURIComponent(data.artist) + '/' + encodeURIComponent(data.title),
+            albumart: '/art/album/' + encodeURIComponent(data.albumartist) + '/' + encodeURIComponent(data.title),
             songs: d
           }
           disp.send('pushAlbum', out)
@@ -189,13 +200,13 @@ async function setup (server) {
           var mod = d.map((d) => {
             return {
               title: d.album,
-              albumart: '/art/album/' + encodeURIComponent(data.artist) + '/' + encodeURIComponent(d.album)
+              albumart: '/art/album/' + encodeURIComponent(data.albumartist) + '/' + encodeURIComponent(d.album)
             }
           })
           var out = {
             artist: {
               title: data.artist,
-              albumart: '/art/artist/' + encodeURIComponent(data.artist)
+              albumart: '/art/artist/' + encodeURIComponent(data.albumartist)
             },
             albums: mod
           }
