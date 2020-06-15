@@ -230,6 +230,31 @@ var uiTools = (function () {
       e.preventDefault()
       document.querySelector('aside.menu').classList.add('is-active')
     })
+
+    document.getElementById('search-input').addEventListener('keyup', (e) => {
+      pageSearch()
+    })
+
+    document.addEventListener('keypress', (e) => {
+      if (e.target == document.body) {
+        //document.getElementById('search-input').value += e.key
+        document.getElementById('search-input').focus()
+        pageSearch()
+      }
+    })
+  }
+
+  var pageSearch = function () {
+    var tiles = document.querySelectorAll('.item-tile')
+    var ss = document.getElementById('search-input').value.toLowerCase()
+    tiles.forEach((t) => {
+      if (t.dataset.title.toLowerCase().indexOf(ss) === -1 && t.dataset.subtitle.toLowerCase().indexOf(ss) === -1) {
+        //console.log(t)
+        t.classList.add('is-hidden')
+      } else {
+        t.classList.remove('is-hidden')
+      }
+    })
   }
 
   var hideMenu = function () {

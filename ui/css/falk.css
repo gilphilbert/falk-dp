@@ -8943,3 +8943,38 @@ aside.menu {
   #burger .feather {
     height: 32px;
     width: 32px; }
+
+#search-input-container {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  height: auto;
+  width: auto;
+  background: #F2F6F6;
+  border-radius: 4px; }
+  #search-input-container::before {
+    content: '';
+    position: absolute;
+    right: 11px;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background-image: url("/img/search.svg");
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-size: 18px; }
+  #search-input-container input {
+    z-index: 2;
+    position: relative;
+    right: 0;
+    top: 0;
+    width: 40px;
+    padding: 12px 15px;
+    background: transparent;
+    color: #7a7a7a;
+    max-width: none;
+    border: none;
+    transition: width 250ms ease 0s; }
+    #search-input-container input:focus {
+      width: 150px;
+      transition: width 250ms ease 0s; }

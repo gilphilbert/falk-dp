@@ -568,3 +568,38 @@ body.no-controls
   .feather
     height: 32px
     width: 32px
+
+#search-input-container
+  position: absolute
+  top: 20px
+  right: 20px
+  height: auto
+  width: auto
+  background: $grey-lighter
+  border-radius: 4px
+  &::before
+    content: ''
+    position: absolute
+    right: 11px
+    top: 0
+    height: 100%
+    width: 100%
+    background-image: url('/img/search.svg')
+    background-repeat: no-repeat
+    background-position: right center
+    background-size: 18px
+  input
+    z-index: 2
+    position: relative
+    right: 0
+    top: 0
+    width: 40px
+    padding: 12px 15px
+    background: transparent
+    color: $grey
+    max-width: none
+    border: none
+    transition: width 250ms ease 0s
+    &:focus
+      width: 150px
+      transition: width 250ms ease 0s

@@ -27,7 +27,7 @@ var domBuilder = (function () {
   }
 
   var buildTile = function ({ title, image, href, subtitle, subtitleHref } = {}) {
-    return cr.div({ class: 'column is-tile is-2-desktop is-4-tablet is-6-mobile' },
+    return cr.div({ class: 'column is-tile is-2-desktop is-4-tablet is-6-mobile item-tile', 'data-title': title, 'data-subtitle': subtitle },
       cr.a({ href: href, 'data-navigo': '' },
         cr.figure({ class: 'image is-1by1' },
           cr.img({ src: image })
