@@ -187,7 +187,7 @@ async function setup (server) {
           var out = {
             artist: data.artist,
             title: data.title,
-            albumart: '/art/album/' + encodeURIComponent(data.albumartist) + '/' + encodeURIComponent(data.title),
+            albumart: '/art/album/' + encodeURIComponent(data.artist) + '/' + encodeURIComponent(data.title),
             songs: d
           }
           disp.send('pushAlbum', out)
@@ -200,13 +200,13 @@ async function setup (server) {
           var mod = d.map((d) => {
             return {
               title: d.album,
-              albumart: '/art/album/' + encodeURIComponent(data.albumartist) + '/' + encodeURIComponent(d.album)
+              albumart: '/art/album/' + encodeURIComponent(data.artist) + '/' + encodeURIComponent(d.album)
             }
           })
           var out = {
             artist: {
               title: data.artist,
-              albumart: '/art/artist/' + encodeURIComponent(data.albumartist)
+              albumart: '/art/artist/' + encodeURIComponent(data.artist)
             },
             albums: mod
           }
