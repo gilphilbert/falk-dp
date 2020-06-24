@@ -8970,11 +8970,12 @@ aside.menu {
     top: 0;
     width: 40px;
     padding: 12px 15px;
+    color: transparent;
     background: transparent;
-    color: #7a7a7a;
     max-width: none;
     border: none;
     transition: width 250ms ease 0s; }
     #search-input-container input:focus {
       width: 150px;
-      transition: width 250ms ease 0s; }
+      transition: width 250ms ease 0s;
+      color: #7a7a7a; }

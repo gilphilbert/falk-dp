@@ -236,12 +236,15 @@ var uiTools = (function () {
     })
 
     document.addEventListener('keypress', (e) => {
-      if (e.target == document.body) {
-        //document.getElementById('search-input').value += e.key
+      if (e.target == document.body || e.target.nodeName == 'A') { // <!-------------------------------------------------------------------------- NEEDS TO CHANGE TO != INPUT (or include menu...)
         document.getElementById('search-input').focus()
         pageSearch()
       }
     })
+    document.getElementById('search-input').addEventListener('focus', () => {
+      document.getElementById('search-input').value = ''
+    })
+
   }
 
   var pageSearch = function () {
