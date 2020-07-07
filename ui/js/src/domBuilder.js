@@ -30,7 +30,7 @@ var domBuilder = (function () {
     return cr.div({ class: 'column is-tile is-2-desktop is-4-tablet is-6-mobile item-tile', 'data-title': title, 'data-subtitle': subtitle },
       cr.a({ href: href, 'data-navigo': '' },
         cr.figure({ class: 'image is-1by1' },
-          cr.img({ src: image })
+          cr.img({ src: image, loading: 'lazy' })
         ),
         cr.p({ class: 'title is-5 is-capitalized' }, title)
       ),
@@ -78,7 +78,7 @@ var domBuilder = (function () {
     var els = document.createDocumentFragment()
     queue.forEach((song) => {
       els.appendChild(cr.div({ class: 'columns is-mobile is-vcentered' + ((song.pos === queuePos) ? ' is-playing' : ''), 'data-pos': song.pos, 'data-id': song.id },
-        cr.div({ class: 'column is-narrow is-hidden-touch' }, cr.figure({ class: 'image is-32x32' }, cr.img({ src: song.albumart }))),
+        cr.div({ class: 'column is-narrow is-hidden-touch' }, cr.figure({ class: 'image is-32x32' }, cr.img({ src: song.albumart, loading: 'lazy' }))),
         cr.div({ class: 'column is-narrow is-hidden-desktop' }, uiTools.getSVG(((song.pos === queuePos) ? 'pause' : 'play-circle'))),
         cr.div({ class: 'column has-no-overflow pointer', on: { click: function () { webSocket.action.play(this.closest('.columns').dataset.pos) } } }, song.title, cr.p({ class: 'is-hidden-desktop' }, song.artist + ' - ' + uiTools.formatTime(song.duration))),
         cr.div({ class: 'column has-no-overflow is-fixed-size is-hidden-touch' }, cr.a({ href: '/artist/' + song.artist, 'data-navigo': '' }, song.artist)),
@@ -118,7 +118,7 @@ var domBuilder = (function () {
             cr.div({ class: 'columns is-reversed-touch' },
               cr.div({ class: 'column is-10-touch is-offset-1-touch is-3 is-2-fullhd' },
                 cr.figure({ id: 'home-albumart', class: 'image albumart' },
-                  cr.img()
+                  cr.img({ loading: 'lazy' })
                 )
               ),
               cr.div({ class: 'column is-10-desktop' },
@@ -204,7 +204,7 @@ var domBuilder = (function () {
             cr.div({ class: 'columns is-multiline is-mobile album-detail' },
               cr.div({ class: 'column is-3-desktop is-10-touch is-offset-1-touch' },
                 cr.figure({ class: 'image is-1by1 albumart' },
-                  cr.img({ src: data.albumart })
+                  cr.img({ src: data.albumart, loading: 'lazy' })
                 )
               ),
               cr.div({ class: 'column is-8-desktop is-10-touch is-offset-1-touch' },
@@ -303,7 +303,7 @@ var domBuilder = (function () {
             cr.div({ class: 'columns artist-info is-mobile' },
               cr.div({ class: 'column is-2-tablet is-2-desktop is-4-mobile' },
                 cr.figure({ class: 'image artistart' },
-                  cr.img({ src: data.artist.albumart })
+                  cr.img({ src: data.artist.albumart, loading: 'lazy' })
                 )
               ),
               cr.div({ class: 'column is-8' },
