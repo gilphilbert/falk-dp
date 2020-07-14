@@ -148,8 +148,7 @@ async function setup (server) {
     disp.bind('getArtists', function () {
       mpdc.api.db.list('albumartist')
         .then(async (d) => {
-          console.log(d)
-          var mod = d.map(i => { return { title: i.albumartist, albumart: '/art/artist/' + encodeURIComponent(i.albumartist) } })
+          var mod = d.map(i => { return { title: i.albumartist, albumart: '/art/artist/' + encodeURIComponent(i.albumartist) + '.jpg' } })
           disp.send('pushArtists', mod)
         })
     })
@@ -162,7 +161,7 @@ async function setup (server) {
               var flat = {
                 title: e.album,
                 artist: item.albumartist,
-                albumart: '/art/album/' + encodeURIComponent(item.albumartist) + '/' + encodeURIComponent(e.album)
+                albumart: '/art/album/' + encodeURIComponent(item.albumartist) + '/' + encodeURIComponent(e.album) + '.jpg'
               }
               arr.push(flat)
             })
@@ -187,7 +186,7 @@ async function setup (server) {
           var out = {
             artist: data.artist,
             title: data.title,
-            albumart: '/art/album/' + encodeURIComponent(data.artist) + '/' + encodeURIComponent(data.title),
+            albumart: '/art/album/' + encodeURIComponent(data.artist) + '/' + encodeURIComponent(data.title) + '.jpg',
             songs: d
           }
           disp.send('pushAlbum', out)
@@ -200,13 +199,13 @@ async function setup (server) {
           var mod = d.map((d) => {
             return {
               title: d.album,
-              albumart: '/art/album/' + encodeURIComponent(data.artist) + '/' + encodeURIComponent(d.album)
+              albumart: '/art/album/' + encodeURIComponent(data.artist) + '/' + encodeURIComponent(d.album) + '.jpg'
             }
           })
           var out = {
             artist: {
               title: data.artist,
-              albumart: '/art/artist/' + encodeURIComponent(data.artist)
+              albumart: '/art/artist/' + encodeURIComponent(data.artist) + '.jpg'
             },
             albums: mod
           }
@@ -249,7 +248,7 @@ async function setup (server) {
       mpdc.api.queue.info()
         .then((d) => {
           d.forEach((i) => {
-            i.albumart = '/art/album/' + encodeURIComponent(i.artist) + '/' + encodeURIComponent(i.album)
+            i.albumart = '/art/album/' + encodeURIComponent(i.artist) + '/' + encodeURIComponent(i.album) + '.jpg'
           })
           disp.send('pushQueue', d)
         })

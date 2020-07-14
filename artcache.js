@@ -25,6 +25,10 @@ router.get('/artist/:artist', function (req, res) {
     return
   }
 
+  if (q.artist.indexOf('.jpg') > -1) {
+    q.artist = q.artist.substr(0, q.artist.indexOf('.jpg'));
+  }
+
   getArt({ artist: q.artist }, res)
 })
 
@@ -35,6 +39,10 @@ router.get('/album/:artist/:album', function (req, res) {
   if (!q.artist || !q.artist) {
     res.json({ error: 'you must specify an artist and/or album' })
     return
+  }
+
+  if (q.album.indexOf('.jpg') > -1) {
+    q.album = q.album.substr(0, q.album.indexOf('.jpg'));
   }
 
   getArt({ artist: q.artist, album: q.album }, res)
@@ -130,16 +138,7 @@ async function getAlbumArt (artist, album, imgpath) {
   var info = await axios.get(`http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=250b1448a91894d0f7542cbcdedc936e&artist=${_artist}&album=${_album}&format=json`)
 
   const images = info.data.album.image
-  /*
-  var _img = images.filter(img => {
-    return img.size == "mega"
-  })
-  if (!_img || _img.length===0) {
-    _img = images.filter(img => {
-      return img.size == "extralarge"
-    })
-  }
-  */
+
   var _img = images.filter(img => {
     return img.size === 'extralarge'
   })
