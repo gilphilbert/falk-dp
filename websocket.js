@@ -17,7 +17,7 @@ async function setup (server) {
             mpdc.api.queue.info()
               .then((d) => {
                 d.forEach((i) => {
-                  i.albumart = '/art/album/' + encodeURIComponent(i.artist) + '/' + encodeURIComponent(i.album)
+                  i.albumart = '/art/album/' + encodeURIComponent(i.artist) + '/' + encodeURIComponent(i.album) + '.jpg'
                 })
                 broadcast('pushQueue', d)
               })
@@ -72,7 +72,7 @@ async function setup (server) {
       status.album = songdetail.album
       status.genre = songdetail.genre
       status.date = songdetail.date
-      status.albumart = '/art/album/' + songdetail.artist + '/' + songdetail.album
+      status.albumart = '/art/album/' + songdetail.artist + '/' + songdetail.album + '.jpg'
 
       if (status.time) {
         status.duration = status.time.total
