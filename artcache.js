@@ -66,7 +66,7 @@ function getArt ({ artist, album } = {}, res) {
   try {
     if (fs.existsSync(imgpath)) {
       // we have the file in the cache, so serve it
-      res.sendFile(imgpath, {maxAge: 1209600000})
+      res.sendFile(imgpath, {maxAge: 31536000000}) //assume this image won't change for a year
     } else {
       // what art are we looking for?
       if (!album) {
@@ -74,22 +74,22 @@ function getArt ({ artist, album } = {}, res) {
         getArtistArt(artist, imgpath)
           .then((e) => {
             // we got a file, let's serve it
-            res.sendFile(imgpath, {maxAge: 1209600000})
+            res.sendFile(imgpath, {maxAge: 31536000000}) //assume this image won't change for a year
           })
           .catch((e) => {
             // there's no art, serve the default artistart
-            res.sendFile(artcache + 'artist.png', {maxAge: 86400000})
+            res.sendFile(artcache + 'artist.png', {maxAge: 86400000}) //refresh this every day, in case a new image is uploaded
           })
       } else {
         // we're looking for albumart let's look for some!
         getAlbumArt(artist, album, imgpath)
           .then((e) => {
             // we got a file, let's serve it
-            res.sendFile(imgpath, {maxAge: 1209600000})
+            res.sendFile(imgpath, {maxAge: 31536000000}) //assume this image won't change for a year
           })
           .catch((e) => {
             // there's no art, serve the default artistart
-            res.sendFile(artcache + 'album.png', {maxAge: 86400000})
+            res.sendFile(artcache + 'album.png', {maxAge: 86400000}) //refresh this every day, in case a new image is uploaded
           })
       }
     }
@@ -99,18 +99,17 @@ function getArt ({ artist, album } = {}, res) {
 }
 
 async function getArtistArt (artist, imgpath) {
-  // var _artist = encodeURIComponent(artist)
-  // get the mbid from audioscrobbler...
-  /*
-    info = await axios.get("https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=" + _artist + "&api_key=250b1448a91894d0f7542cbcdedc936e&format=json")
-    const mbid = info.data.artist.mbid
-  */
   var info = await mbApi.searchArtist(artist, 0, 1)
   var mbid = info.artists[0].id
 
   // now get the fanart from fanart.tv
   var fanart = await axios.get('https://webservice.fanart.tv/v3/music/' + mbid + '&?api_key=fd55f4282969cb8b8d09f470e3d18c51&format=json')
   const data = fanart.data
+
+  // check to see if we actually got any art URLs back
+  if (data.artistbackground && data.artistbackground.length > 0) {
+    await getArtistBackground(data.artistbackground[0].url, imgpath.replace('artist','artistbg'))
+  }
 
   // check to see if we actually got any art URLs back
   if (data.artistthumb && data.artistthumb.length > 0) {
@@ -130,6 +129,21 @@ async function getArtistArt (artist, imgpath) {
     // we didn't get any image urls back, send an error
     throw new Error(1)
   }
+}
+
+async function getArtistBackground (url, imgpath) {
+  // fetch the image file
+  const response = await axios({ url: url, method: 'GET', responseType: 'stream' })
+
+  // write the file
+  const writer = fs.createWriteStream(imgpath)
+  await response.data.pipe(writer)
+
+  // return a promise
+  return new Promise((resolve, reject) => {
+    writer.on('finish', resolve)
+    writer.on('error', reject)
+  })
 }
 
 async function getAlbumArt (artist, album, imgpath) {

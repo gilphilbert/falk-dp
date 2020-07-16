@@ -202,7 +202,7 @@ var domBuilder = (function () {
           // append the details and list of tracks to the fragment
           frag.appendChild(
             cr.div({ class: 'columns is-multiline is-mobile album-detail' },
-              cr.div({ class: 'column is-3-desktop is-10-touch is-offset-1-touch' },
+              cr.div({ class: 'column is-2-desktop is-10-touch is-offset-1-touch' },
                 cr.figure({ class: 'image is-1by1 albumart' },
                   cr.img({ src: data.albumart, loading: 'lazy' })
                 )
