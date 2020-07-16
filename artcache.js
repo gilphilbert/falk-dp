@@ -66,7 +66,7 @@ function getArt ({ artist, album } = {}, res) {
   try {
     if (fs.existsSync(imgpath)) {
       // we have the file in the cache, so serve it
-      res.sendFile(imgpath)
+      res.sendFile(imgpath, {maxAge: 1209600000})
     } else {
       // what art are we looking for?
       if (!album) {
@@ -74,22 +74,22 @@ function getArt ({ artist, album } = {}, res) {
         getArtistArt(artist, imgpath)
           .then((e) => {
             // we got a file, let's serve it
-            res.sendFile(imgpath)
+            res.sendFile(imgpath, {maxAge: 1209600000})
           })
           .catch((e) => {
             // there's no art, serve the default artistart
-            res.sendFile(artcache + 'artist.png')
+            res.sendFile(artcache + 'artist.png', {maxAge: 86400000})
           })
       } else {
         // we're looking for albumart let's look for some!
         getAlbumArt(artist, album, imgpath)
           .then((e) => {
             // we got a file, let's serve it
-            res.sendFile(imgpath)
+            res.sendFile(imgpath, {maxAge: 1209600000})
           })
           .catch((e) => {
             // there's no art, serve the default artistart
-            res.sendFile(artcache + 'album.png')
+            res.sendFile(artcache + 'album.png', {maxAge: 86400000})
           })
       }
     }
