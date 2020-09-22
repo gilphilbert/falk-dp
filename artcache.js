@@ -8,6 +8,9 @@ const fs = require('fs')
 const path = require('path')
 const rootdir = path.resolve(__dirname)
 const axios = require('axios')
+
+const sharp = require('sharp');
+
 const MusicBrainzApi = require('musicbrainz-api').MusicBrainzApi
 const mbApi = new MusicBrainzApi({
   appName: 'FALK',
@@ -66,7 +69,9 @@ function getArt ({ artist, album } = {}, res) {
   try {
     if (fs.existsSync(imgpath)) {
       // we have the file in the cache, so serve it
-      res.sendFile(imgpath, {maxAge: 31536000000}) //assume this image won't change for a year
+      res.set('Cache-control', 'public, max-age=31536000000')
+      res.type('image/jpg');
+      sharp(imgpath).resize(480, 480).pipe(res);
     } else {
       // what art are we looking for?
       if (!album) {
@@ -74,7 +79,9 @@ function getArt ({ artist, album } = {}, res) {
         getArtistArt(artist, imgpath)
           .then((e) => {
             // we got a file, let's serve it
-            res.sendFile(imgpath, {maxAge: 31536000000}) //assume this image won't change for a year
+            res.set('Cache-control', 'public, max-age=31536000000')
+            res.type('image/jpg');
+            sharp(imgpath).resize(480, 480).pipe(res);
           })
           .catch((e) => {
             // there's no art, serve the default artistart
@@ -85,7 +92,9 @@ function getArt ({ artist, album } = {}, res) {
         getAlbumArt(artist, album, imgpath)
           .then((e) => {
             // we got a file, let's serve it
-            res.sendFile(imgpath, {maxAge: 31536000000}) //assume this image won't change for a year
+            res.set('Cache-control', 'public, max-age=31536000000')
+            res.type('image/jpg');
+            sharp(imgpath).resize(480, 480).pipe(res);
           })
           .catch((e) => {
             // there's no art, serve the default artistart
