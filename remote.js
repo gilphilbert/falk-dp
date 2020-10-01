@@ -34,6 +34,7 @@ function startMonitor() {
 async function openDevice(deviceInfo) {
     var mpdapi = require('mpd-api')
     var mpdc = null
+    var closing = false
     async function connectMPD () {
         console.log('Connecting to MPD...')
         try {
@@ -41,8 +42,10 @@ async function openDevice(deviceInfo) {
             console.log('Connected to MPD (remote)')
 
             mpdc.on('close', () => {
-            console.log('MPD connection lost')
-            connectMPD()
+                console.log('MPD connection lost')
+                if (closing == false) {
+                    connectMPD()
+                }
             })
         } catch (e) {
             console.log('Couldn\'t connect to MPD')
@@ -91,8 +94,9 @@ async function openDevice(deviceInfo) {
 
     device.on("error", function(err) {
         console.log(err)
-        device.disconnect()
-        mpdapi.disconnect()
+        device.close()
+        closing = true
+        mpdc.close()
         device = null
     });
 }
