@@ -96,7 +96,7 @@ async function openDevice(deviceInfo) {
         console.log(err)
         device.close()
         closing = true
-        mpdc.close()
+        mpdc.connection.close()
         device = null
     });
 }
