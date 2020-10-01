@@ -16,16 +16,20 @@ sudo apt-get install nodejs
 ```
 
 ### Install Prereqs
-Just git for now
+We'll need git, but also some prereqs for the bluetooth/USB remote support
 ```
 sudo apt install git
+sudo apt install libusb-1.0-0 libusb-1.0-0-dev libudev-dev 
 ```
 
-### Prepare system
-MPD's configuration isn't configured for internal mounts by default. The following script changes to a simple database and creates the structures required.
+### Install Moosic
 ```
-//sudo sed 's/db_file/#db_file/g' -i /etc/mpd.conf
-//printf "database {\n plugin \"simple\"\n path \"/var/lib/mpd/db\"\n cache_directory \"/var/lib/mpd/cache\"\n}" | sudo tee -a /etc/mpd.conf
+git clone https://github.com/gilphilbert/falk-dp.git
+sudo mv falk-dp /opt/
+cd /opt/falk-dp
+npm install
+
+//configure MPD
 sudo mv /etc/mpd.conf /etc/mpd.conf.bak
 sudo mv mpd.conf /etc/mpd.conf
 sudo mkdir -p /var/lib/mpd/cache
@@ -33,16 +37,21 @@ sudo touch /var/lib/mpd/db
 sudo chown mpd.audio /var/lib/mpd/cache
 sudo chown mpd.audio /var/lib/mpd/db
 sudo systemctl restart mpd
-```
 
-### Install Moosic
-```
-git clone https://github.com/gilphilbert/falk-dp.git
-cd falk-dp
+//configure udev
+sudo mv 99-falk.rules /etc/udev/rules.d/
+sudo systemctl restart udev
+
+//install falk as a service
 sudo mv falk.service /etc/systemd/system
-npm install
 sudo systemctl enable falk
 sudo systemctl start falk
 ```
 
-You might want to configure this as a deamon (I'll probably get around to it at some point...)
+### Configure a bluetooth remote
+```
+bluetoothctl
+ -> discovery on
+ -> ...
+```
+You may need to add appropriate UDEV rules (instructions needed!)

@@ -8,6 +8,10 @@ const httpServer = http.createServer(app)
 var socketserver = require('./websocket')
 socketserver.setup(httpServer)
 
+// start the remote service
+const remote = require('./remote')
+remote.setup()
+
 // include the artcache
 const artcache = require('./artcache')
 app.use('/art', artcache)

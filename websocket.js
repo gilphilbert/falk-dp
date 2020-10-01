@@ -7,7 +7,6 @@ async function setup (server) {
   async function connectMPD () {
     console.log('Connecting to MPD...')
     try {
-      //mpdc = await mpdapi.connect({ path: '/var/lib/mpd/socket' })
       mpdc = await mpdapi.connect({ path: '/run/mpd/socket' })
       console.log('Connected to MPD')
 
@@ -39,8 +38,6 @@ async function setup (server) {
   
       mpdc.on('close', () => {
         console.log('MPD connection lost')
-        // now try to reconnect...
-        // <!-----------------%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         connectMPD()
       })
     } catch (e) {
