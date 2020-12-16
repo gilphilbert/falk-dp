@@ -14,7 +14,7 @@ a
       text-decoration: underline
 
 .title, .subtitle
-  //font-family: 'Rubik Mono One', sans-serif
+  font-weight: 300
   @include until($desktop)
     &.is-3
       font-size: 1.7em
@@ -23,13 +23,14 @@ a
     &.is-5
       font-size: 1.25em
 .title
-  font-weight: 600
+  font-weight: normal
 
 body
-  background: $white
+  background: $grey-lighter
   background-attachment: fixed
   min-height: 100vh
   color: $grey-darker
+  font-weight: 300
 
   @include until($desktop)
     font-size: 12px
@@ -40,6 +41,13 @@ body
     .tag.quality
       background: $white
       color: $blue
+
+.has-text-weight-normal
+  font-weight: normal
+
+.tag
+  font-weight: normal
+  border-radius: 1000px
 
 .container
   position: inherit
@@ -135,7 +143,7 @@ progress.progress
         background-color: rgba(255,255,255,0.1)
     .title
       margin-top: 10px
-      font-weight: 500
+      font-weight: normal
     .title, .subtitle
       font-size: 1.1rem
   &.artistart
@@ -280,10 +288,11 @@ aside.menu
       margin-bottom: 11px
     #home-quality
       padding: 8px 12px
-      border-radius: 4px
+      border-radius: 1000px
       background-color: $blue
       color: $white
-      font-weight: normal
+      font-size: 14px
+      font-weight: 300
   @include until($desktop)
     #home-album
       margin-bottom: 8px
@@ -293,10 +302,10 @@ aside.menu
       margin-bottom: 11px
     #home-quality
       padding: 5px 8px
-      border-radius: 4px
+      border-radius: 1000px
       background-color: $white
       color: $blue
-      font-weight: bold
+      font-weight: normal
     #swipe-up-queue
       position: absolute
       padding: 8px 12px
@@ -313,13 +322,13 @@ aside.menu
   table.table.songs
     tr
       td:first-child
-        border-top-left-radius: 4px
-        border-bottom-left-radius: 4px
+        //border-top-left-radius: 4px
+        //border-bottom-left-radius: 4px
         @include until($desktop)
           padding-right: 0.75em
       td:last-child
-        border-top-right-radius: 4px
-        border-bottom-right-radius: 4px
+        //border-top-right-radius: 4px
+        //border-bottom-right-radius: 4px
       &:hover
         td
           background: rgba(0, 0, 0, 0.08)
@@ -390,13 +399,17 @@ aside.menu
     text-decoration: underline
     &:hover
       color: $blue
+  .columns
+    border-bottom: 1px solid #E1E1E1
+  .columns:last-child
+    border-bottom: none
   .columns:hover
-    background: rgba(0,0,0,0.08)
+    background: $grey-light
   .column.is-fixed-size
     flex: none
     width: 13%
   .is-playing
-    font-weight: 500
+    font-weight: normal
   @include until($desktop)
     position: fixed
     top: 100vh
@@ -440,7 +453,7 @@ aside.menu
   height: 100px
   width: 100%
   bottom: 0
-  background: #EAEDEF
+  background: $grey-light
   z-index: 3
   line-height: 1
   color: $grey-darker

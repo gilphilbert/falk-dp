@@ -122,10 +122,10 @@ var domBuilder = (function () {
                 )
               ),
               cr.div({ class: 'column is-10-desktop' },
+                cr.p({ id: 'home-title', class: 'subtitle is-3 has-text-centered-touch has-no-overflow' }, state.title || 'Not playing'),
                 cr.p({ id: 'home-album', class: 'has-text-centered-touch subtitle is-4 has-no-overflow' }, cr.a({ href: '/album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album || '')),
-                cr.p({ id: 'home-artist', class: 'has-text-centered-touch subtitle is-4 has-text-weight-bold has-no-overflow' }, cr.a({ href: '/artist/' + state.artist, 'data-navigo': '' }, state.artist || '')),
-                cr.p({ id: 'home-title', class: 'subtitle is-3 has-text-weight-bold has-text-centered-touch has-no-overflow' }, state.title || 'Not playing'),
-                cr.p({ class: 'has-text-centered-touch' }, cr.span({ id: 'home-quality', class: 'is-small' }, uiTools.getQuality(state)))
+                cr.p({ id: 'home-artist', class: 'has-text-centered-touch subtitle is-4 has-no-overflow' }, cr.a({ href: '/artist/' + state.artist, 'data-navigo': '' }, state.artist || '')),
+                cr.p({ class: 'has-text-centered-touch' }, cr.span({ id: 'home-quality', class: 'is-small has-text-weight-normal' }, uiTools.getQuality(state)))
               )
             )
           )
@@ -147,7 +147,7 @@ var domBuilder = (function () {
             )
           )
           frag.appendChild(
-            cr.div({ id: 'swipe-up-queue', on: { click: () => { document.querySelector('#queue-list').classList.add('is-active') } } }, uiTools.getSVG('chevron-up'))
+            cr.div({ class: 'is-hidden-desktop', id: 'swipe-up-queue', on: { click: () => { document.querySelector('#queue-list').classList.add('is-active') } } }, uiTools.getSVG('chevron-up'))
           )
 
           if ('albumart' in state) {
@@ -210,9 +210,9 @@ var domBuilder = (function () {
               cr.div({ class: 'column is-8-desktop is-10-touch is-offset-1-touch' },
                 cr.div({ class: 'columns is-multiline is-mobile' },
                   cr.div({ class: 'column is-8-mobile is-12-desktop' },
-                    cr.p({ class: 'is-uppercase has-text-weight-semibold is-hidden-mobile' }, 'Album'),
-                    cr.p({ class: 'title is-3 album-title has-text-weight-semibold' }, data.title),
-                    cr.p('By ', cr.a({ class: 'artist has-text-weight-semibold', 'data-navigo': '', href: '/artist/' + encodeURIComponent(data.artist) }, data.artist)),
+                    cr.p({ class: 'is-hidden-mobile has-text-weight-normal' }, 'Album'),
+                    cr.p({ class: 'title is-3 album-title' }, data.title),
+                    cr.p('By ', cr.a({ class: 'artist has-text-weight-normal', 'data-navigo': '', href: '/artist/' + encodeURIComponent(data.artist) }, data.artist)),
                     cr.p({ class: 'detail' }, data.songs.length + ' Song' + ((data.songs.length > 1) ? 's' : '') + ' - ' + duration + ((data.songs[0].date) ? ' - ' + data.songs[0].date : '')),
                     cr.div({ class: 'tags' },
                       ((format !== '') ? cr.span({ class: 'tag is-rounded' }, format) : null),

@@ -51,7 +51,16 @@ sudo systemctl start falk
 ### Configure a bluetooth remote
 ```
 bluetoothctl
- -> discovery on
- -> ...
+discoverable on
+pairable on
+agent on
+default-agent
+scan on
 ```
-You may need to add appropriate UDEV rules (instructions needed!)
+Wait for your device to be discovered, then:
+```
+pair 12:23:34:45:56:67
+trust 12:23:34:45:56:67
+connect 12:23:34:45:56:67
+```
+Where `12:23:34:45:56:67` is the address of the device you want to add.

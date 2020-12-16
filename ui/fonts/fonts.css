@@ -17,3 +17,15 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'Rubik';
+    src: url('rubik_l.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'Rubik';
+    src: url('rubik_m.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+  }

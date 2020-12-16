@@ -2,20 +2,20 @@
 
 // Set your brand colors
 $green: #4BBE87;
-$blue: #255C99;
+$blue: #4D84C3;
 $yellow: #E3B505;
 $orange: #FF6B35;
-$white: #FCFFFF;
+$white: #FFFFFF;
 $red: #A31621;
 
-$grey-dark: #7D869C;
-$grey-darker: #4A5A67;
-$grey-lighter: #F2F6F6;
+$grey-dark: #9c9c9c;
+$grey-darker: #6F6F6F;
+$grey-light: #f1f1f1;
+$grey-lighter: #F7F7F7;
 
 $darken: rgba(0,0,0,0.1);
 
 // Update Bulma's global variables
-//$family-sans-serif: 'Maven Pro', sans-serif;
 $family-sans-serif: 'Rubik', sans-serif;
 $primary: $blue;
 $link: $grey-darker;
