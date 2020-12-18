@@ -39,7 +39,8 @@ var domBuilder = (function () {
   }
 
   var buildTrack = function (data) {
-    var format = ((data.format) ? (parseInt(data.format.split(':')[0]) / 1000) + 'kHz ' + data.format.split(':')[1] + 'bit' : '')
+    console.log(data)
+    var format = ((data.format) ? data.format.sample_rate_short.value + data.format.sample_rate_short.unit + ' ' + data.format.bits + 'bit' : '')
     var filetype = data.file.split('.')[data.file.split('.').length - 1]
     var tr = cr.tr({ 'data-uri': data.file },
       (('track' in data) ? cr.td({ class: 'is-narrow pointer', on: { click: uiTools.handlers.tracks } }, data.track) : null),
@@ -179,21 +180,17 @@ var domBuilder = (function () {
           var format = ''
           var channels = ''
           // if every song has the same format
-          if (data.songs.every(song => song.format === data.songs[0].format)) {
-            format = data.songs[0].format
-          }
-          if (format !== '') {
-            format = format.split(':')
-            channels = format[2]
+          if (data.songs.every(song => song.format.original_value === data.songs[0].format.original_value)) {
+            format = data.songs[0].format.sample_rate_short.value + data.songs[0].format.sample_rate_short.unit + ' ' + data.songs[0].format.bits + 'bit'
+            channels = data.songs[0].format.channels
             switch (channels) {
-              case '2':
+              case 2:
                 channels = 'stereo'
                 break
-              case '6':
+              case 6:
                 channels = '5.1'
                 break
             }
-            format = parseInt(format[0] / 1000) + 'kHz ' + format[1] + 'bit'
           }
 
           // create the main fragment
@@ -202,12 +199,12 @@ var domBuilder = (function () {
           // append the details and list of tracks to the fragment
           frag.appendChild(
             cr.div({ class: 'columns is-multiline is-mobile album-detail' },
-              cr.div({ class: 'column is-2-desktop is-10-touch is-offset-1-touch' },
+              cr.div({ class: 'column is-3-desktop is-10-touch is-offset-1-touch' },
                 cr.figure({ class: 'image is-1by1 albumart' },
                   cr.img({ src: data.albumart, loading: 'lazy' })
                 )
               ),
-              cr.div({ class: 'column is-8-desktop is-10-touch is-offset-1-touch' },
+              cr.div({ class: 'column is-9-desktop is-10-touch is-offset-1-touch' },
                 cr.div({ class: 'columns is-multiline is-mobile' },
                   cr.div({ class: 'column is-8-mobile is-12-desktop' },
                     cr.p({ class: 'is-hidden-mobile has-text-weight-normal' }, 'Album'),
@@ -228,11 +225,15 @@ var domBuilder = (function () {
           )
 
           frag.appendChild(
-            cr.table({ class: 'table is-fullwidth songs songs-hover' },
-              cr.tbody(
-                data.songs.map(function (song) {
-                  return buildTrack(song)
-                })
+            cr.div({ class: 'columns is-multiline is-mobile album-detail' },
+              cr.div({ class: 'column is-9-desktop is-offset-3-desktop is-12-touch' },
+                cr.table({ class: 'table is-fullwidth songs songs-hover' },
+                  cr.tbody(
+                    data.songs.map(function (song) {
+                      return buildTrack(song)
+                    })
+                  )
+                )
               )
             )
           )
