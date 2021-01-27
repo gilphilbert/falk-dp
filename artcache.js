@@ -84,6 +84,7 @@ function getArt ({ artist, album, type } = {}, res) {
 
   // now convert the hash to a file name ./artcache/${filename}
   const imgpath = artcache + pre + hash + '.jpg'
+  console.log(imgpath)
 
   // for now, we'll resize everything to 480x480, it should cover most screens. Later, we'll ask the artcache server for the size wanted
   try {
@@ -100,17 +101,7 @@ function getArt ({ artist, album, type } = {}, res) {
       // what art are we looking for?
       if (!album) {
         // we're looking for an artist, let's go look for it and store it if we find it
-        getArtistArt(artist, imgpath)
-          .then((e) => {
-            // we got a file, let's serve it
-            res.set('Cache-control', 'public, max-age=31536000000')
-            res.type('image/jpg')
-            sharp(imgpath).resize(480, 480).pipe(res)
-          })
-          .catch((e) => {
-            // there's no art, serve the default artistart
-            res.sendFile(artcache + 'artist.png', { maxAge: 86400000 }) // refresh this every day, in case a new image is uploaded
-          })
+        getArtistArt(artist, imgpath, res, type)
       } else {
         // we're looking for albumart let's look for some!
         getAlbumArt(artist, album, imgpath)
@@ -131,54 +122,41 @@ function getArt ({ artist, album, type } = {}, res) {
   }
 }
 
-async function getArtistArt (artist, imgpath) {
+/* THIS STILL NEEDS:
+
+** Error handling (what if requests fail?)
+** No image return handling (return default images)
+** Removal of mbApi sync handling
+
+*/
+async function getArtistArt (artist, imgpath, res, type) {
   const info = await mbApi.searchArtist(artist, 0, 1)
   const mbid = info.artists[0].id
 
   // now get the fanart from fanart.tv
-  const fanart = await axios.get('https://webservice.fanart.tv/v3/music/' + mbid + '&?api_key=fd55f4282969cb8b8d09f470e3d18c51&format=json')
-  const data = fanart.data
-
-  // check to see if we actually got any art URLs back
-  if (data.artistbackground && data.artistbackground.length > 0) {
-    await getArtistBackground(data.artistbackground[0].url, imgpath.replace('artist', 'artistbg'))
-  }
-
-  // check to see if we actually got any art URLs back
-  if (data.artistthumb && data.artistthumb.length > 0) {
-    // fetch the image file
-    const response = await axios({ url: data.artistthumb[0].url, method: 'GET', responseType: 'stream' })
-
-    // write the file
-    const writer = fs.createWriteStream(imgpath)
-    await response.data.pipe(writer)
-
-    // return a promise
-    return new Promise((resolve, reject) => {
-      writer.on('finish', resolve)
-      writer.on('error', reject)
+  axios.get('https://webservice.fanart.tv/v3/music/' + mbid + '&?api_key=fd55f4282969cb8b8d09f470e3d18c51&format=json')
+    .then(function (response) {
+      const fanart = response.data
+      const url = ((type === 'bg') ? fanart.artistbackground[0].url : fanart.artistthumb[0].url)
+      axios({ url: url, method: 'GET', responseType: 'stream' })
+        .then(function (response) {
+          // write the file
+          const writer = fs.createWriteStream(imgpath)
+          response.data.pipe(writer)
+          writer.on('finish', () => {
+            res.set('Cache-control', 'public, max-age=31536000000')
+            res.type('image/jpg')
+            const opts = { width: 480 }
+            if (type !== 'bg') {
+              opts.height = 480
+            }
+            sharp(imgpath).resize(opts).pipe(res)
+          })
+        })
     })
-  } else {
-    // we didn't get any image urls back, send an error
-    throw new Error(1)
-  }
 }
 
-async function getArtistBackground (url, imgpath) {
-  // fetch the image file
-  const response = await axios({ url: url, method: 'GET', responseType: 'stream' })
-
-  // write the file
-  const writer = fs.createWriteStream(imgpath)
-  await response.data.pipe(writer)
-
-  // return a promise
-  return new Promise((resolve, reject) => {
-    writer.on('finish', resolve)
-    writer.on('error', reject)
-  })
-}
-
+// update this for fanart.tv?
 async function getAlbumArt (artist, album, imgpath) {
   const _artist = encodeURIComponent(artist)
   const _album = encodeURIComponent(album)
