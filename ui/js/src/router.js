@@ -1,9 +1,9 @@
 /* global webSocket, domBuilder, dataTools, uiTools */
 
-var router = (function () {
-  var _router = new window.Navigo('/', true, '#')
+const router = (function () {
+  const _router = new window.Navigo('/', true, '#')
 
-  var init = function () {
+  const init = function () {
     _router.updatePageLinks()
     _router
       .on({
@@ -65,11 +65,11 @@ var router = (function () {
       .resolve()
   }
 
-  var update = function () {
+  const update = function () {
     _router.updatePageLinks()
   }
 
-  var lastRoute = function () {
+  const lastRoute = function () {
     return _router.lastRouteResolved()
   }
 

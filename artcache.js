@@ -1,5 +1,5 @@
-var express = require('express')
-var router = express.Router()
+const express = require('express')
+const router = express.Router()
 
 // var app = express()
 
@@ -9,7 +9,7 @@ const path = require('path')
 const rootdir = path.resolve(__dirname)
 const axios = require('axios')
 
-const sharp = require('sharp');
+const sharp = require('sharp')
 
 const MusicBrainzApi = require('musicbrainz-api').MusicBrainzApi
 const mbApi = new MusicBrainzApi({
@@ -20,7 +20,7 @@ const mbApi = new MusicBrainzApi({
 
 // the albumart service
 router.get('/artist/:artist', function (req, res) {
-  var q = req.params
+  const q = req.params
 
   // you need to specify an artist!
   if (!q.artist) {
@@ -29,14 +29,31 @@ router.get('/artist/:artist', function (req, res) {
   }
 
   if (q.artist.indexOf('.jpg') > -1) {
-    q.artist = q.artist.substr(0, q.artist.indexOf('.jpg'));
+    q.artist = q.artist.substr(0, q.artist.indexOf('.jpg'))
   }
 
-  getArt({ artist: q.artist }, res)
+  getArt({ artist: q.artist, type: '' }, res)
+})
+
+// the albumart service
+router.get('/artist/background/:artist', function (req, res) {
+  const q = req.params
+
+  // you need to specify an artist!
+  if (!q.artist) {
+    res.json({ error: 'you must specify an artist' })
+    return
+  }
+
+  if (q.artist.indexOf('.jpg') > -1) {
+    q.artist = q.artist.substr(0, q.artist.indexOf('.jpg'))
+  }
+
+  getArt({ artist: q.artist, type: 'bg' }, res)
 })
 
 router.get('/album/:artist/:album', function (req, res) {
-  var q = req.params
+  const q = req.params
 
   // you need to specify an artist!
   if (!q.artist || !q.artist) {
@@ -45,34 +62,40 @@ router.get('/album/:artist/:album', function (req, res) {
   }
 
   if (q.album.indexOf('.jpg') > -1) {
-    q.album = q.album.substr(0, q.album.indexOf('.jpg'));
+    q.album = q.album.substr(0, q.album.indexOf('.jpg'))
   }
 
   getArt({ artist: q.artist, album: q.album }, res)
 })
 
-function getArt ({ artist, album } = {}, res) {
+function getArt ({ artist, album, type } = {}, res) {
   const artcache = rootdir + '/artcache/'
 
   // generate a hash from the request
-  var cs = artist
-  var pre = 'artist/'
+  let cs = artist
+  let pre = 'artist/'
   if (album) {
     cs = cs + album
     pre = 'album/'
+  } else if (type === 'bg') {
+    pre = 'artistbg/'
   }
   const hash = crypto.createHash('sha1').update(cs).digest('hex')
 
   // now convert the hash to a file name ./artcache/${filename}
   const imgpath = artcache + pre + hash + '.jpg'
 
-  //for now, we'll resize everything to 480x480, it should cover most screens. Later, we'll ask the artcache server for the size wanted
+  // for now, we'll resize everything to 480x480, it should cover most screens. Later, we'll ask the artcache server for the size wanted
   try {
     if (fs.existsSync(imgpath)) {
       // we have the file in the cache, so serve it
       res.set('Cache-control', 'public, max-age=31536000000')
-      res.type('image/jpg');
-      sharp(imgpath).resize(480, 480).pipe(res);
+      res.type('image/jpg')
+      if (type !== 'bg') {
+        sharp(imgpath).resize(480, 480).pipe(res)
+      } else {
+        sharp(imgpath).resize(480).pipe(res)
+      }
     } else {
       // what art are we looking for?
       if (!album) {
@@ -81,12 +104,12 @@ function getArt ({ artist, album } = {}, res) {
           .then((e) => {
             // we got a file, let's serve it
             res.set('Cache-control', 'public, max-age=31536000000')
-            res.type('image/jpg');
-            sharp(imgpath).resize(480, 480).pipe(res);
+            res.type('image/jpg')
+            sharp(imgpath).resize(480, 480).pipe(res)
           })
           .catch((e) => {
             // there's no art, serve the default artistart
-            res.sendFile(artcache + 'artist.png', {maxAge: 86400000}) //refresh this every day, in case a new image is uploaded
+            res.sendFile(artcache + 'artist.png', { maxAge: 86400000 }) // refresh this every day, in case a new image is uploaded
           })
       } else {
         // we're looking for albumart let's look for some!
@@ -94,12 +117,12 @@ function getArt ({ artist, album } = {}, res) {
           .then((e) => {
             // we got a file, let's serve it
             res.set('Cache-control', 'public, max-age=31536000000')
-            res.type('image/jpg');
-            sharp(imgpath).resize(480, 480).pipe(res);
+            res.type('image/jpg')
+            sharp(imgpath).resize(480, 480).pipe(res)
           })
           .catch((e) => {
             // there's no art, serve the default artistart
-            res.sendFile(artcache + 'album.png', {maxAge: 86400000}) //refresh this every day, in case a new image is uploaded
+            res.sendFile(artcache + 'album.png', { maxAge: 86400000 }) // refresh this every day, in case a new image is uploaded
           })
       }
     }
@@ -109,16 +132,16 @@ function getArt ({ artist, album } = {}, res) {
 }
 
 async function getArtistArt (artist, imgpath) {
-  var info = await mbApi.searchArtist(artist, 0, 1)
-  var mbid = info.artists[0].id
+  const info = await mbApi.searchArtist(artist, 0, 1)
+  const mbid = info.artists[0].id
 
   // now get the fanart from fanart.tv
-  var fanart = await axios.get('https://webservice.fanart.tv/v3/music/' + mbid + '&?api_key=fd55f4282969cb8b8d09f470e3d18c51&format=json')
+  const fanart = await axios.get('https://webservice.fanart.tv/v3/music/' + mbid + '&?api_key=fd55f4282969cb8b8d09f470e3d18c51&format=json')
   const data = fanart.data
 
   // check to see if we actually got any art URLs back
   if (data.artistbackground && data.artistbackground.length > 0) {
-    await getArtistBackground(data.artistbackground[0].url, imgpath.replace('artist','artistbg'))
+    await getArtistBackground(data.artistbackground[0].url, imgpath.replace('artist', 'artistbg'))
   }
 
   // check to see if we actually got any art URLs back
@@ -157,16 +180,16 @@ async function getArtistBackground (url, imgpath) {
 }
 
 async function getAlbumArt (artist, album, imgpath) {
-  var _artist = encodeURIComponent(artist)
-  var _album = encodeURIComponent(album)
-  var info = await axios.get(`http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=250b1448a91894d0f7542cbcdedc936e&artist=${_artist}&album=${_album}&format=json`)
+  const _artist = encodeURIComponent(artist)
+  const _album = encodeURIComponent(album)
+  const info = await axios.get(`http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=250b1448a91894d0f7542cbcdedc936e&artist=${_artist}&album=${_album}&format=json`)
 
   const images = info.data.album.image
 
-  var _img = images.filter(img => {
+  const _img = images.filter(img => {
     return img.size === 'extralarge'
   })
-  var imageurl = false
+  let imageurl = false
   if (_img && _img.length > 0) {
     imageurl = _img[0]['#text']
   }

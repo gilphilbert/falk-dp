@@ -1,17 +1,17 @@
 /* global domBuilder, dataTools */
 
-var webSocket = (function () {
+const webSocket = (function () {
   /* ----------- PRIVATE VARIABLES ----------- */
-  var _host = ''
-  var server
+  const _host = ''
+  let server
 
   /* ----------- PRIVATE FUNCTIONS ----------- */
 
-  var ServerEventsDispatcher = function (url) {
-    var conn = new WebSocket(url)
+  const ServerEventsDispatcher = function (url) {
+    let conn = new window.WebSocket(url)
 
-    var callbacks = {}
-    var cbOnce = {}
+    const callbacks = {}
+    const cbOnce = {}
 
     this.bind = function (eventName, callback) {
       callbacks[eventName] = callbacks[eventName] || []
@@ -25,14 +25,14 @@ var webSocket = (function () {
     }
 
     this.send = function (eventName, eventData) {
-      var payload = JSON.stringify({ event: eventName, data: eventData })
+      const payload = JSON.stringify({ event: eventName, data: eventData })
       conn.send(payload)
       return this
     }
 
-    var startup = function () {
+    const startup = function () {
       conn.onmessage = function (evt) {
-        var json = JSON.parse(evt.data)
+        const json = JSON.parse(evt.data)
         dispatch(json.event, json.data)
       }
 
@@ -44,20 +44,20 @@ var webSocket = (function () {
     this.bind('close', (e) => {
       if (e.code !== 1000) {
         setTimeout(function () {
-          conn = new WebSocket(url)
+          conn = new window.WebSocket(url)
           startup()
         }, 3000)
       }
     })
 
-    var dispatch = function (eventName, message) {
-      var chain = callbacks[eventName]
+    const dispatch = function (eventName, message) {
+      const chain = callbacks[eventName]
       if (typeof chain !== 'undefined') {
-        for (var i = 0; i < chain.length; i++) {
+        for (let i = 0; i < chain.length; i++) {
           chain[i](message)
         }
       }
-      var once = cbOnce[eventName]
+      const once = cbOnce[eventName]
       if (typeof once !== 'undefined') {
         once(message)
         cbOnce[eventName] = undefined
@@ -68,7 +68,7 @@ var webSocket = (function () {
   /* ----------- PUBLIC FUNCTIONS ----------- */
 
   // initiate the connection to the host
-  var init = function (host, onConnect) {
+  const init = function (host, onConnect) {
     server = new ServerEventsDispatcher('ws://' + host)
     server.bind('open', () => {
       onConnect()
@@ -77,12 +77,12 @@ var webSocket = (function () {
     server.bind('notification', (data) => notificationHandler)
   }
 
-  var notificationHandler = function (data) {
+  const notificationHandler = function (data) {
     console.log(data)
   }
 
   // request data (the underlying functions determine what's requested)
-  var get = {
+  const get = {
     state: function () {
       server.send('getStatus')
     },
@@ -130,13 +130,13 @@ var webSocket = (function () {
     // },
   }
 
-  var set = {
+  const set = {
     // deviceName: function (name) {
     //   sendData('setDeviceName', { name: name })
     // }
   }
 
-  var action = {
+  const action = {
     clearQueue: function () {
       server.send('clearQueue')
     },
@@ -149,7 +149,7 @@ var webSocket = (function () {
       server.send('replaceAndPlay', { songs: songs, pos: pos })
     },
     enqueue: function (data) {
-      var songs = {}
+      let songs = {}
       // if we're given a straight URI as a string
       if (typeof data === 'string') {
         songs = [{ uri: data }]
@@ -160,7 +160,6 @@ var webSocket = (function () {
       } else if (Array.isArray(data)) {
         songs = data
       }
-      console.log(songs)
       server.send('enqueue', { songs: songs })
     },
     removeFromQueue: function (pos) {
@@ -179,7 +178,6 @@ var webSocket = (function () {
       }
     },
     playid: function (id) {
-      console.log(id)
       if (id !== undefined) {
         server.send('playid', parseInt(id))
       }
@@ -194,11 +192,11 @@ var webSocket = (function () {
       server.send('prev')
     },
     toggleRandom: function () {
-      var rand = dataTools.getState().random
+      const rand = dataTools.getState().random
       server.send('random', { state: !rand })
     },
     toggleRepeat: function () {
-      var state = dataTools.getState()
+      const state = dataTools.getState()
       if (state.single === true) {
         server.send('repeat', { state: false })
         server.send('single', { state: false })
@@ -243,11 +241,11 @@ var webSocket = (function () {
     }
   }
 
-  var getURL = function (partial) {
+  const getURL = function (partial) {
     return 'http://' + _host + partial
   }
 
-  var start = function () {
+  const start = function () {
     server.bind('pushArtists', domBuilder.page.build)
       .bind('pushAlbums', domBuilder.page.build)
       .bind('pushGenres', domBuilder.page.build)

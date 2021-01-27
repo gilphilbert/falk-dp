@@ -5,7 +5,7 @@ const app = express()
 
 // include the webservice
 const httpServer = http.createServer(app)
-var socketserver = require('./websocket')
+const socketserver = require('./websocket')
 socketserver.setup(httpServer)
 
 // start the remote service
@@ -24,9 +24,6 @@ app.use(express.static('ui'))
 app.use('/lcd', express.static('lcd'))
 
 // start the app
-// app.listen(3000, function () {
-//   console.log('Listening on port 3000')
-// })
 httpServer.listen(port, function listening () {
   console.log('listening on ' + port)
 })

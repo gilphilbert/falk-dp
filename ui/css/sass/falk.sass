@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend+Deca&display=swap');
+
 html
     overflow: scroll
     overflow-x: hidden
@@ -5,6 +7,9 @@ html
 ::-webkit-scrollbar
     width: 0px
     background: transparent
+
+h1, h2, h3, h4, h5, h6, p.title, p.subtitle
+  font-family: 'Lexend Deca', sans-serif
 
 a
   text-decoration: none
@@ -15,6 +20,8 @@ a
 
 .title, .subtitle
   font-weight: 300
+  &.is-6
+    font-size: 0.9rem
   @include until($desktop)
     &.is-3
       font-size: 1.7em
@@ -24,13 +31,17 @@ a
       font-size: 1.25em
 .title
   font-weight: normal
+.subtitle
+  &.is-6
+    font-size: 0.8rem
 
 body
   background: $grey-lighter
   background-attachment: fixed
   min-height: 100vh
   color: $grey-darker
-  font-weight: 300
+  font-weight: normal
+  font-size: 15px
 
   @include until($desktop)
     font-size: 12px
@@ -116,6 +127,9 @@ progress.progress
   background-color: $blue
   &.is-24
     background-color: $grey-dark
+  @include until($desktop)
+    background-color: $white
+    color: $blue
 
 .feather
   width: 24px
@@ -135,22 +149,37 @@ progress.progress
   &.albumart, &.artistart
     .column
       padding: 35px
-      // @include until($desktop)
-      //  padding: 1em .5em
+      @include until($desktop)
+        padding: 1em .5em
     img
       border-radius: 7px
-      @include until($desktop)
-        background-color: rgba(255,255,255,0.1)
+      //@include until($desktop)
+      //  background-color: rgba(255,255,255,0.1)
     .title
-      margin-top: 10px
+      margin-top: 8px
       font-weight: normal
     .title, .subtitle
       font-size: 1.1rem
+      @include until($desktop)
+        font-size: 0.8rem
   &.artistart
-    img
-      border-radius: 100%
+    //img
+    //  border-radius: 
     .title, .subtitle
       text-align: center
+
+figure
+  &.artistart
+    span
+      position: absolute
+      bottom: 0
+      display: block
+      width: 100%
+      text-align: center
+      z-index: 2
+      font-family: 'Lexend Deca', sans-serif
+      font-size: 1.3rem
+
 
 //this contains the left hand menu
 aside.menu
@@ -266,7 +295,7 @@ aside.menu
     padding-bottom: 50px
     figure
       img
-        border-radius: 100%
+        border-radius: 7px
 
   .album-detail
     p.title
@@ -314,9 +343,9 @@ aside.menu
 
   .albumart img
     border-radius: 7px
-    -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3)
-    -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3)
-    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3)
+    //-webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3)
+    //-moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3)
+    //box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3)
     
 
   table.table.songs
@@ -339,12 +368,15 @@ aside.menu
         padding-left: 0
         padding-right: 0
       .dropdown button
-        svg
-          stroke: $grey-dark
-        @include until($desktop)
-          padding: 0
+        vertical-align: middle
         border: none
         background: none
+        svg
+          stroke: $grey-dark
+          @include until($desktop)
+            stroke: $white
+        @include until($desktop)
+          padding: 0
 
 .has-no-overflow
   overflow: hidden
@@ -475,9 +507,10 @@ aside.menu
     min-width: 48px
     max-width: 48px
     background: $blue
-    border-radius: 5000px
+    border-radius: 1000px
     display: inline-flex
     align-items: center
+    margin: 0 7px
     .feather
       stroke: $white
     svg

@@ -1,9 +1,9 @@
 async function setup (server) {
-  var WebSocket = require('ws')
-  var mpdapi = require('mpd-api')
+  const WebSocket = require('ws')
+  const mpdapi = require('mpd-api')
   const wss = new WebSocket.Server({ server: server })
 
-  var mpdc = null
+  let mpdc = null
   async function connectMPD () {
     console.log('Connecting to MPD...')
     try {
@@ -30,12 +30,13 @@ async function setup (server) {
               .then(d => broadcast('pushPlaylist', d))
             break
           case 'database':
-            //what do we do here? pushStatus seems most logical. How do the clients know when new files have been found?
+            // what do we do here? pushStatus seems most logical. How do the clients know when new files have been found?
+            break
           default:
             console.log('[MPD] Unknown State Change:' + e)
         }
       })
-  
+
       mpdc.on('close', () => {
         console.log('MPD connection lost')
         connectMPD()
@@ -48,7 +49,7 @@ async function setup (server) {
   await connectMPD()
 
   function broadcast (eventName, eventData) {
-    var payload = JSON.stringify({ event: eventName, data: eventData })
+    const payload = JSON.stringify({ event: eventName, data: eventData })
     wss.clients.forEach(function each (client) {
       if (client.readyState === WebSocket.OPEN) {
         client.send(payload)
@@ -57,10 +58,10 @@ async function setup (server) {
   }
 
   async function getStatus () {
-    var status = await mpdc.api.status.get()
-    var queue = await mpdc.api.queue.info()
+    const status = await mpdc.api.status.get()
+    const queue = await mpdc.api.queue.info()
     if (status.song !== undefined && queue.length > 0) {
-      var songdetail = queue.filter((qs) => {
+      const songdetail = queue.filter((qs) => {
         return qs.pos === status.song
       })[0]
 
@@ -96,7 +97,7 @@ async function setup (server) {
   }
 
   wss.on('connection', function (ws) {
-    var disp = new Dispatcher(ws)
+    const disp = new Dispatcher(ws)
     ws.on('error', (e) => console.log(e))
 
     // system
@@ -114,7 +115,7 @@ async function setup (server) {
       mpdc.api.db.rescan()
       mpdc.api.mounts.list()
         .then((mounts) => {
-          var netmount = mounts.filter((m) => {
+          const netmount = mounts.filter((m) => {
             if ('storage' in m) {
               return m.storage.startsWith('smb') || m.storage.startsWith('nfs')
             }
@@ -123,13 +124,14 @@ async function setup (server) {
             return m.mount
           })
           netmount.forEach(i => mpdc.api.db.rescan(i).then(d => console.log(d)))
-        })    })
+        })
+    })
 
     disp.bind('updateDB', function () {
       mpdc.api.db.update()
       mpdc.api.mounts.list()
         .then((mounts) => {
-          var netmount = mounts.filter((m) => {
+          const netmount = mounts.filter((m) => {
             if ('storage' in m) {
               return m.storage.startsWith('smb') || m.storage.startsWith('nfs')
             }
@@ -145,7 +147,7 @@ async function setup (server) {
     disp.bind('getArtists', function () {
       mpdc.api.db.list('albumartist')
         .then(async (d) => {
-          var mod = d.map(i => { return { title: i.albumartist, albumart: '/art/artist/' + encodeURIComponent(i.albumartist) + '.jpg' } })
+          const mod = d.map(i => { return { title: i.albumartist, albumart: '/art/artist/' + encodeURIComponent(i.albumartist) + '.jpg' } })
           disp.send('pushArtists', mod)
         })
     })
@@ -153,9 +155,9 @@ async function setup (server) {
     disp.bind('getAlbums', function () {
       mpdc.api.db.list('album', null, 'albumartist')
         .then((d) => {
-          var mod = d.reduce((arr, item) => {
+          const mod = d.reduce((arr, item) => {
             item.album.forEach((e) => {
-              var flat = {
+              const flat = {
                 title: e.album,
                 artist: item.albumartist,
                 albumart: '/art/album/' + encodeURIComponent(item.albumartist) + '/' + encodeURIComponent(e.album) + '.jpg'
@@ -172,7 +174,7 @@ async function setup (server) {
     disp.bind('getGenres', function () {
       mpdc.api.db.list('genre')
         .then((d) => {
-          var mod = d.map(i => i.genre)
+          const mod = d.map(i => i.genre)
           disp.send('pushGenres', mod)
         })
     })
@@ -180,7 +182,7 @@ async function setup (server) {
     disp.bind('getAlbum', function (data) {
       mpdc.api.db.find(`((album == "${data.title}") AND (albumartist == "${data.artist}"))`)
         .then((d) => {
-          var out = {
+          const out = {
             artist: data.artist,
             title: data.title,
             albumart: '/art/album/' + encodeURIComponent(data.artist) + '/' + encodeURIComponent(data.title) + '.jpg',
@@ -193,16 +195,17 @@ async function setup (server) {
     disp.bind('getArtistAlbums', function (data) {
       mpdc.api.db.list('album', `(albumartist == "${data.artist}")`)
         .then((d) => {
-          var mod = d.map((d) => {
+          const mod = d.map((d) => {
             return {
               title: d.album,
               albumart: '/art/album/' + encodeURIComponent(data.artist) + '/' + encodeURIComponent(d.album) + '.jpg'
             }
           })
-          var out = {
+          const out = {
             artist: {
               title: data.artist,
-              albumart: '/art/artist/' + encodeURIComponent(data.artist) + '.jpg'
+              albumart: '/art/artist/' + encodeURIComponent(data.artist) + '.jpg',
+              background: '/art/artist/background/' + encodeURIComponent(data.artist) + '.jpg'
             },
             albums: mod
           }
@@ -214,14 +217,14 @@ async function setup (server) {
     disp.bind('getMounts', function () {
       mpdc.api.mounts.list()
         .then((data) => {
-          var mounts = data.filter(mount => mount.mount)
+          const mounts = data.filter(mount => mount.mount)
           disp.send('pushMounts', mounts)
         })
     })
 
     disp.bind('addMount', function (data) {
-      var point = data.path.substr(data.path.lastIndexOf('/') + 1, data.path.length)
-      var share = data.type + '://' + data.host + '/' + data.path
+      const point = data.path.substr(data.path.lastIndexOf('/') + 1, data.path.length)
+      const share = data.type + '://' + data.host + '/' + data.path
       mpdc.api.mounts.mount(point, share)
         .then(() => {
           mpdc.api.mounts.list()
@@ -271,14 +274,14 @@ async function setup (server) {
     })
 
     disp.bind('addPlay', function (data) {
-      var pos = data.pos || 0
+      const pos = data.pos || 0
       if (data.uri) {
-        var id = mpdc.api.queue.addid(data.uri)
+        const id = mpdc.api.queue.addid(data.uri)
         mpdc.api.playback.playid(id)
       } else if (data.songs) {
-        var songs = data.songs
-        var promises = []
-        for (var i = 0; i < songs.length; i++) {
+        const songs = data.songs
+        const promises = []
+        for (let i = 0; i < songs.length; i++) {
           promises[i] = mpdc.api.queue.addid(songs[i].uri)
         }
         Promise.all(promises).then((values) => {
@@ -303,7 +306,7 @@ async function setup (server) {
       } else if (Array.isArray(data.songs)) {
         mpdc.api.queue.clear()
           .then(() => {
-            var promises = []
+            const promises = []
             data.songs.forEach(song => {
               promises.push(mpdc.api.queue.addid(song.uri))
             })
@@ -376,7 +379,7 @@ async function setup (server) {
     disp.bind('getPlaylists', function () {
       mpdc.api.playlists.get()
         .then(d => {
-          var mod = d.map(i => { return { name: i.playlist, last_modified: i.last_modified } })
+          const mod = d.map(i => { return { name: i.playlist, last_modified: i.last_modified } })
           disp.send('pushPlaylists', mod)
         })
     })
@@ -433,8 +436,8 @@ async function setup (server) {
   })
 }
 
-var Dispatcher = function (ws) {
-  var callbacks = {}
+const Dispatcher = function (ws) {
+  const callbacks = {}
 
   this.bind = function (eventName, callback) {
     callbacks[eventName] = callbacks[eventName] || []
@@ -443,21 +446,21 @@ var Dispatcher = function (ws) {
   }
 
   this.send = (eventName, eventData) => {
-    var payload = JSON.stringify({ event: eventName, data: eventData })
+    const payload = JSON.stringify({ event: eventName, data: eventData })
     ws.send(payload)
     return this
   }
 
   // dispatch to the right handlers
   ws.on('message', (evt) => {
-    var json = JSON.parse(evt)
+    const json = JSON.parse(evt)
     dispatch(json.event, json.data)
   })
 
-  var dispatch = function (eventName, message) {
-    var chain = callbacks[eventName]
+  const dispatch = function (eventName, message) {
+    const chain = callbacks[eventName]
     if (typeof chain === 'undefined') return
-    for (var i = 0; i < chain.length; i++) {
+    for (let i = 0; i < chain.length; i++) {
       chain[i](message)
     }
   }
