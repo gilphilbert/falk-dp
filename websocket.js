@@ -70,7 +70,7 @@ async function setup (server) {
       status.album = songdetail.album
       status.genre = songdetail.genre
       status.date = songdetail.date
-      status.albumart = '/art/album/' + songdetail.artist + '/' + songdetail.album + '.jpg'
+      status.albumart = '/art/album/' + encodeURIComponent(songdetail.artist) + '/' + encodeURIComponent(songdetail.album) + '.jpg'
 
       if (status.time) {
         status.duration = status.time.total

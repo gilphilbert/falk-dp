@@ -113,7 +113,6 @@ const domBuilder = (function () {
       // run the right code based on the page
       if (_loadPage === 'home') {
         const state = dataTools.getState()
-        console.log(state)
         const frag = cr.div({ class: 'container is-fluid' })
         frag.appendChild(
           cr.div({ class: 'columns is-reversed-touch' },
@@ -487,7 +486,6 @@ const domBuilder = (function () {
       _loadPage = ''
     },
     updateState: function (newState) {
-      console.log(newState)
       const changed = dataTools.changeState(newState)
       const state = dataTools.getState()
 
