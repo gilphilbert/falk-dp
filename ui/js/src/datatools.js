@@ -1,9 +1,9 @@
-var dataTools = (function () {
-  var _state = {}
+const dataTools = (function () {
+  let _state = {}
 
-  var changeState = function (newState) {
+  const changeState = function (newState) {
     // should check to see if ins is an object
-    var changedKeys = Object.keys(newState).filter(key => {
+    const changedKeys = Object.keys(newState).filter(key => {
       return this._state === undefined || !(key in _state) || newState[key] !== _state[key]
     })
     if (changedKeys.length === 0) {
@@ -13,7 +13,7 @@ var dataTools = (function () {
     return changedKeys
   }
 
-  var getQuality = function (samplerate, bitdepth) {
+  const getQuality = function (samplerate, bitdepth) {
     if (_state.samplerate !== undefined && _state.samplerate !== '') {
       if (_state.bitdepth !== undefined && _state.bitdepth !== '') {
         return _state.samplerate.replace(' ', '') + ' ' + _state.bitdepth.replace(' ', '')
@@ -27,12 +27,12 @@ var dataTools = (function () {
     }
   }
 
-  var formatTime = function (seconds) {
-    var s = seconds
+  const formatTime = function (seconds) {
+    let s = seconds
     return (s - (s %= 60)) / 60 + (s > 9 ? ':' : ':0') + s
   }
 
-  var getStatus = function () {
+  const getStatus = function () {
     if ('status' in _state) {
       return _state.status
     } else {
@@ -40,11 +40,11 @@ var dataTools = (function () {
     }
   }
 
-  var getState = function () {
+  const getState = function () {
     return _state
   }
 
-  var getQueuePosition = function () {
+  const getQueuePosition = function () {
     return parseInt(_state.position)
   }
 

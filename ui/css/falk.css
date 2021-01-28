@@ -8489,19 +8489,6 @@ body {
   .select select:-ms-input-placeholder, .textarea:-ms-input-placeholder, .input:-ms-input-placeholder {
     color: #f1f1f1; }
 
-progress.progress {
-  margin-top: 3px;
-  background: rgba(0, 0, 0, 0.1); }
-  progress.progress::-moz-progress-value {
-    background: #4D84C3; }
-  progress.progress::-moz-progress-bar {
-    background: rgba(0, 0, 0, 0.1); }
-  progress.progress::-webkit-progress-value {
-    background: #4D84C3;
-    border-radius: none; }
-  progress.progress::-webkit-progress-bar {
-    background: rgba(0, 0, 0, 0.1); }
-
 .has-no-vpadding {
   padding-top: 0;
   padding-bottom: 0; }
@@ -8672,8 +8659,17 @@ aside.menu {
     margin-top: 25px; }
   #content-container .artist-info {
     padding-bottom: 50px; }
-    #content-container .artist-info figure img {
-      border-radius: 7px; }
+    #content-container .artist-info figure {
+      border-radius: 7px;
+      overflow: hidden; }
+      #content-container .artist-info figure:after {
+        content: '';
+        background-image: linear-gradient(transparent, #2A2A2ADD);
+        height: 40px;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%; }
   @media screen and (max-width: 1023px) {
     #content-container .album-detail p.title {
       margin-bottom: 0; } }
@@ -8906,12 +8902,6 @@ aside.menu {
   #control-bar .playing-controls {
     display: flex;
     align-items: center; }
-  #control-bar .play-progress .column:first-child p {
-    margin-right: 10px; }
-  #control-bar .play-progress .column:last-child p {
-    margin-left: 10px; }
-  #control-bar progress.progress {
-    margin-top: 3px; }
   #control-bar .misc-controls svg {
     margin: 0 5px; }
   #control-bar .progress-topper {
