@@ -122,13 +122,6 @@ function getArt ({ artist, album, type } = {}, res) {
   }
 }
 
-/* THIS STILL NEEDS:
-
-** Error handling (what if requests fail?)
-** No image return handling (return default images)
-** Removal of mbApi sync handling
-
-*/
 async function getArtistArt (artist, imgpath, res, type) {
   const info = await mbApi.searchArtist(artist, 0, 1)
   const mbid = info.artists[0].id
@@ -153,6 +146,18 @@ async function getArtistArt (artist, imgpath, res, type) {
             sharp(imgpath).resize(opts).pipe(res)
           })
         })
+        .catch(err => {
+          if (err) {
+            const artcache = rootdir + '/artcache/'
+            res.sendFile(artcache + 'artist.png', { maxAge: 86400000 }) // refresh this every day, in case a new image is uploaded
+          }
+        })
+    })
+    .catch(err => {
+      if (err) {
+        const artcache = rootdir + '/artcache/'
+        res.sendFile(artcache + 'artist.png', { maxAge: 86400000 }) // refresh this every day, in case a new image is uploaded
+      }
     })
 }
 
