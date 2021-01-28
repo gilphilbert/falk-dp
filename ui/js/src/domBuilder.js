@@ -75,19 +75,31 @@ const domBuilder = (function () {
     }
 
     const queuePos = dataTools.getState().song
-    const els = document.createDocumentFragment()
+    // const els = document.createDocumentFragment()
+    const tbl = cr.table()
     queue.forEach((song) => {
-      els.appendChild(cr.div({ class: 'columns is-mobile is-vcentered' + ((song.pos === queuePos) ? ' is-playing' : ''), 'data-pos': song.pos, 'data-id': song.id },
-        cr.div({ class: 'column is-narrow is-hidden-touch' }, cr.figure({ class: 'image is-32x32' }, cr.img({ src: song.albumart, loading: 'lazy' }))),
-        cr.div({ class: 'column is-narrow is-hidden-desktop' }, uiTools.getSVG(((song.pos === queuePos) ? 'pause' : 'play-circle'))),
-        cr.div({ class: 'column has-no-overflow pointer', on: { click: function () { webSocket.action.play(this.closest('.columns').dataset.pos) } } }, song.title, cr.p({ class: 'is-hidden-desktop' }, song.artist + ' - ' + uiTools.formatTime(song.duration))),
-        cr.div({ class: 'column has-no-overflow is-fixed-size is-hidden-touch' }, cr.a({ href: '/artist/' + song.artist, 'data-navigo': '' }, song.artist)),
-        cr.div({ class: 'column has-no-overflow is-fixed-size is-hidden-touch' }, cr.a({ href: '/album/' + song.artist + '/' + song.album, 'data-navigo': '' }, song.album)),
-        cr.div({ class: 'column is-fixed-size is-hidden-touch' }, uiTools.formatTime(song.duration)),
-        cr.div({ class: 'column is-fixed-size remove is-narrow', on: { click: uiTools.handlers.removeSong } }, cr.span({ class: 'delete' }))
+      tbl.appendChild(cr.tr({ class: ((song.pos === queuePos) ? 'is-playing' : '') },
+        cr.td(cr.figure({ class: 'image is-32x32' }, cr.img({ src: song.albumart, loading: 'lazy' }))),
+        cr.td({ class: 'is-hidden-desktop' }, uiTools.getSVG(((song.pos === queuePos) ? 'pause' : 'play-circle'))),
+        cr.td({ on: { click: function () { webSocket.action.play(this.closest('.columns').dataset.pos) } } }, song.title),
+        cr.td(cr.a({ href: '/artist/' + song.artist, 'data-navigo': '' }, song.artist)),
+        cr.td(cr.a({ href: '/album/' + song.artist + '/' + song.album, 'data-navigo': '' }, song.album)),
+        cr.td(uiTools.formatTime(song.duration)),
+        cr.td({on: { click: uiTools.handlers.removeSong } }, cr.span({ class: 'delete' }))
       ))
     })
-    uiTools.clearNodes(el).appendChild(els)
+    // els.appendChild(cr.div({ class: 'columns is-mobile is-vcentered' + ((song.pos === queuePos) ? ' is-playing' : ''), 'data-pos': song.pos, 'data-id': song.id },
+    //   cr.div({ class: 'column is-narrow is-hidden-touch' }, cr.figure({ class: 'image is-32x32' }, cr.img({ src: song.albumart, loading: 'lazy' }))),
+    //   cr.div({ class: 'column is-narrow is-hidden-desktop' }, uiTools.getSVG(((song.pos === queuePos) ? 'pause' : 'play-circle'))),
+    //   cr.div({ class: 'column has-no-overflow pointer', on: { click: function () { webSocket.action.play(this.closest('.columns').dataset.pos) } } }, song.title, cr.p({ class: 'is-hidden-desktop' }, song.artist + ' - ' + uiTools.formatTime(song.duration))),
+    //   cr.div({ class: 'column has-no-overflow is-fixed-size is-hidden-touch' }, cr.a({ href: '/artist/' + song.artist, 'data-navigo': '' }, song.artist)),
+    //   cr.div({ class: 'column has-no-overflow is-fixed-size is-hidden-touch' }, cr.a({ href: '/album/' + song.artist + '/' + song.album, 'data-navigo': '' }, song.album)),
+    //   cr.div({ class: 'column is-fixed-size is-hidden-touch' }, uiTools.formatTime(song.duration)),
+    //   cr.div({ class: 'column is-fixed-size remove is-narrow', on: { click: uiTools.handlers.removeSong } }, cr.span({ class: 'delete' }))
+    // ))
+    // })
+    // uiTools.clearNodes(el).appendChild(els)
+    uiTools.clearNodes(el).appendChild(tbl)
     router.update()
   }
 

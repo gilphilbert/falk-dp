@@ -18,3 +18,15 @@
     font-weight: normal;
     font-style: normal;
 }
+@font-face {
+    font-family: 'Interstate';
+    src: url('interstate-bold.woff2') format('woff2');
+    font-weight: bold;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Interstate';
+    src: url('interstate-light.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+}

@@ -45,13 +45,6 @@ body
 
   @include until($desktop)
     font-size: 0.8rem
-    //background: $grey-darkest
-    //color: $white
-    //a, .title, .subtitle
-    //  color: $white
-    //.tag.quality
-    //  background: $white
-    //  color: $blue
 
 .has-text-weight-normal
   font-weight: normal
@@ -88,19 +81,6 @@ body
     color: $grey-light
   &:-ms-input-placeholder
     color: $grey-light
-
-progress.progress
-  margin-top: 3px
-  background: $darken
-  &::-moz-progress-value
-    background: $blue
-  &::-moz-progress-bar
-    background: $darken
-  &::-webkit-progress-value
-    background: $blue
-    border-radius: none
-  &::-webkit-progress-bar
-    background: $darken
 
 .has-no-vpadding
   padding-top: 0
@@ -417,17 +397,19 @@ aside.menu
     text-decoration: underline
     &:hover
       color: $blue
-  //.columns
-  //  border-bottom: 1px solid #383838
-  //.columns:last-child
-  //  border-bottom: none
-  .columns:hover
-    background: #222
-  .column.is-fixed-size
-    flex: none
-    width: 13%
-  .is-playing
-    font-weight: normal
+  table
+    width: 100%
+    tr
+      &.is-playing
+        font-weight: bold
+      td
+        vertical-align: middle
+        padding: 10px 0
+        &:first-child
+          width: 32px
+          padding-right: 8px
+        &:last-child
+          width: 20px
   @include until($desktop)
     position: fixed
     top: 100vh
@@ -483,7 +465,7 @@ aside.menu
   //-webkit-box-shadow: 0px -2px 3px 0px rgba(0,0,0,0.15)
   //-moz-box-shadow: 0px -2px 3px 0px rgba(0,0,0,0.15)
   @include until($desktop)
-    //height: 78px
+    height: 78px
     left: 0
     transition: left 250ms ease 0s
   // make all columns full height
@@ -516,9 +498,6 @@ aside.menu
       height: 70px
       width: 70px
       border-radius: 4px
-      //-webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3)
-      //-moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3)
-      //box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3)
     .column:not(:first-child)
       padding-left: 0
     @include until($desktop)
@@ -533,18 +512,29 @@ aside.menu
   .playing-controls
     display: flex
     align-items: center
-  //progress bar
-  .play-progress
-    .column:first-child p
-      margin-right: 10px
-    .column:last-child p
-      margin-left: 10px
-  progress.progress
-    margin-top: 3px
   //random, repeat
   .misc-controls
     svg
       margin: 0 5px
+  .progress-topper
+    background-color: $blue
+    width: 0
+    height: 3px
+    position: absolute
+    top: 0
+    left: 0
+    transition: all 40ms ease
+    &::after
+      content: ''
+      position: absolute
+      right: 0
+      top: -4px
+      height: 11px
+      width: 11px
+      background-color: $grey-darkest
+      border: 3px solid $blue
+      border-radius: 1000px
+    
 body.no-controls
   @include until($desktop)
     #content-container

@@ -1,9 +1,9 @@
 /* global dataTools, webSocket */
 
-var uiTools = (function () {
-  var _title = ''
+const uiTools = (function () {
+  let _title = ''
 
-  var clearNodes = function (bind) {
+  const clearNodes = function (bind) {
     if (typeof bind === 'string') {
       bind = document.querySelector(bind)
     }
@@ -13,23 +13,23 @@ var uiTools = (function () {
     return bind
   }
 
-  var formatTime = function (s) {
+  const formatTime = function (s) {
     s = Math.round(s)
     return (s - (s %= 60)) / 60 + (s > 9 ? ':' : ':0') + s
   }
 
-  var getQuality = function (state) {
-    var quality = 'unknown'
+  const getQuality = function (state) {
+    let quality = 'unknown'
     if (state.sampleRate && state.bits) {
       quality = (state.sampleRate / 1000) + 'kHz' + ' ' + state.bits + 'bit'
     }
     return quality
   }
 
-  var getSVG = function (iconName, cls) {
-    var svgElem = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+  const getSVG = function (iconName, cls) {
+    const svgElem = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
     svgElem.classList.add('feather')
-    var useElem = document.createElementNS('http://www.w3.org/2000/svg', 'use')
+    const useElem = document.createElementNS('http://www.w3.org/2000/svg', 'use')
     useElem.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '/img/feather-sprite.svg#' + iconName)
     svgElem.appendChild(useElem)
     if (cls) {
@@ -38,8 +38,8 @@ var uiTools = (function () {
     return svgElem
   }
 
-  var setPageTitle = function ({ title, state } = {}) {
-    var t = ''
+  const setPageTitle = function ({ title, state } = {}) {
+    let t = ''
     if (title !== undefined) { // if there's a title
       _title = title // save it
       t = title // set it
@@ -63,7 +63,7 @@ var uiTools = (function () {
     document.title = t + ' | FALK'
   }
 
-  var progress = {
+  const progress = {
     _seek: 0,
     _duration: 0,
     _counter: false,
@@ -85,10 +85,16 @@ var uiTools = (function () {
         this._seek = this._seek + 100
       }
       document.querySelector('#control-bar .seek').innerText = formatTime(Math.floor(this._seek / 1000))
-      var p = this._seek / this._duration * 1000
+
+      const topperPos = (this._seek / this._duration) * window.innerWidth
+      if (!isNaN(topperPos) && topperPos !== Infinity) {
+        document.querySelector('.progress-topper').style.width = Math.round(topperPos) + 'px'
+      }
+
+      const p = this._seek / this._duration * 1000
       if (!isNaN(p) && p !== Infinity) {
-        document.querySelector('#control-bar .play-progress progress').value = p
-        var el = document.getElementById('mobile-progress')
+        // document.querySelector('#control-bar .play-progress progress').value = p // old progress bar
+        const el = document.getElementById('mobile-progress')
         if (el !== null) {
           el.value = p
         }
@@ -96,7 +102,7 @@ var uiTools = (function () {
     }
   }
 
-  var _setListeners = function () {
+  const _setListeners = function () {
     // user clicks "clear-queue"
     /*
     document.querySelector('#queue .clear-queue').addEventListener('click', function (e) {
@@ -146,7 +152,7 @@ var uiTools = (function () {
     */
 
     document.querySelector('.playing-controls .play-button').addEventListener('click', function (e) {
-      var state = dataTools.getState().state
+      const state = dataTools.getState().state
 
       // if (this.classList.contains('playing')) {
       if (state === 'play') {
@@ -178,8 +184,8 @@ var uiTools = (function () {
 
     // hide dropdowns when they're clicked out of
     document.querySelector('html').addEventListener('click', function (ev) {
-      var t = ev.target || ev.srcElement
-      var dd = t.closest('.dropdown')
+      const t = ev.target || ev.srcElement
+      const dd = t.closest('.dropdown')
       document.querySelectorAll('.dropdown').forEach(function (el) {
         if (dd === null || dd.id !== el.id) {
           el.classList.remove('is-active')
@@ -197,8 +203,8 @@ var uiTools = (function () {
     })
 
     document.addEventListener('click', function (e) {
-      var cl = e.target.classList
-      if (! cl.contains('burger')) {
+      const cl = e.target.classList
+      if (!cl.contains('burger')) {
         hideMenu()
       }
     })
@@ -213,14 +219,14 @@ var uiTools = (function () {
     })
     document.addEventListener('swiped-up', function (e) {
       e.preventDefault()
-      var ql = document.querySelector('#queue-list')
+      const ql = document.querySelector('#queue-list')
       if (ql != null) {
         ql.classList.add('is-active')
       }
     })
     document.addEventListener('swiped-down', function (e) {
       e.preventDefault()
-      var ql = document.querySelector('#queue-list')
+      const ql = document.querySelector('#queue-list')
       if (ql != null) {
         ql.classList.remove('is-active')
       }
@@ -236,7 +242,7 @@ var uiTools = (function () {
     })
 
     document.addEventListener('keypress', (e) => {
-      if (e.target == document.body || e.target.nodeName == 'A') { // <!-------------------------------------------------------------------------- NEEDS TO CHANGE TO != INPUT (or include menu...)
+      if (e.target === document.body || e.target.nodeName === 'A') { // <!-------------------------------------------------------------------------- NEEDS TO CHANGE TO != INPUT (or include menu...)
         document.getElementById('search-input').focus()
         pageSearch()
       }
@@ -244,15 +250,14 @@ var uiTools = (function () {
     document.getElementById('search-input').addEventListener('focus', () => {
       document.getElementById('search-input').value = ''
     })
-
   }
 
-  var pageSearch = function () {
-    var tiles = document.querySelectorAll('.item-tile')
-    var ss = document.getElementById('search-input').value.toLowerCase()
+  const pageSearch = function () {
+    const tiles = document.querySelectorAll('.item-tile')
+    const ss = document.getElementById('search-input').value.toLowerCase()
     tiles.forEach((t) => {
       if (t.dataset.title.toLowerCase().indexOf(ss) === -1 && t.dataset.subtitle.toLowerCase().indexOf(ss) === -1) {
-        //console.log(t)
+        // console.log(t)
         t.classList.add('is-hidden')
       } else {
         t.classList.remove('is-hidden')
@@ -260,14 +265,14 @@ var uiTools = (function () {
     })
   }
 
-  var hideMenu = function () {
+  const hideMenu = function () {
     document.querySelector('aside.menu').classList.remove('is-active')
   }
-  var showMenu = function () {
+  const showMenu = function () {
     document.querySelector('aside.menu').classList.add('is-active')
   }
 
-  var control = {
+  const control = {
     hide: () => {
       document.querySelector('#control-bar').classList.remove('is-active')
       document.body.classList.add('no-controls')
@@ -278,21 +283,21 @@ var uiTools = (function () {
     }
   }
 
-  var handlers = {
+  const handlers = {
     playAlbum: function (e) {
-      var rows = document.querySelector('table.songs').querySelectorAll('tr')
-      var uris = []
+      const rows = document.querySelector('table.songs').querySelectorAll('tr')
+      const uris = []
       rows.forEach((tr) => {
         uris.push({ uri: tr.dataset.uri })
       })
       webSocket.action.replaceAndPlay(uris)
     },
     tracks: function (e) {
-      var rows = this.closest('tbody').querySelectorAll('tr')
-      var uris = []
-      var qp = 0
-      var uri = this.closest('tr').dataset.uri
-      for (var i = 0; i < rows.length; i++) {
+      const rows = this.closest('tbody').querySelectorAll('tr')
+      const uris = []
+      let qp = 0
+      const uri = this.closest('tr').dataset.uri
+      for (let i = 0; i < rows.length; i++) {
         uris.push({ uri: rows[i].dataset.uri })
         if (rows[i].dataset.uri === uri) {
           qp = i
@@ -304,7 +309,7 @@ var uiTools = (function () {
       this.closest('.dropdown').classList.toggle('is-active')
     },
     removeSong: function (e) {
-      var pos = this.closest('.columns').dataset.pos
+      const pos = this.closest('.columns').dataset.pos
       webSocket.action.removeFromQueue(pos)
     },
     addPlay: function () {
@@ -312,7 +317,7 @@ var uiTools = (function () {
       this.closest('.dropdown').classList.remove('is-active')
     },
     queueSong: function (e) {
-      var uri = [{ uri: this.closest('tr').dataset.uri }]
+      const uri = [{ uri: this.closest('tr').dataset.uri }]
       webSocket.action.enqueue(uri)
       this.closest('.dropdown').classList.remove('is-active')
     },
@@ -321,9 +326,9 @@ var uiTools = (function () {
       this.closest('.dropdown').classList.remove('is-active')
     },
     addShare: function (el) {
-      var box = el.closest('.box')
+      const box = el.closest('.box')
 
-      var vals = {
+      const vals = {
         host: box.querySelector('.address').value,
         path: box.querySelector('.path').value,
         type: box.querySelector('.type').value
@@ -332,7 +337,7 @@ var uiTools = (function () {
     },
     mobileButtons: {
       play: () => {
-        var state = dataTools.getState().state
+        const state = dataTools.getState().state
         if (state === 'play') {
           webSocket.action.pause()
         } else {
@@ -342,13 +347,13 @@ var uiTools = (function () {
     }
   }
 
-  var closeModal = function () {
+  const closeModal = function () {
     document.querySelectorAll('#modal-container .modal').forEach(m => {
       m.classList.remove('is-active')
     })
   }
 
-  var init = function () {
+  const init = function () {
     _setListeners()
   }
 
