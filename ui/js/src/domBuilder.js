@@ -43,7 +43,7 @@ const domBuilder = (function () {
     const filetype = data.file.split('.')[data.file.split('.').length - 1]
     const tr = cr.tr({ 'data-uri': data.file },
       (('track' in data) ? cr.td({ class: 'is-narrow pointer', on: { click: uiTools.handlers.tracks } }, data.track) : null),
-      cr.td({ class: 'pointer', on: { click: uiTools.handlers.tracks } }, data.title),
+      cr.td({ class: 'pointer', on: { click: uiTools.handlers.tracks } }, data.title, cr.span({ class: 'artist' }, data.artist)),
       ((data.duration) ? cr.td(uiTools.formatTime(data.duration)) : null),
       ((filetype) ? cr.td({ class: 'is-hidden-mobile' }, filetype.toUpperCase()) : null),
       ((format) ? cr.td({ class: 'is-hidden-mobile' }, cr.span({ class: 'tag is-rounded' }, format)) : null),
@@ -84,7 +84,7 @@ const domBuilder = (function () {
         cr.div({ class: 'column has-no-overflow is-fixed-size is-hidden-touch' }, cr.a({ href: '/artist/' + song.artist, 'data-navigo': '' }, song.artist)),
         cr.div({ class: 'column has-no-overflow is-fixed-size is-hidden-touch' }, cr.a({ href: '/album/' + song.artist + '/' + song.album, 'data-navigo': '' }, song.album)),
         cr.div({ class: 'column is-fixed-size is-hidden-touch' }, uiTools.formatTime(song.duration)),
-        cr.div({ class: 'column remove is-narrow', on: { click: uiTools.handlers.removeSong } }, cr.span({ class: 'delete' }))
+        cr.div({ class: 'column is-fixed-size remove is-narrow', on: { click: uiTools.handlers.removeSong } }, cr.span({ class: 'delete' }))
       ))
     })
     uiTools.clearNodes(el).appendChild(els)
@@ -174,19 +174,9 @@ const domBuilder = (function () {
         // const duration = uiTools.formatTime(Math.round(data.songs.reduce((total, song) => total + parseFloat(song.duration), 0)))
 
         let format = ''
-        let channels = ''
         // if every song has the same format
         if (data.songs.every(song => song.format.original_value === data.songs[0].format.original_value)) {
           format = data.songs[0].format.sample_rate_short.value + data.songs[0].format.sample_rate_short.unit + ' ' + data.songs[0].format.bits + 'bit'
-          channels = data.songs[0].format.channels
-          switch (channels) {
-            case 2:
-              channels = 'stereo'
-              break
-            case 6:
-              channels = '5.1'
-              break
-          }
         }
 
         // create the main fragment
@@ -208,7 +198,6 @@ const domBuilder = (function () {
               ((format !== '') ? cr.p({ class: 'detail' }, format) : null)
               // cr.div({ class: 'tags' },
               //   ((format !== '') ? cr.span({ class: 'tag is-rounded' }, format) : null) //,
-              //   ((format !== '') ? cr.span({ class: 'tag is-rounded is-capitalized' }, channels) : null)
               // )
             )
           )

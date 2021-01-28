@@ -19,7 +19,7 @@ a
       text-decoration: underline
 
 .title, .subtitle
-  font-weight: 300
+  font-weight: normal
   &.is-6
     font-size: 0.9rem
   @include until($desktop)
@@ -36,22 +36,22 @@ a
     font-size: 0.8rem
 
 body
-  background: $grey-lighter
+  background: $grey-darkest
   background-attachment: fixed
   min-height: 100vh
-  color: $grey-darker
+  color: $white
   font-weight: normal
   font-size: 15px
 
   @include until($desktop)
-    font-size: 12px
-    background: $blue
-    color: $white
-    a, .title, .subtitle
-      color: $white
-    .tag.quality
-      background: $white
-      color: $blue
+    font-size: 0.8rem
+    //background: $grey-darkest
+    //color: $white
+    //a, .title, .subtitle
+    //  color: $white
+    //.tag.quality
+    //  background: $white
+    //  color: $blue
 
 .has-text-weight-normal
   font-weight: normal
@@ -67,9 +67,9 @@ body
   cursor: pointer
 
 .title
-  color: $grey-darker
+  color: $white
 .subtitle
-  color: $grey-darker
+  color: $white
 
 .label
   color: $white
@@ -153,8 +153,6 @@ progress.progress
         padding: 1em .5em
     img
       border-radius: 7px
-      //@include until($desktop)
-      //  background-color: rgba(255,255,255,0.1)
     .title
       margin-top: 8px
       font-weight: normal
@@ -163,8 +161,6 @@ progress.progress
       @include until($desktop)
         font-size: 0.8rem
   &.artistart
-    //img
-    //  border-radius: 
     .title, .subtitle
       text-align: center
 
@@ -183,9 +179,6 @@ figure
 
 //this contains the left hand menu
 aside.menu
-  box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
-  -webkit-box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
-  -moz-box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
   height: 100%
   background: $blue
   position: fixed
@@ -196,18 +189,18 @@ aside.menu
   transition: width 250ms
 
   @include until($desktop)
-    background: $white
     left: -90px
     transition: 250ms
     &.is-active
       transition: 250ms
       left: 0
-    .feather
-      stroke: $blue
 
   &:hover
     @include from($desktop)
       width: 180px
+      box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
+      -webkit-box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
+      -moz-box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
       .detail
         visibility: visible
 
@@ -218,9 +211,6 @@ aside.menu
     svg
       width: 100%
       height: auto
-      path
-        @include until($desktop)
-          fill: $blue
  
   .menu-label, .menu-list a
     color: #ffffff
@@ -343,21 +333,13 @@ aside.menu
 
   .albumart img
     border-radius: 7px
-    //-webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3)
-    //-moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3)
-    //box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3)
-    
+
 
   table.table.songs
     tr
       td:first-child
-        //border-top-left-radius: 4px
-        //border-bottom-left-radius: 4px
         @include until($desktop)
           padding-right: 0.75em
-      td:last-child
-        //border-top-right-radius: 4px
-        //border-bottom-right-radius: 4px
       &:hover
         td
           background: rgba(0, 0, 0, 0.08)
@@ -377,6 +359,10 @@ aside.menu
             stroke: $white
         @include until($desktop)
           padding: 0
+    span.artist
+      display: block
+      font-size: 0.75rem
+      color: $grey-dark
 
 .has-no-overflow
   overflow: hidden
@@ -425,18 +411,18 @@ aside.menu
     background: $darken
 
 #queue-list
-  color: $grey-darker
+  color: $grey-light
   a
-    color: $grey-darker
+    color: $grey-light
     text-decoration: underline
     &:hover
       color: $blue
-  .columns
-    border-bottom: 1px solid #E1E1E1
-  .columns:last-child
-    border-bottom: none
+  //.columns
+  //  border-bottom: 1px solid #383838
+  //.columns:last-child
+  //  border-bottom: none
   .columns:hover
-    background: $grey-light
+    background: #222
   .column.is-fixed-size
     flex: none
     width: 13%
@@ -485,17 +471,19 @@ aside.menu
   height: 100px
   width: 100%
   bottom: 0
-  background: $grey-light
+  background: #383838 //$grey-light
   z-index: 3
   line-height: 1
-  color: $grey-darker
-  .title, .subtitle
-    color: $grey-darker
-  box-shadow: 0px -2px 3px 0px rgba(0, 0, 0, 0.15)
-  -webkit-box-shadow: 0px -2px 3px 0px rgba(0,0,0,0.15)
-  -moz-box-shadow: 0px -2px 3px 0px rgba(0,0,0,0.15)
+  color: $white  //$grey-darker
+  .title
+    color: $white //$grey-darker
+  .subtitle
+    color: $grey-dark
+  //box-shadow: 0px -2px 3px 0px rgba(0, 0, 0, 0.15)
+  //-webkit-box-shadow: 0px -2px 3px 0px rgba(0,0,0,0.15)
+  //-moz-box-shadow: 0px -2px 3px 0px rgba(0,0,0,0.15)
   @include until($desktop)
-    height: 78px
+    //height: 78px
     left: 0
     transition: left 250ms ease 0s
   // make all columns full height
@@ -519,7 +507,7 @@ aside.menu
   .feather
     height: 20px
     width: 20px
-    stroke: $grey-darker
+    stroke: $white //$grey-darker
   // currently playing song detail
   .now-playing
     @include from($desktop)
@@ -528,9 +516,9 @@ aside.menu
       height: 70px
       width: 70px
       border-radius: 4px
-      -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3)
-      -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3)
-      box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3)
+      //-webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3)
+      //-moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3)
+      //box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3)
     .column:not(:first-child)
       padding-left: 0
     @include until($desktop)
@@ -579,7 +567,7 @@ body.no-controls
   right: 20px
   height: auto
   width: auto
-  background: $grey-lighter
+  background: $grey-dark
   border-radius: 4px
   &::before
     content: ''
@@ -607,4 +595,5 @@ body.no-controls
     &:focus
       width: 150px
       transition: width 250ms ease 0s
-      color: $grey
+      color: $grey-darkest
+      outline: none
