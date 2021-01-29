@@ -8475,9 +8475,12 @@ a {
     font-family: 'Interstate', sans-serif; }
 
 figure.is-40x40 {
-  width: 40px;
-  height: 40px; }
-
+  width: 44px;
+  height: 44px; }
+  @media screen and (max-width: 1023px) {
+    figure.is-40x40 {
+      width: 40px;
+      height: 40px; } }
 ::-webkit-scrollbar {
   width: 0px;
   background: transparent; }
@@ -8607,7 +8610,8 @@ figure.is-40x40 {
       padding: 8px 12px;
       border-radius: 1000px;
       background-color: #4D84C3;
-      color: #FFFFFF; } }
+      color: #FFFFFF;
+      font-size: 0.9rem; } }
   @media screen and (max-width: 1023px) {
     #content-container #home-album {
       margin-bottom: 8px; }
@@ -8616,10 +8620,13 @@ figure.is-40x40 {
     #content-container #home-artist {
       margin-bottom: 11px; }
     #content-container #home-quality {
-      padding: 5px 8px;
+      padding: 7px 10px;
       border-radius: 1000px;
-      background-color: #FFFFFF;
-      color: #4D84C3; }
+      background-color: #4D84C3;
+      color: #FFFFFF;
+      font-size: 0.9rem; }
+      #content-container #home-quality.is-grey {
+        background-color: #7a7a7a; }
     #content-container #swipe-up-queue {
       position: absolute;
       padding: 8px 12px;
@@ -8697,8 +8704,11 @@ table.table.songs span.artist {
       vertical-align: middle;
       padding: 8px 0; }
       #queue-list table tr td:first-child {
-        width: 40px;
+        width: 44px;
         padding-right: 8px; }
+        @media screen and (max-width: 1023px) {
+          #queue-list table tr td:first-child {
+            width: 40px; } }
       #queue-list table tr td:last-child {
         width: 20px; }
   #queue-list span {
@@ -8728,7 +8738,7 @@ table.table.songs span.artist {
       #queue-list .is-playing figure:after {
         content: '';
         position: absolute;
-        top: 10px;
+        top: 14px;
         left: 14px;
         width: 0;
         height: 0;

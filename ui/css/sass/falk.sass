@@ -69,8 +69,12 @@ a
     font-family: 'Interstate', sans-serif
 
 figure.is-40x40
-  width: 40px
-  height: 40px
+  width: 44px
+  height: 44px
+  @include until($desktop)
+    width: 40px
+    height: 40px
+
 
 // hide the scrollbar (we need to add our own though...)
 ::-webkit-scrollbar
@@ -211,6 +215,7 @@ figure.is-40x40
       border-radius: 1000px
       background-color: $blue
       color: $white
+      font-size: 0.9rem
   @include until($desktop)
     #home-album
       margin-bottom: 8px
@@ -219,10 +224,13 @@ figure.is-40x40
     #home-artist
       margin-bottom: 11px
     #home-quality
-      padding: 5px 8px
+      padding: 7px 10px
       border-radius: 1000px
-      background-color: $white
-      color: $blue
+      background-color: $blue
+      color: $white
+      font-size: 0.9rem
+      &.is-grey
+        background-color: $grey
     #swipe-up-queue
       position: absolute
       padding: 8px 12px
@@ -300,7 +308,9 @@ table.table.songs
         vertical-align: middle
         padding: 8px 0
         &:first-child
-          width: 40px
+          width: 44px
+          @include until($desktop)
+            width: 40px
           padding-right: 8px
         &:last-child
           width: 20px
@@ -317,9 +327,6 @@ table.table.songs
     color: $grey-light
     padding: 30px 20px 20px 20px
     transition: top 250ms ease 0s
-    
-    //.feather
-    //  stroke: $grey-light
     .is-playing
       .title, .subtitle
         font-weight: bold
@@ -335,7 +342,7 @@ table.table.songs
         &:after
           content: ''
           position: absolute
-          top: 10px
+          top: 14px
           left: 14px
           width: 0
           height: 0

@@ -112,27 +112,29 @@ const domBuilder = (function () {
       // run the right code based on the page
       if (_loadPage === 'home') {
         const state = dataTools.getState()
+        const isLossless = !(parseInt(state.bitrate) <= 320)
+        console.log(isLossless)
         const frag = cr.div({ class: 'container is-fluid' })
         frag.appendChild(
-          cr.div({ class: 'columns is-reversed-touch' },
+          cr.div({ class: 'columns' },
             cr.div({ class: 'column is-10-touch is-offset-1-touch is-3-desktop is-2-fullhd' },
               cr.figure({ id: 'home-albumart', class: 'image albumart' },
                 cr.img({ loading: 'lazy' })
+              ),
+              cr.div({ id: 'mobile-toolbar', class: 'column is-10-touch is-offset-1-touch has-no-vpadding is-hidden-desktop' },
+                cr.span({}, uiTools.getSVG('heart'))
               )
             ),
             cr.div({ class: 'column is-10-desktop' },
               cr.p({ id: 'home-title', class: 'title is-2 has-text-centered-touch has-no-overflow' }, state.title || 'Not playing'),
-              cr.p({ class: 'has-text-centered-touch subtitle is-3 has-no-overflow' }, cr.a({ id: 'home-album', href: '/album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album || '')),
+              // cr.p({ class: 'has-text-centered-touch subtitle is-3 has-no-overflow' }, cr.a({ id: 'home-album', href: '/album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album || '')),
               cr.p({ class: 'has-text-centered-touch subtitle is-3 has-no-overflow' }, cr.a({ id: 'home-artist', href: '/artist/' + state.artist, 'data-navigo': '' }, state.artist || '')),
-              cr.p({ class: 'has-text-centered-touch' }, cr.span({ id: 'home-quality', class: 'is-small has-text-weight-normal' }, uiTools.getQuality(state)))
+              cr.p({ class: 'has-text-centered-touch' }, cr.span({ id: 'home-quality', class: 'is-small' + ((isLossless) ? '' : ' is-grey') }, uiTools.getQuality(state)))
             )
           )
         )
         frag.appendChild(
           cr.div({ class: 'columns is-hidden-desktop' },
-            cr.div({ id: 'mobile-toolbar', class: 'column is-10-touch is-offset-1-touch has-no-vpadding' },
-              cr.span({}, uiTools.getSVG('heart'))
-            ),
             cr.div({ id: 'mobile-controls', class: 'column mobile-controls is-12' },
               cr.span({ on: { click: webSocket.action.toggleRandom } }, uiTools.getSVG('shuffle', 'random is-small' + ((state.random) ? ' is-active' : ''))),
               cr.span({ on: { click: webSocket.action.prev } }, uiTools.getSVG('skip-back')),
@@ -493,7 +495,6 @@ const domBuilder = (function () {
 
       // const mc = document.querySelector('.home .mobile-controls')
       const mc = document.getElementById('mobile-controls')
-      console.log(mc)
 
       // this whole section updates the footer (now playing) banner
       if (changed.includes('albumart')) {
@@ -604,14 +605,6 @@ const domBuilder = (function () {
           el.href = '/artist/' + state.artist
           // set the current song quality
           document.getElementById('home-quality').textContent = uiTools.getQuality(state)
-          // const home = document.querySelector('#content-container .home')
-          // home.querySelector('.title').textContent = state.title
-          // home.querySelector('.artist').textContent = state.artist
-          // home.querySelector('.detail .tag .quality').textContent = uiTools.getQuality(state)
-          // const album = home.querySelector('.album a')
-          // album.textContent = state.album
-          // album.href = '/' + state.artist + '/' + state.album
-          // home.querySelector('.albumart img').src = state.albumart
         }
       }
     },
