@@ -32,9 +32,9 @@ const domBuilder = (function () {
         cr.figure({ class: 'image is-1by1' },
           cr.img({ src: image, loading: 'lazy' })
         ),
-        cr.p({ class: 'title is-5 is-capitalized' }, title)
+        cr.p({ class: 'title is-6 is-capitalized' }, title)
       ),
-      ((subtitle !== undefined) ? cr.a({ href: subtitleHref, 'data-navigo': '' }, cr.p({ class: 'subtitle is-5' }, subtitle)) : null)
+      ((subtitle !== undefined) ? cr.a({ href: subtitleHref, 'data-navigo': '' }, cr.p({ class: 'subtitle is-6 is-capitalized' }, subtitle)) : null)
     )
   }
 
@@ -79,12 +79,11 @@ const domBuilder = (function () {
     const tbl = cr.table()
     queue.forEach((song) => {
       tbl.appendChild(cr.tr({ class: ((song.pos === queuePos) ? 'is-playing' : ''), 'data-pos': song.pos },
-        cr.td(cr.figure({ class: 'image is-32x32' }, cr.img({ src: song.albumart, loading: 'lazy' }))),
-        cr.td({ class: 'is-hidden-desktop' }, uiTools.getSVG(((song.pos === queuePos) ? 'pause' : 'play-circle'))),
-        cr.td({ on: { click: function () { webSocket.action.play(this.closest('tr').dataset.pos) } } }, song.title),
-        cr.td(cr.a({ href: '/artist/' + song.artist, 'data-navigo': '' }, song.artist)),
-        cr.td(cr.a({ href: '/album/' + song.artist + '/' + song.album, 'data-navigo': '' }, song.album)),
-        cr.td(uiTools.formatTime(song.duration)),
+        cr.td(cr.figure({ class: 'image is-40x40' }, cr.img({ src: song.albumart, loading: 'lazy' }))),
+        cr.td({ on: { click: function () { webSocket.action.play(this.closest('tr').dataset.pos) } } },
+          cr.span({ class: 'title is-5' }, song.title),
+          cr.span({ class: 'subtitle is-6' }, song.artist + ' - ' + uiTools.formatTime(song.duration))
+        ),
         cr.td({ on: { click: uiTools.handlers.removeSong } }, cr.span({ class: 'delete' }))
       ))
     })
@@ -116,15 +115,15 @@ const domBuilder = (function () {
         const frag = cr.div({ class: 'container is-fluid' })
         frag.appendChild(
           cr.div({ class: 'columns is-reversed-touch' },
-            cr.div({ class: 'column is-10-touch is-offset-1-touch is-3 is-2-fullhd' },
+            cr.div({ class: 'column is-10-touch is-offset-1-touch is-3-desktop is-2-fullhd' },
               cr.figure({ id: 'home-albumart', class: 'image albumart' },
                 cr.img({ loading: 'lazy' })
               )
             ),
             cr.div({ class: 'column is-10-desktop' },
-              cr.p({ id: 'home-title', class: 'subtitle is-3 has-text-centered-touch has-no-overflow' }, state.title || 'Not playing'),
-              cr.p({ id: 'home-album', class: 'has-text-centered-touch subtitle is-4 has-no-overflow' }, cr.a({ href: '/album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album || '')),
-              cr.p({ id: 'home-artist', class: 'has-text-centered-touch subtitle is-4 has-no-overflow' }, cr.a({ href: '/artist/' + state.artist, 'data-navigo': '' }, state.artist || '')),
+              cr.p({ id: 'home-title', class: 'title is-2 has-text-centered-touch has-no-overflow' }, state.title || 'Not playing'),
+              cr.p({ class: 'has-text-centered-touch subtitle is-3 has-no-overflow' }, cr.a({ id: 'home-album', href: '/album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album || '')),
+              cr.p({ class: 'has-text-centered-touch subtitle is-3 has-no-overflow' }, cr.a({ id: 'home-artist', href: '/artist/' + state.artist, 'data-navigo': '' }, state.artist || '')),
               cr.p({ class: 'has-text-centered-touch' }, cr.span({ id: 'home-quality', class: 'is-small has-text-weight-normal' }, uiTools.getQuality(state)))
             )
           )
@@ -134,15 +133,16 @@ const domBuilder = (function () {
             cr.div({ id: 'mobile-toolbar', class: 'column is-10-touch is-offset-1-touch has-no-vpadding' },
               cr.span({}, uiTools.getSVG('heart'))
             ),
-            cr.div({ class: 'column mobile-controls is-12' },
-              // cr.span({ on: { click: webSocket.action.toggleRandom } }, uiTools.getSVG('shuffle', 'random is-small' + ((state.random) ? ' is-active' : ''))),
+            cr.div({ id: 'mobile-controls', class: 'column mobile-controls is-12' },
+              cr.span({ on: { click: webSocket.action.toggleRandom } }, uiTools.getSVG('shuffle', 'random is-small' + ((state.random) ? ' is-active' : ''))),
               cr.span({ on: { click: webSocket.action.prev } }, uiTools.getSVG('skip-back')),
               cr.button({ class: 'button is-primary is-rounded', on: { click: uiTools.handlers.mobileButtons.play } }, uiTools.getSVG(((state.state !== 'play') ? 'play' : 'pause'))),
-              cr.span({ on: { click: webSocket.action.next } }, uiTools.getSVG('skip-forward'))//,
-              // cr.span({ on: { click: webSocket.action.toggleRepeat } }, uiTools.getSVG('repeat' + ((state.single) ? '-one' : ''), 'repeat is-small' + ((state.repeat) ? ' is-active' : '')))
+              cr.span({ on: { click: webSocket.action.next } }, uiTools.getSVG('skip-forward')),
+              cr.span({ on: { click: webSocket.action.toggleRepeat } }, uiTools.getSVG('repeat' + ((state.single) ? '-one' : ''), 'repeat is-small' + ((state.repeat) ? ' is-active' : '')))
             ),
             cr.div({ class: 'column is-10-touch is-offset-1-touch' },
-              cr.progress({ id: 'mobile-progress', class: 'progress', value: 0, max: 1000 })
+              cr.progress({ id: 'mobile-progress', class: 'progress', value: 0, max: 1000 }),
+              cr.div({ id: 'mobile-progress-bar' }, cr.div())
             )
           )
         )
@@ -160,10 +160,10 @@ const domBuilder = (function () {
 
         frag.appendChild(
           cr.div({ id: 'queue-list' },
-            cr.div({ class: 'container-fluid' },
-              cr.p({ class: 'title is-3 is-hidden-desktop' }, 'Play queue'),
-              cr.div({ id: 'queue-items' })
-            )
+            // cr.div({ class: 'container-fluid' },
+            cr.p({ class: 'title is-3 is-hidden-desktop' }, 'Play queue'),
+            cr.div({ id: 'queue-items' })
+            // )
           )
         )
 
@@ -270,7 +270,7 @@ const domBuilder = (function () {
               cr.figure({ class: 'image artistart' },
                 // cr.img({ src: data.artist.albumart, loading: 'lazy' })
                 cr.img({ src: data.artist.background, loading: 'lazy' }),
-                cr.span(data.artist.title)
+                cr.span({ class: 'title is-1' }, data.artist.title)
               )
             ) // ,
             // cr.div({ class: 'column is-8' },
@@ -281,7 +281,7 @@ const domBuilder = (function () {
         )
 
         frag.appendChild(
-          cr.p({ class: 'subtitle is-4' }, 'Albums')
+          cr.p({ class: 'subtitle is-2' }, 'Albums')
         )
         // create the list of albums (in tile format)
         frag.appendChild(
@@ -491,7 +491,9 @@ const domBuilder = (function () {
 
       const isHome = (document.getElementById('home-albumart') !== null)
 
-      const mc = document.querySelector('.home .mobile-controls')
+      // const mc = document.querySelector('.home .mobile-controls')
+      const mc = document.getElementById('mobile-controls')
+      console.log(mc)
 
       // this whole section updates the footer (now playing) banner
       if (changed.includes('albumart')) {
@@ -524,12 +526,12 @@ const domBuilder = (function () {
         if (state.repeat === true) {
           document.querySelector('#control-bar .misc-controls .repeat').classList.add('is-active')
           if (mc) {
-            document.querySelector('.mobile-controls .repeat').classList.add('is-active')
+            mc.querySelector('.repeat').classList.add('is-active')
           }
         } else {
           document.querySelector('#control-bar .misc-controls .repeat').classList.remove('is-active')
           if (mc) {
-            document.querySelector('.mobile-controls .repeat').classList.remove('is-active')
+            mc.querySelector('.repeat').classList.remove('is-active')
           }
         }
       }
@@ -540,19 +542,19 @@ const domBuilder = (function () {
         }
         document.querySelector('#control-bar .repeat use').setAttribute('xlink:href', '/img/feather-sprite.svg#' + rpt)
         if (mc) {
-          document.querySelector('.mobile-controls .repeat use').setAttribute('xlink:href', '/img/feather-sprite.svg#' + rpt)
+          mc.querySelector('.repeat use').setAttribute('xlink:href', '/img/feather-sprite.svg#' + rpt)
         }
       }
       if (changed.includes('random')) {
         if (state.random === true) {
           document.querySelector('#control-bar .misc-controls .random').classList.add('is-active')
           if (mc) {
-            document.querySelector('.mobile-controls .random').classList.add('is-active')
+            mc.querySelector('.random').classList.add('is-active')
           }
         } else {
           document.querySelector('#control-bar .misc-controls .random').classList.remove('is-active')
           if (mc) {
-            document.querySelector('.mobile-controls .random').classList.remove('is-active')
+            mc.querySelector('.random').classList.remove('is-active')
           }
         }
       }
@@ -567,13 +569,13 @@ const domBuilder = (function () {
         if (state.state === 'play') {
           use.setAttribute('xlink:href', '/img/feather-sprite.svg#pause')
           if (mc) {
-            mc.querySelector('.button use').setAttribute('xlink:href', '/img/feather-sprite.svg#pause')
+            mc.querySelector('button use').setAttribute('xlink:href', '/img/feather-sprite.svg#pause')
           }
           uiTools.progress.start()
         } else {
           use.setAttribute('xlink:href', '/img/feather-sprite.svg#play')
           if (mc) {
-            mc.querySelector('.button use').setAttribute('xlink:href', '/img/feather-sprite.svg#play')
+            mc.querySelector('button use').setAttribute('xlink:href', '/img/feather-sprite.svg#play')
           }
           uiTools.progress.stop()
           uiTools.progress.update()
@@ -590,14 +592,26 @@ const domBuilder = (function () {
         webSocket.get.queue()
         // shortcut to find if we're on the homepage
         if (router.lastRoute().url.match(/\//g || []).length === 2) {
-          const home = document.querySelector('#content-container .home')
-          home.querySelector('.title').textContent = state.title
-          home.querySelector('.artist').textContent = state.artist
-          home.querySelector('.detail .tag .quality').textContent = uiTools.getQuality(state)
-          const album = home.querySelector('.album a')
-          album.textContent = state.album
-          album.href = '/' + state.artist + '/' + state.album
-          home.querySelector('.albumart img').src = state.albumart
+          // set the song title
+          document.getElementById('home-title').textContent = state.title
+          // set the album name
+          let el = document.getElementById('home-album')
+          el.textContent = state.album
+          el.href = '/album/' + state.artist + '/' + state.album
+          // set the artist name
+          el = document.getElementById('home-artist')
+          el.textContent = state.artist
+          el.href = '/artist/' + state.artist
+          // set the current song quality
+          document.getElementById('home-quality').textContent = uiTools.getQuality(state)
+          // const home = document.querySelector('#content-container .home')
+          // home.querySelector('.title').textContent = state.title
+          // home.querySelector('.artist').textContent = state.artist
+          // home.querySelector('.detail .tag .quality').textContent = uiTools.getQuality(state)
+          // const album = home.querySelector('.album a')
+          // album.textContent = state.album
+          // album.href = '/' + state.artist + '/' + state.album
+          // home.querySelector('.albumart img').src = state.albumart
         }
       }
     },

@@ -91,13 +91,10 @@ const uiTools = (function () {
         document.querySelector('.progress-topper').style.width = Math.round(topperPos) + 'px'
       }
 
-      const p = this._seek / this._duration * 1000
-      if (!isNaN(p) && p !== Infinity) {
-        // document.querySelector('#control-bar .play-progress progress').value = p // old progress bar
-        const el = document.getElementById('mobile-progress')
-        if (el !== null) {
-          el.value = p
-        }
+      const mobileCont = document.getElementById('mobile-progress-bar')
+      if (mobileCont !== null) {
+        const mobilePos = (this._seek / this._duration) * mobileCont.offsetWidth
+        mobileCont.querySelector('div').style.width = Math.round(mobilePos) + 'px'
       }
     }
   }

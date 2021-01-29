@@ -1,0 +1,51 @@
+//this contains the left hand menu
+aside.menu
+  height: 100%
+  background: $blue
+  position: fixed
+  top: 0
+  left: 0
+  width: 90px
+  z-index: 2
+  transition: width 250ms
+
+  @include until($desktop)
+    left: -90px
+    transition: 250ms
+    &.is-active
+      transition: 250ms
+      left: 0
+
+  &:hover
+    @include from($desktop)
+      width: 180px
+      box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
+      -webkit-box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
+      -moz-box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
+      .detail
+        visibility: visible
+
+  .image.menu-brand
+    width: 55px
+    height: auto
+    margin: 40px auto
+    svg
+      width: 100%
+      height: auto
+ 
+  .menu-label, .menu-list a
+    color: #ffffff
+    letter-spacing: inherit
+    text-transform: none
+    
+  .menu-list a
+    display: inline-block
+    width: 100%
+    padding: .6em 0
+    &:hover
+      background: rgba(255,255,255,0.2)
+      text-decoration: none
+
+  .detail
+    margin-top: 5px
+    visibility: hidden

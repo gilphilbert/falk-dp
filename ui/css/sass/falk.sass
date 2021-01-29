@@ -1,14 +1,27 @@
 @import url('https://fonts.googleapis.com/css2?family=Lexend+Deca&display=swap');
 
 html
-    overflow: scroll
-    overflow-x: hidden
+  overflow: scroll
+  overflow-x: hidden
+  font-size: 15px
+  font-weight: normal
+  color: $white
+  background: $grey-darkest
+  @include until($desktop)
+    font-size: 13px
 
-::-webkit-scrollbar
-    width: 0px
-    background: transparent
+body
+  background-attachment: fixed
+  min-height: 100vh
+  &.no-controls
+    @include until($desktop)
+      #content-container
+        padding-bottom: 10px
+      #control-bar
+        left: 100vw
+        transition: left 250ms ease 0s
 
-h1, h2, h3, h4, h5, h6, p.title, p.subtitle
+h1, h2, h3, h4, h5, h6, .title, .subtitle
   font-family: 'Lexend Deca', sans-serif
 
 a
@@ -18,51 +31,64 @@ a
     p
       text-decoration: underline
 
-.title, .subtitle
-  font-weight: normal
-  &.is-6
-    font-size: 0.9rem
-  @include until($desktop)
-    &.is-3
-      font-size: 1.7em
-    &.is-4
-      font-size: 1.4em
-    &.is-5
-      font-size: 1.25em
 .title
   font-weight: normal
+  color: $white
+  &.is-1
+    font-size: 1.5rem
+  &.is-2
+    font-size: 1.4rem
+  &.is-3
+    font-size: 1.3rem
+  &.is-4
+    font-size: 1.2rem
+    font-family: 'Interstate', sans-serif
+  &.is-5
+    font-size: 1.1rem
+    font-family: 'Interstate', sans-serif
+  &.is-6
+    font-size: 1rem
+    font-family: 'Interstate', sans-serif
 .subtitle
+  font-weight: normal
+  color: $grey-light
+  &.is-1
+    font-size: 1.4rem
+  &.is-2
+    font-size: 1.3rem
+  &.is-3
+    font-size: 1.2rem
+  &.is-4
+    font-size: 1.1rem
+    font-family: 'Interstate', sans-serif
+  &.is-5
+    font-size: 1rem
+    font-family: 'Interstate', sans-serif
   &.is-6
     font-size: 0.8rem
+    font-family: 'Interstate', sans-serif
 
-body
-  background: $grey-darkest
-  background-attachment: fixed
-  min-height: 100vh
-  color: $white
-  font-weight: normal
-  font-size: 15px
+figure.is-40x40
+  width: 40px
+  height: 40px
 
-  @include until($desktop)
-    font-size: 0.8rem
+// hide the scrollbar (we need to add our own though...)
+::-webkit-scrollbar
+    width: 0px
+    background: transparent
 
-.has-text-weight-normal
-  font-weight: normal
-
-.tag
+// add radius to tags
+.tag:not(body)
   font-weight: normal
   border-radius: 1000px
+  background-color: $blue
+  color: $white
 
 .container
   position: inherit
 
 .pointer
   cursor: pointer
-
-.title
-  color: $white
-.subtitle
-  color: $white
 
 .label
   color: $white
@@ -103,13 +129,15 @@ body
   .select select option
     color: $blue
 
-.tag:not(body)
-  background-color: $blue
-  &.is-24
-    background-color: $grey-dark
+.has-no-overflow
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap
+.has-no-overflow-touch
   @include until($desktop)
-    background-color: $white
-    color: $blue
+    overflow: hidden
+    text-overflow: ellipsis
+    white-space: nowrap
 
 .feather
   width: 24px
@@ -124,121 +152,6 @@ body
   &.is-small
     height: 20px
     width: 20px
-
-.columns
-  &.albumart, &.artistart
-    .column
-      padding: 35px
-      @include until($desktop)
-        padding: 1em .5em
-    img
-      border-radius: 7px
-    .title
-      margin-top: 8px
-      font-weight: normal
-    .title, .subtitle
-      font-size: 1.1rem
-      @include until($desktop)
-        font-size: 0.8rem
-  &.artistart
-    .title, .subtitle
-      text-align: center
-
-figure
-  &.artistart
-    span
-      position: absolute
-      bottom: 0
-      display: block
-      width: 100%
-      text-align: center
-      z-index: 2
-      font-family: 'Lexend Deca', sans-serif
-      font-size: 1.3rem
-
-
-//this contains the left hand menu
-aside.menu
-  height: 100%
-  background: $blue
-  position: fixed
-  top: 0
-  left: 0
-  width: 90px
-  z-index: 2
-  transition: width 250ms
-
-  @include until($desktop)
-    left: -90px
-    transition: 250ms
-    &.is-active
-      transition: 250ms
-      left: 0
-
-  &:hover
-    @include from($desktop)
-      width: 180px
-      box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
-      -webkit-box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
-      -moz-box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
-      .detail
-        visibility: visible
-
-  .image.menu-brand
-    width: 55px
-    height: auto
-    margin: 40px auto
-    svg
-      width: 100%
-      height: auto
- 
-  .menu-label, .menu-list a
-    color: #ffffff
-    font-size: 110%
-    letter-spacing: inherit
-    text-transform: none
-    
-  .menu-list a
-    display: inline-block
-    width: 100%
-    padding: .6em 0
-    &:hover
-      background: rgba(255,255,255,0.2)
-      text-decoration: none
-
-  .detail
-    margin-top: 5px
-    visibility: hidden
-
-.navbar
-  z-index: 1
-  background-color: transparent
-  transition: background-color 0.25s ease
-  .navbar-menu
-    display: block
-    opacity: 0
-    position: absolute
-    left: 0
-    right: 0
-    transform: translateY(-50%)
-    transition: all .4s ease-in-out
-    pointer-events: none
-  &.is-active
-    background-color: #221F1F
-    .navbar-menu
-      opacity: 1
-      transform: none
-      pointer-events: auto
-  display: none
-  @include until($desktop)
-    display: block
-  .navbar-burger
-    color: #ffffff
-    width: 5rem
-  .navbar-menu
-    background-color: #221F1F
-    .navbar-item, .navbar-link
-      color: $white
 
 .dropdown-content
   background-color: #696363
@@ -298,8 +211,6 @@ aside.menu
       border-radius: 1000px
       background-color: $blue
       color: $white
-      font-size: 14px
-      font-weight: 300
   @include until($desktop)
     #home-album
       margin-bottom: 8px
@@ -312,7 +223,6 @@ aside.menu
       border-radius: 1000px
       background-color: $white
       color: $blue
-      font-weight: normal
     #swipe-up-queue
       position: absolute
       padding: 8px 12px
@@ -322,81 +232,57 @@ aside.menu
   .albumart img
     border-radius: 7px
 
-
-  table.table.songs
-    tr
-      td:first-child
-        @include until($desktop)
-          padding-right: 0.75em
-      &:hover
-        td
-          background: rgba(0, 0, 0, 0.08)
-    td
-      vertical-align: middle
+table.table.songs
+  tr
+    td:first-child
       @include until($desktop)
-        color: $white
-        padding-left: 0
-        padding-right: 0
-      .dropdown button
-        vertical-align: middle
-        border: none
-        background: none
-        svg
-          stroke: $grey-dark
-          @include until($desktop)
-            stroke: $white
+        padding-right: 0.75em
+    &:hover
+      td
+        background: rgba(0, 0, 0, 0.08)
+  td
+    vertical-align: middle
+    @include until($desktop)
+      color: $white
+      padding-left: 0
+      padding-right: 0
+    .dropdown button
+      vertical-align: middle
+      border: none
+      background: none
+      svg
+        stroke: $grey-dark
         @include until($desktop)
-          padding: 0
-    span.artist
-      display: block
-      font-size: 0.75rem
-      color: $grey-dark
+          stroke: $white
+      @include until($desktop)
+        padding: 0
+  span.artist
+    display: block
+    color: $grey-dark
 
-.has-no-overflow
-  overflow: hidden
-  text-overflow: ellipsis
-  white-space: nowrap
-.has-no-overflow-touch
-  @include until($desktop)
-    overflow: hidden
-    text-overflow: ellipsis
-    white-space: nowrap
-  
+.albumart, .artistart
+  text-align: center
+  .column
+    padding: 35px
+    @include until($desktop)
+      padding: 1em .5em
+  img
+    border-radius: 7px
+  .title
+    margin-top: 8px
+
+.artistart
+  span
+    position: absolute
+    bottom: 0
+    display: block
+    width: 100%
+    text-align: center
+    z-index: 2
+
 #mobile-toolbar
   @media screen and (max-height: 600px)
     display: none
-
-.mobile-controls
-  display: flex
-  align-items: center
-  justify-content: center
-  line-height: 0.8
-  svg.feather
-    margin: 0 25px
-      stroke: $white
-    &.is-small
-      height: 17px
-      width: 17px
-  .button
-    height: 48px
-    min-width: 48px
-    max-width: 48px
-    padding: 0
-    background: $white
-    .feather
-      margin: 0
-      stroke: $blue
-#mobile-progress
-  background: $darken
-  &::-moz-progress-value
-    background: $white
-  &::-moz-progress-bar
-    background: $darken
-  &::-webkit-progress-value
-    background: $white
-    border-radius: none
-  &::-webkit-progress-bar
-    background: $darken
 
 #queue-list
   color: $grey-light
@@ -412,12 +298,14 @@ aside.menu
         font-weight: bold
       td
         vertical-align: middle
-        padding: 10px 0
+        padding: 8px 0
         &:first-child
-          width: 32px
+          width: 40px
           padding-right: 8px
         &:last-child
           width: 20px
+  span
+    display: block
   @include until($desktop)
     position: fixed
     top: 100vh
@@ -425,23 +313,35 @@ aside.menu
     height: 100vh
     width: 100vw
     display: block
-    background: $white
-    color: $grey-darker
+    background: $grey-darkest
+    color: $grey-light
+    padding: 30px 20px 20px 20px
     transition: top 250ms ease 0s
-    .title
-      color: $white
-      background: $blue
-      margin: 0
-      padding: 35px 25px
-    .columns
-      margin: 0
-      padding: 0 10px
-    .feather
-      stroke: $grey-light
+    
+    //.feather
+    //  stroke: $grey-light
     .is-playing
-      background: $grey-lighter
-      .feather
-        stroke: $blue
+      .title, .subtitle
+        font-weight: bold
+      figure
+        &:before
+          content: ''
+          position: absolute
+          top: 0
+          left: 0
+          height: 100%
+          width: 100%
+          background: rgba(0,0,0,0.5)
+        &:after
+          content: ''
+          position: absolute
+          top: 10px
+          left: 14px
+          width: 0
+          height: 0
+          border-top: 9px solid transparent
+          border-bottom: 9px solid transparent
+          border-left: 12px solid $grey-light
     &.is-active
         top: 0
         transition: top 250ms ease 0s
@@ -454,102 +354,6 @@ aside.menu
     &:not(:first-child)
       padding-top: 17px
       margin-top: 17px
-
-// this contains the fixed-bottom play bar
-#control-bar
-  position: fixed
-  height: 100px
-  width: 100%
-  bottom: 0
-  background: #383838 //$grey-light
-  z-index: 3
-  line-height: 1
-  color: $white  //$grey-darker
-  .title
-    color: $white //$grey-darker
-  .subtitle
-    color: $grey-dark
-  //box-shadow: 0px -2px 3px 0px rgba(0, 0, 0, 0.15)
-  //-webkit-box-shadow: 0px -2px 3px 0px rgba(0,0,0,0.15)
-  //-moz-box-shadow: 0px -2px 3px 0px rgba(0,0,0,0.15)
-  @include until($desktop)
-    height: 78px
-    left: 0
-    transition: left 250ms ease 0s
-  // make all columns full height
-  .columns
-    height: 100%
-  //round play button
-  .play-button
-    height: 48px
-    min-width: 48px
-    max-width: 48px
-    background: $blue
-    border-radius: 1000px
-    display: inline-flex
-    align-items: center
-    margin: 0 7px
-    .feather
-      stroke: $white
-    svg
-      margin: 0 auto
-  //icons
-  .feather
-    height: 20px
-    width: 20px
-    stroke: $white //$grey-darker
-  // currently playing song detail
-  .now-playing
-    @include from($desktop)
-      width: 300px
-    figure img
-      height: 70px
-      width: 70px
-      border-radius: 4px
-    .column:not(:first-child)
-      padding-left: 0
-    @include until($desktop)
-      figure img
-        height: 48px
-        width: 48px
-    .title
-      max-height: 37px
-      overflow: hidden
-      text-overflow: ellipsis
-  //prev,play,next
-  .playing-controls
-    display: flex
-    align-items: center
-  //random, repeat
-  .misc-controls
-    svg
-      margin: 0 5px
-  .progress-topper
-    background-color: $blue
-    width: 0
-    height: 3px
-    position: absolute
-    top: 0
-    left: 0
-    transition: all 40ms ease
-    &::after
-      content: ''
-      position: absolute
-      right: 0
-      top: -4px
-      height: 11px
-      width: 11px
-      background-color: $grey-darkest
-      border: 3px solid $blue
-      border-radius: 1000px
-    
-body.no-controls
-  @include until($desktop)
-    #content-container
-      padding-bottom: 10px
-    #control-bar
-      left: 100vw
-      transition: left 250ms ease 0s
 
 #burger
   position: absolute
@@ -565,7 +369,7 @@ body.no-controls
   right: 20px
   height: auto
   width: auto
-  background: $grey-dark
+  background: #191919
   border-radius: 4px
   &::before
     content: ''
@@ -593,5 +397,5 @@ body.no-controls
     &:focus
       width: 150px
       transition: width 250ms ease 0s
-      color: $grey-darkest
+      color: $grey-light
       outline: none

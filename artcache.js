@@ -84,7 +84,6 @@ function getArt ({ artist, album, type } = {}, res) {
 
   // now convert the hash to a file name ./artcache/${filename}
   const imgpath = artcache + pre + hash + '.jpg'
-  console.log(imgpath)
 
   // for now, we'll resize everything to 480x480, it should cover most screens. Later, we'll ask the artcache server for the size wanted
   try {

@@ -81,7 +81,6 @@ async function setup (server) {
         status.elapsed = 0
       }
       if (status.audio) {
-        console.log('here')
         status.sampleRate = status.audio.sample_rate
         status.bits = status.audio.bits
         status.channels = status.audio.channels
