@@ -279,7 +279,7 @@ button,
 input,
 select,
 textarea {
-  font-family: "Interstate", sans-serif; }
+  font-family: "Lexend Deca", sans-serif; }
 
 code,
 pre {
@@ -822,13 +822,13 @@ a.has-text-danger:hover, a.has-text-danger:focus {
   font-weight: 700 !important; }
 
 .is-family-primary {
-  font-family: "Interstate", sans-serif !important; }
+  font-family: "Lexend Deca", sans-serif !important; }
 
 .is-family-secondary {
-  font-family: "Interstate", sans-serif !important; }
+  font-family: "Lexend Deca", sans-serif !important; }
 
 .is-family-sans-serif {
-  font-family: "Interstate", sans-serif !important; }
+  font-family: "Lexend Deca", sans-serif !important; }
 
 .is-family-monospace {
   font-family: monospace !important; }
@@ -8418,6 +8418,7 @@ html {
     html {
       font-size: 13px; } }
 body {
+  font-family: 'Lexend Deca', sans-serif;
   background-attachment: fixed;
   min-height: 100vh; }
   @media screen and (max-width: 1023px) {
@@ -8426,9 +8427,6 @@ body {
     body.no-controls #control-bar {
       left: 100vw;
       transition: left 250ms ease 0s; } }
-h1, h2, h3, h4, h5, h6, .title, .subtitle {
-  font-family: 'Lexend Deca', sans-serif; }
-
 a {
   text-decoration: none; }
   a:hover {
