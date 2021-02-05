@@ -8446,14 +8446,11 @@ a {
   .title.is-3 {
     font-size: 1.3rem; }
   .title.is-4 {
-    font-size: 1.2rem;
-    font-family: 'Interstate', sans-serif; }
+    font-size: 1.2rem; }
   .title.is-5 {
-    font-size: 1.1rem;
-    font-family: 'Interstate', sans-serif; }
+    font-size: 1.1rem; }
   .title.is-6 {
-    font-size: 1rem;
-    font-family: 'Interstate', sans-serif; }
+    font-size: 1rem; }
 
 .subtitle {
   font-weight: normal;
@@ -8465,14 +8462,11 @@ a {
   .subtitle.is-3 {
     font-size: 1.2rem; }
   .subtitle.is-4 {
-    font-size: 1.1rem;
-    font-family: 'Interstate', sans-serif; }
+    font-size: 1.1rem; }
   .subtitle.is-5 {
-    font-size: 1rem;
-    font-family: 'Interstate', sans-serif; }
+    font-size: 1rem; }
   .subtitle.is-6 {
-    font-size: 0.8rem;
-    font-family: 'Interstate', sans-serif; }
+    font-size: 0.8rem; }
 
 figure.is-40x40 {
   width: 44px;
@@ -8572,6 +8566,10 @@ figure.is-40x40 {
   @media screen and (max-width: 1023px) {
     #content-container {
       padding: 24px 9px 100px 9px; } }
+  #content-container.has-background {
+    padding-top: 235px;
+    background-size: contain;
+    background-repeat: no-repeat; }
   @media screen and (max-width: 1023px) {
     #content-container > .container.is-fluid {
       padding-left: 10px;
@@ -8598,40 +8596,19 @@ figure.is-40x40 {
     #content-container .is-reversed-touch {
       display: flex;
       flex-direction: column-reverse; } }
-  @media screen and (min-width: 1024px) {
-    #content-container #home-album {
-      margin-top: 15px;
-      margin-bottom: 8px; }
-    #content-container #home-title {
-      margin-bottom: 14px; }
-    #content-container #home-artist {
-      margin-bottom: 11px; }
-    #content-container #home-quality {
-      padding: 8px 12px;
-      border-radius: 1000px;
-      background-color: #4D84C3;
-      color: #FFFFFF;
-      font-size: 0.9rem; } }
-  @media screen and (max-width: 1023px) {
-    #content-container #home-album {
-      margin-bottom: 8px; }
-    #content-container #home-title {
-      margin-bottom: 14px; }
-    #content-container #home-artist {
-      margin-bottom: 11px; }
-    #content-container #home-quality {
-      padding: 7px 10px;
-      border-radius: 1000px;
-      background-color: #4D84C3;
-      color: #FFFFFF;
-      font-size: 0.9rem; }
-      #content-container #home-quality.is-grey {
-        background-color: #7a7a7a; }
-    #content-container #swipe-up-queue {
-      position: absolute;
-      padding: 8px 12px;
-      left: calc(50vw - 24px);
-      bottom: 10px; } }
+  #content-container #home-quality {
+    padding: 7px 10px;
+    border-radius: 1000px;
+    background-color: #4D84C3;
+    color: #FFFFFF;
+    font-size: 0.9rem; }
+    #content-container #home-quality.is-grey {
+      background-color: #7a7a7a; }
+  #content-container #swipe-up-queue {
+    position: absolute;
+    padding: 8px 12px;
+    left: calc(50vw - 24px);
+    bottom: 10px; }
   #content-container .albumart img {
     border-radius: 7px; }
 

@@ -42,13 +42,10 @@ a
     font-size: 1.3rem
   &.is-4
     font-size: 1.2rem
-    font-family: 'Interstate', sans-serif
   &.is-5
     font-size: 1.1rem
-    font-family: 'Interstate', sans-serif
   &.is-6
     font-size: 1rem
-    font-family: 'Interstate', sans-serif
 .subtitle
   font-weight: normal
   color: $grey-light
@@ -60,13 +57,10 @@ a
     font-size: 1.2rem
   &.is-4
     font-size: 1.1rem
-    font-family: 'Interstate', sans-serif
   &.is-5
     font-size: 1rem
-    font-family: 'Interstate', sans-serif
   &.is-6
     font-size: 0.8rem
-    font-family: 'Interstate', sans-serif
 
 figure.is-40x40
   width: 44px
@@ -170,6 +164,11 @@ figure.is-40x40
   @include until($desktop)
     padding: 24px 9px 100px 9px
 
+  &.has-background
+    padding-top: 235px
+    background-size: contain
+    background-repeat: no-repeat
+
   >.container.is-fluid
     @include until($desktop)
       padding-left: 10px
@@ -202,40 +201,19 @@ figure.is-40x40
       display: flex
       flex-direction: column-reverse
 
-  @include from($desktop)
-    #home-album
-      margin-top: 15px
-      margin-bottom: 8px
-    #home-title
-      margin-bottom: 14px
-    #home-artist
-      margin-bottom: 11px
-    #home-quality
-      padding: 8px 12px
-      border-radius: 1000px
-      background-color: $blue
-      color: $white
-      font-size: 0.9rem
-  @include until($desktop)
-    #home-album
-      margin-bottom: 8px
-    #home-title
-      margin-bottom: 14px
-    #home-artist
-      margin-bottom: 11px
-    #home-quality
-      padding: 7px 10px
-      border-radius: 1000px
-      background-color: $blue
-      color: $white
-      font-size: 0.9rem
-      &.is-grey
-        background-color: $grey
-    #swipe-up-queue
-      position: absolute
-      padding: 8px 12px
-      left: calc(50vw - 24px)
-      bottom: 10px
+  #home-quality
+    padding: 7px 10px
+    border-radius: 1000px
+    background-color: $blue
+    color: $white
+    font-size: 0.9rem
+    &.is-grey
+      background-color: $grey
+  #swipe-up-queue
+    position: absolute
+    padding: 8px 12px
+    left: calc(50vw - 24px)
+    bottom: 10px
 
   .albumart img
     border-radius: 7px

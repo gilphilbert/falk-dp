@@ -109,11 +109,13 @@ const domBuilder = (function () {
       // clear the main page content
       const main = uiTools.clearNodes('#content-container')
 
+      main.style.backgroundImage = ''
+      main.classList.remove('has-background')
+
       // run the right code based on the page
       if (_loadPage === 'home') {
         const state = dataTools.getState()
         const isLossless = !(parseInt(state.bitrate) <= 320)
-        console.log(isLossless)
         const frag = cr.div({ class: 'container is-fluid' })
         frag.appendChild(
           cr.div({ class: 'columns' },
@@ -121,7 +123,7 @@ const domBuilder = (function () {
               cr.figure({ id: 'home-albumart', class: 'image albumart' },
                 cr.img({ loading: 'lazy' })
               ),
-              cr.div({ id: 'mobile-toolbar', class: 'column is-10-touch is-offset-1-touch has-no-vpadding is-hidden-desktop' },
+              cr.div({ id: 'mobile-toolbar', class: 'is-hidden-desktop' },
                 cr.span({}, uiTools.getSVG('heart'))
               )
             ),
@@ -248,6 +250,8 @@ const domBuilder = (function () {
         // append the main fragment to the page
         main.appendChild(frag)
       } else if (_loadPage === 'artist') {
+        main.style.backgroundImage = `url(${data.artist.background})`
+        main.classList.add('has-background')
         // list of the artist's songs
         // songs = data.navigation.lists[1].items
 
@@ -266,6 +270,7 @@ const domBuilder = (function () {
         // frag.appendChild(breadcrumb([{ data.artist.title: 'Artists', url: 'artists' }, { data.artist.title: data.navigation.info.title, url: null, isActive: true }]))
 
         // create the information section
+        /*
         frag.appendChild(
           cr.div({ class: 'columns artist-info is-mobile' },
             cr.div({ class: 'column is-2-tablet is-2-desktop is-10-touch is-offset-1-touch' },
@@ -274,13 +279,10 @@ const domBuilder = (function () {
                 cr.img({ src: data.artist.background, loading: 'lazy' }),
                 cr.span({ class: 'title is-1' }, data.artist.title)
               )
-            ) // ,
-            // cr.div({ class: 'column is-8' },
-            //   cr.p({ class: 'title' }, data.artist.title) //,
-            //   // cr.p({ class: 'subtitle' }, data.albums.length + ' album' + ((data.albums.length > 1 || data.albums.length === 0) ? 's' : '')) // + ' - ' + songs.length + ' track' + ((songs.length > 1) ? 's' : ''))
-            // )
+            )
           )
         )
+        */
 
         frag.appendChild(
           cr.p({ class: 'subtitle is-2' }, 'Albums')
@@ -520,9 +522,11 @@ const domBuilder = (function () {
           document.getElementById('home-artist').innerText = state.artist
         }
       }
+      /*
       if (changed.includes('album') && isHome) {
         document.getElementById('home-album').innerText = state.album
       }
+      */
       if (changed.includes('repeat')) {
         if (state.repeat === true) {
           document.querySelector('#control-bar .misc-controls .repeat').classList.add('is-active')
