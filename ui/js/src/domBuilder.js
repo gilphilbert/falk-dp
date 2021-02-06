@@ -129,7 +129,7 @@ const domBuilder = (function () {
             ),
             cr.div({ class: 'column is-10-desktop' },
               cr.p({ id: 'home-title', class: 'title is-2 has-text-centered-touch has-no-overflow' }, state.title || 'Not playing'),
-              // cr.p({ class: 'has-text-centered-touch subtitle is-3 has-no-overflow' }, cr.a({ id: 'home-album', href: '/album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album || '')),
+              cr.p({ class: 'has-text-centered-touch subtitle is-3 has-no-overflow is-hidden-touch' }, cr.a({ id: 'home-album', href: '/album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album || '')),
               cr.p({ class: 'has-text-centered-touch subtitle is-3 has-no-overflow' }, cr.a({ id: 'home-artist', href: '/artist/' + state.artist, 'data-navigo': '' }, state.artist || '')),
               cr.p({ class: 'has-text-centered-touch' }, cr.span({ id: 'home-quality', class: 'is-small' + ((isLossless) ? '' : ' is-grey') }, uiTools.getQuality(state)))
             )
@@ -522,11 +522,11 @@ const domBuilder = (function () {
           document.getElementById('home-artist').innerText = state.artist
         }
       }
-      /*
+      
       if (changed.includes('album') && isHome) {
         document.getElementById('home-album').innerText = state.album
       }
-      */
+      
       if (changed.includes('repeat')) {
         if (state.repeat === true) {
           document.querySelector('#control-bar .misc-controls .repeat').classList.add('is-active')
