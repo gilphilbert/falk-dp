@@ -8676,6 +8676,7 @@ table.table.songs span.artist {
     #queue-list table tr.is-playing {
       font-weight: bold; }
     #queue-list table tr td {
+      cursor: pointer;
       vertical-align: middle;
       padding: 8px 0; }
       #queue-list table tr td:first-child {
