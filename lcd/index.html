@@ -6,9 +6,7 @@
 
     <title>FALK LCD Screen</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+Semi+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca&display=swap" rel="stylesheet">
 
     <style>
       /* reset.css */
@@ -65,7 +63,6 @@
         padding: 10px;
         background-color: rgb(255,255,255);
         border-radius: 6px;
-        font-weight: 600;
         display: inline;
       }
 
@@ -99,7 +96,7 @@
       }
 
       body, button, input, select, textarea {
-        font-family: "Rubik", sans-serif;
+        font-family: "Lexend Deca", sans-serif;
         line-height: normal;
 
       }
@@ -125,7 +122,7 @@
           --body-background: white;
         }
         body, button, input, select, textarea {
-          font-family: 'Encode Sans Semi Condensed', sans-serif!important;
+          font-family: 'Lexend Deca', sans-serif!important;
         }
         body:before {
           content: '';
@@ -155,7 +152,6 @@
           top: 22px;
           left: 180px;
           font-size: 22px;
-          font-weight: 600;
           max-width: 285px;
           white-space: nowrap;
           overflow: hidden;
@@ -166,7 +162,6 @@
           top: 56px;
           left: 180px;
           font-size: 16px;
-          font-weight: 600;
           max-width: 285px;
           white-space: nowrap;
           overflow: hidden;
@@ -177,7 +172,6 @@
           top: 86px;
           left: 180px;
           font-size: 16px;
-          font-weight: 400;
           max-width: 285px;
           white-space: nowrap;
           overflow: hidden;
@@ -188,7 +182,6 @@
           top: 123px;
           left: 180px;
           font-size: 12px;
-          font-weight: 600; font-weight: 700;
           padding: 6px 8px 7px 8px;
           background-color: white;
           border-radius: 4px;
@@ -256,7 +249,6 @@
           position: absolute;
           top: 50px;
           left: 503px;
-          font-weight: 700;
           max-width: 875px;
           white-space: nowrap;
           overflow: hidden;
@@ -267,7 +259,6 @@
           position: absolute;
           top: 115px;
           left: 503px;
-          font-weight: 600;
           max-width: 875px;
           white-space: nowrap;
           overflow: hidden;
@@ -361,7 +352,6 @@
           background: rgba(0,0,0,0.1);
         }
         #queue li .title {
-          font-weight: bold;
           display: block;
         }
         #queue-pos {
@@ -403,12 +393,10 @@
         #title {
           top: 90px;
           font-size: 30px;
-          font-weight: 700;
         }
         #artist {
           top: 130px;
           font-size: 23px;
-          font-weight: 500;
         }
         #album {
           top: 160px;
@@ -467,7 +455,6 @@
           top: 446px;
           left: 0;
           text-align: center;
-          font-weight: 500;
         }
       }
 
@@ -565,7 +552,7 @@
       window.clearInterval(Clock)
       State = state;
       if (state.title) {
-        document.querySelector('#albumart').setAttribute('src', window.location.origin + encodeURI(state.albumart))
+        document.querySelector('#albumart').setAttribute('src', window.location.origin + state.albumart)
         document.getElementById('title').innerText = state.title
         document.getElementById('artist').innerText = state.artist
         document.getElementById('album').innerText = state.album + " (" + state.date + ")"
