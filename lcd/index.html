@@ -60,19 +60,18 @@
         border-radius: 4%;
       }
       #quality {
-        padding: 10px;
+        padding: 10px 16px;
         background-color: rgb(255,255,255);
-        border-radius: 6px;
+        border-radius: 1000px;
         display: inline;
       }
-
       progress {
         -webkit-appearance: none;
         appearance: none;
+        overflow: hidden;
       }
       progress::-webkit-progress-bar {
         border-radius: 1000px;
-        overflow: hidden;
       }
       #not-playing {
         position: absolute;
@@ -80,7 +79,7 @@
         left: 0;
         height: 100%;
         width: 100%;
-        background: #255C99;
+        background: #2A2A2A;
         transition: left 0.5s ease;
       }
       #not-playing img {
@@ -184,7 +183,7 @@
           font-size: 12px;
           padding: 6px 8px 7px 8px;
           background-color: white;
-          border-radius: 4px;
+          border-radius: 1000px;
         }
         body.light #quality {
           background-color: rgba(0,0,0,0.6);
@@ -255,7 +254,7 @@
           text-overflow: ellipsis;
         }
         #artist {
-          font-size: 37px;
+          font-size: 35px;
           position: absolute;
           top: 115px;
           left: 503px;
@@ -265,7 +264,7 @@
           text-overflow: ellipsis;
         }
         #album {
-          font-size: 35px;
+          font-size: 30px;
           position: absolute;
           top: 170px;
           left: 503px;
@@ -302,6 +301,9 @@
           top: 366px;
           right: 542px;
         }
+        body.light progress::-webkit-progress-value {
+          background-color: rgba(0,0,0,0.45);
+        }
         progress {
           width: 875px;
           height: 27px;
@@ -323,11 +325,12 @@
         body.light progress::-webkit-progress-value {
           background-color: rgba(0,0,0,0.45);
         }
+
         #queue {
           position: absolute;
           top: 0px;
-          left: 1436;
-          width: 483px;
+          right: 0;
+          width: 480px;
           height: 480px;
           background: rgba(255,255,255,0.12);
         }
@@ -335,15 +338,23 @@
           background: rgba(0,0,0,0.06);
         }
         #queue li {
-          position: relative;
-          padding: 23px 10px 27px 25px;
           font-size: 30px;
+          height: 120px;
+          width: 100%;
+          vertical-align: middle;
+          display: flex;
+          align-items: center;
+          padding: 0 20px;
         }
-        #queue li span {
+        #queue span {
           max-width: 420px;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
+          display: block;
+        }
+        #queue span:last-child {
+          font-size: 20px;
         }
         #queue li.active {
           background: rgba(255,255,255,0.1);
@@ -405,7 +416,7 @@
         #quality {
           top: 205px;
           font-size: 17px;
-          padding: 7px 9px;
+          padding: 7px 12px;
         }
         #progress {
           position: absolute;
@@ -467,10 +478,10 @@
     <p id="album"></p>
     <p id="quality"></p>
     <ul id="queue">
-      <li><span class="title"></span><span class="artist"></span></li>
-      <li><span class="title"></span><span class="artist"></span></li>
-      <li><span class="title"></span><span class="artist"></span></li>
-      <li><span class="title"></span><span class="artist"></span></li>
+      <li><div><span class="title"></span><span class="artist"></span></div></li>
+      <li><div><span class="title"></span><span class="artist"></span></div></li>
+      <li><div><span class="title"></span><span class="artist"></span></div></li>
+      <li><div><span class="title"></span><span class="artist"></span></div></li>
     </ul>
     <p id="queue-pos"></p>
     <p id="elapsed">0:00</p>
@@ -478,9 +489,10 @@
     <svg id="state-pause" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-pause"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
     <p id="duration">0:00</p>
     <progress id="progress" value="0" max="1000"></progress>
+    <div id="progress-container"><div id="progress-bar"></div></div>
     <div id="not-playing">
       <!--<img src="/img/notplaying.png">-->
-      <img src="/img/falk-white.svg">
+      <img src="/img/falk-blue-white.svg">
     </div>
   </body>
   <script src="color-thief.min.js"></script>
@@ -555,8 +567,7 @@
         document.querySelector('#albumart').setAttribute('src', window.location.origin + state.albumart)
         document.getElementById('title').innerText = state.title
         document.getElementById('artist').innerText = state.artist
-        document.getElementById('album').innerText = state.album + " (" + state.date + ")"
-        console.log(state.sampleRate)
+        document.getElementById('album').innerText = state.album
         document.getElementById('quality').innerText = state.sampleRate / 1000 + "kHz " + state.bits + "bit"
         document.getElementById('duration').innerText = formatTime(State.duration)
         State.elapsed = State.elapsed * 1000
