@@ -44,7 +44,6 @@ const webSocket = (function () {
     this.bind('close', (e) => {
       if (e.code !== 1000) {
         setTimeout(function () {
-          console.error("disconnected")
           domBuilder.disconnected()
           conn = new window.WebSocket(url)
           startup()
