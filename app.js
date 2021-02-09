@@ -14,7 +14,7 @@ try {
     const remote = require('./remote')
     remote.setup()
   }
-} catch(e) {
+} catch (e) {
   console.log('No remote support')
 }
 
@@ -22,12 +22,13 @@ try {
 const artcache = require('./artcache')
 app.use('/art', artcache)
 
-// serve the static files (the UI)
-app.use('/dev', express.static('public'))
-
-app.use(express.static('ui'))
-
 app.use('/lcd', express.static('lcd'))
+
+// serve the static files (the UI)
+app.use(express.static('ui'))
+app.get('*', (req, res) => {
+  res.sendFile('ui/index.html', { root: __dirname })
+})
 
 // start the app
 httpServer.listen(port, function listening () {
