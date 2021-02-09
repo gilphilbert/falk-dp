@@ -306,7 +306,7 @@ const uiTools = (function () {
       this.closest('.dropdown').classList.toggle('is-active')
     },
     removeSong: function (e) {
-      const pos = this.closest('.columns').dataset.pos
+      const pos = this.closest('tr').dataset.pos
       webSocket.action.removeFromQueue(pos)
     },
     addPlay: function () {

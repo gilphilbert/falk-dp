@@ -289,7 +289,7 @@ const domBuilder = (function () {
         )
         // create the list of albums (in tile format)
         frag.appendChild(
-          cr.div({ class: 'container is-fluid art-container' },
+          cr.div({ class: 'columns is-fluid art-container' },
             data.albums.map(function (album) {
               return buildTile({
                 title: album.title,
