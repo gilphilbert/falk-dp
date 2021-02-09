@@ -37,13 +37,15 @@ const webSocket = (function () {
       }
 
       conn.onclose = function (e) { dispatch('close', e) }
-      conn.onopen = function () { dispatch('open', null) }
+      conn.onopen = function () { dispatch('open', null); domBuilder.reconnected() }
     }
     startup()
 
     this.bind('close', (e) => {
       if (e.code !== 1000) {
         setTimeout(function () {
+          console.error("disconnected")
+          domBuilder.disconnected()
           conn = new window.WebSocket(url)
           startup()
         }, 3000)

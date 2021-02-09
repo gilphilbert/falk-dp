@@ -817,6 +817,13 @@ const domBuilder = (function () {
     }
   }
 
+  const reconnected = function() {
+    document.getElementById('disconnect-message').classList.remove('show')
+  }
+  const disconnected = function() {
+    document.getElementById('disconnect-message').classList.add('show')
+  }
+
   const mounts = function (data) {
     console.log(data)
     uiTools.closeModal()
@@ -830,6 +837,8 @@ const domBuilder = (function () {
     queueTable: queueTable,
     mounts: mounts,
     database: database,
-    page: page
+    page: page,
+    disconnected: disconnected,
+    reconnected: reconnected
   }
 })()

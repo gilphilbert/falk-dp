@@ -1,0 +1,55 @@
+//
+//
+// By:		Aaron Lumsden
+// Website:	Tuts+
+// URL:		http://goo.gl/vdEJg5
+//
+//
+
+.audio-wave
+	display: flex
+	align-items: flex-end
+	height: 30px
+	width: 55px
+	span
+		display: block
+		bottom: 0px
+		width: 9px
+		height: 5px
+		animation: xLoaderAudioWave 1.5s infinite ease-in-out
+
+		&:nth-child(2)
+			animation-delay: .2s
+		
+		&:nth-child(3)
+			animation-delay: .4s
+		
+		&:nth-child(4)
+			animation-delay: .6s
+		
+		&:nth-child(5)
+			animation-delay: .8s
+
+@keyframes xLoaderAudioWave
+	0%
+		height: 5px
+		transform: translateY(0px)
+		-webkit-transform: translateY(0px)
+		background: #ffffff44
+
+	25%
+		height: 30px
+		transform: translateY(15px)
+		-webkit-transform: translateY(0px)
+		background: #ffffff
+	50% 
+		height: 5px
+		transform: translateY(0px)
+		-webkit-transform: translateY(0px)
+		background: #ffffff44
+
+	100%
+		height: 5px
+		transform: translateY(0px)
+		-webkit-transform: translateY(0px)
+		background: #ffffff44
