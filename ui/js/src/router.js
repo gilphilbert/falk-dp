@@ -1,7 +1,7 @@
 /* global webSocket, domBuilder, dataTools, uiTools */
 
 const router = (function () {
-  const _router = new window.Navigo('/', true, '#')
+  const _router = new window.Navigo('/')
 
   const init = function () {
     _router.updatePageLinks()
@@ -14,7 +14,7 @@ const router = (function () {
         },
         'playlist/:playlist': function (params) {
           domBuilder.page.setLoad('playlist')
-          webSocket.get.playlist(params.playlist)
+          webSocket.get.playlist(params.data.playlist)
           uiTools.control.show()
         },
         artists: function () {
@@ -24,7 +24,7 @@ const router = (function () {
         },
         'artist/:artist': function (params) {
           domBuilder.page.setLoad('artist')
-          webSocket.get.artistAlbums(params.artist)
+          webSocket.get.artistAlbums(params.data.artist)
           uiTools.control.show()
         },
         albums: function () {
@@ -34,7 +34,7 @@ const router = (function () {
         },
         'album/:artist/:album': function (params) {
           domBuilder.page.setLoad('album')
-          webSocket.get.album(params.artist, params.album)
+          webSocket.get.album(params.data.artist, params.data.album)
           uiTools.control.show()
         },
         genres: function () {
@@ -44,7 +44,7 @@ const router = (function () {
         },
         'genre/:genre': function (params) {
           domBuilder.page.setLoad('genre')
-          webSocket.get.genre(params.genre)
+          webSocket.get.genre(params.data.genre)
           uiTools.control.show()
         },
         settings: function () {

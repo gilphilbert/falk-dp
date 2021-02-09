@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Lexend+Deca&display=swap');
 
 html
-  overflow: scroll
-  overflow-x: hidden
+  //overflow: scroll
+  //overflow-x: hidden
   font-size: 15px
   font-weight: normal
   color: $white
@@ -73,12 +73,6 @@ figure.is-40x40
     width: 40px
     height: 40px
 
-
-// hide the scrollbar (we need to add our own though...)
-::-webkit-scrollbar
-    width: 0px
-    background: transparent
-
 // add radius to tags
 .tag:not(body)
   font-weight: normal
@@ -131,15 +125,15 @@ figure.is-40x40
   .select select option
     color: $blue
 
-.has-no-overflow
-  overflow: hidden
-  text-overflow: ellipsis
-  white-space: nowrap
-.has-no-overflow-touch
-  @include until($desktop)
-    overflow: hidden
-    text-overflow: ellipsis
-    white-space: nowrap
+//.has-no-overflow
+//  overflow: hidden
+//  text-overflow: ellipsis
+//  white-space: nowrap
+//.has-no-overflow-touch
+//  @include until($desktop)
+//    overflow: hidden
+//    text-overflow: ellipsis
+//    white-space: nowrap
 
 .feather
   width: 24px

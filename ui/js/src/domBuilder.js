@@ -817,10 +817,10 @@ const domBuilder = (function () {
     }
   }
 
-  const reconnected = function() {
+  const reconnected = function () {
     document.getElementById('disconnect-message').classList.remove('show')
   }
-  const disconnected = function() {
+  const disconnected = function () {
     document.getElementById('disconnect-message').classList.add('show')
   }
 

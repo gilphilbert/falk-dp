@@ -8408,8 +8408,6 @@ label.panel-block {
     margin: 0 .4rem; }
 
 html {
-  overflow: scroll;
-  overflow-x: hidden;
   font-size: 15px;
   font-weight: normal;
   color: #FFFFFF;
@@ -8478,10 +8476,6 @@ figure.is-40x40 {
     figure.is-40x40 {
       width: 40px;
       height: 40px; } }
-::-webkit-scrollbar {
-  width: 0px;
-  background: transparent; }
-
 .tag:not(body) {
   font-weight: normal;
   border-radius: 1000px;
@@ -8531,17 +8525,6 @@ figure.is-40x40 {
     margin-top: 1em; }
   .modal .select select option {
     color: #4D84C3; }
-
-.has-no-overflow {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap; }
-
-@media screen and (max-width: 1023px) {
-  .has-no-overflow-touch {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap; } }
 
 .feather {
   width: 24px;
