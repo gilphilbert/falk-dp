@@ -9,8 +9,14 @@ const socketserver = require('./websocket')
 socketserver.setup(httpServer)
 
 // start the remote service
-const remote = require('./remote')
-remote.setup()
+try {
+  if (require.resolve('node-hid')) {
+    const remote = require('./remote')
+    remote.setup()
+  }
+} catch(e) {
+  console.log('No remote support')
+}
 
 // include the artcache
 const artcache = require('./artcache')

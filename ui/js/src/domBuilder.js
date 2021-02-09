@@ -43,7 +43,10 @@ const domBuilder = (function () {
     const filetype = data.file.split('.')[data.file.split('.').length - 1]
     const tr = cr.tr({ 'data-uri': data.file },
       (('track' in data) ? cr.td({ class: 'is-narrow pointer', on: { click: uiTools.handlers.tracks } }, data.track) : null),
-      cr.td({ class: 'pointer', on: { click: uiTools.handlers.tracks } }, data.title, cr.span({ class: 'artist' }, data.artist)),
+      cr.td({ class: 'pointer', on: { click: uiTools.handlers.tracks } },
+        cr.p({ class: 'is-5' }, data.title),
+        cr.p({ class: 'subtitle is-5' }, data.artist)
+      ),
       ((data.duration) ? cr.td(uiTools.formatTime(data.duration)) : null),
       ((filetype) ? cr.td({ class: 'is-hidden-mobile' }, filetype.toUpperCase()) : null),
       ((format) ? cr.td({ class: 'is-hidden-mobile' }, cr.span({ class: 'tag is-rounded' }, format)) : null),
@@ -491,14 +494,14 @@ const domBuilder = (function () {
       }
 
       if (changed.includes('title')) {
-        document.querySelector('#control-bar .now-playing .title').innerText = state.title
+        document.querySelector('#control-bar-title').innerText = state.title
         if (isHome) {
           document.getElementById('home-title').innerText = state.title
         }
         uiTools.progress.stop()
       }
       if (changed.includes('artist')) {
-        document.querySelector('#control-bar .now-playing .subtitle').innerText = state.artist
+        document.querySelector('#control-bar-artist').innerText = state.artist
         if (isHome) {
           document.getElementById('home-artist').innerText = state.artist
         }
