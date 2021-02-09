@@ -176,7 +176,6 @@ const domBuilder = (function () {
         // set the page title
         title = data.title + ' - ' + data.artist
         // list of songs in this album
-        // const duration = uiTools.formatTime(Math.round(data.songs.reduce((total, song) => total + parseFloat(song.duration), 0)))
 
         let format = ''
         // if every song has the same format
@@ -190,20 +189,18 @@ const domBuilder = (function () {
         // append the details and list of tracks to the fragment
         frag.appendChild(
           cr.div({ class: 'columns is-multiline is-mobile album-detail' },
-            cr.div({ class: 'column is-3-desktop is-4-touch' },
-              cr.figure({ class: 'image is-1by1 albumart' },
+            cr.div({ class: 'column is-3-desktop is-4-touch art' },
+              cr.figure({ class: 'image is-1by1' },
                 cr.img({ src: data.albumart, loading: 'lazy' })
               )
             ),
             cr.div({ class: 'column is-9-desktop is-8-touch' },
-              cr.p({ class: 'is-hidden-mobile has-text-weight-normal' }, 'Album'),
-              cr.p({ class: 'is-3 album-title' }, data.title),
-              cr.p(cr.a({ class: 'artist has-text-weight-normal', 'data-navigo': '', href: '/artist/' + encodeURIComponent(data.artist) }, data.artist)),
-              ((data.songs[0].date) ? cr.p({ class: 'detail' }, data.songs[0].date) : null),
-              ((format !== '') ? cr.p({ class: 'detail' }, format) : null)
-              // cr.div({ class: 'tags' },
-              //   ((format !== '') ? cr.span({ class: 'tag is-rounded' }, format) : null) //,
-              // )
+              cr.p({ class: 'is-5 is-hidden-mobile has-text-weight-normal' }, 'Album'),
+              cr.h1({ class: 'album-title' }, data.title),
+              cr.p(cr.a({ class: 'is-3', 'data-navigo': '', href: '/artist/' + encodeURIComponent(data.artist) }, data.artist)),
+              ((data.songs[0].date) ? cr.p({ class: 'is-4 detail' }, data.songs[0].date) : null),
+              cr.p(cr.a({ class: 'is-4', 'data-navigo': '', href: '/genres/' + encodeURIComponent(data.songs[0].genre) }, data.songs[0].genre)),
+              ((format !== '') ? cr.p({ class: 'is-6 tag is-rounded detail' }, format) : null)
             )
           )
         )
