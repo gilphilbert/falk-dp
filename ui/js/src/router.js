@@ -44,7 +44,7 @@ const router = (function () {
         },
         'genre/:genre': function (params) {
           domBuilder.page.setLoad('genre')
-          webSocket.get.genre(encodeURIComponent(params.genre))
+          webSocket.get.genre(params.genre)
           uiTools.control.show()
         },
         settings: function () {
