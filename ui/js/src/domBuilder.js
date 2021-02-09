@@ -14,7 +14,7 @@ const domBuilder = (function () {
     let pl = document.querySelector('.pageloader')
     if (st === true && pl == null) {
       pl = cr.div({ class: 'pageloader' },
-        cr.p({ class: 'title' }, msg)
+        cr.p(msg)
       )
       document.body.appendChild(pl)
       window.setTimeout(() => { pl.classList.add('is-active') }, 200)
@@ -26,15 +26,15 @@ const domBuilder = (function () {
     }
   }
 
-  const buildTile = function ({ title, image, href, subtitle, subtitleHref } = {}) {
-    return cr.div({ class: 'column is-tile is-2-desktop is-4-tablet is-4-mobile item-tile', 'data-title': title, 'data-subtitle': subtitle },
+  const buildTile = function ({ title, image, href, subtitle, subtitleHref, classes } = {}) {
+    return cr.div({ class: 'column is-tile is-2-desktop is-4-tablet is-4-mobile item-tile art has-text-centered' + ((classes != null) ? ' ' + classes : ''), 'data-title': title, 'data-subtitle': subtitle },
       cr.a({ href: href, 'data-navigo': '' },
         cr.figure({ class: 'image is-1by1' },
           cr.img({ src: image, loading: 'lazy' })
         ),
-        cr.p({ class: 'title is-6 is-capitalized' }, title)
+        cr.p({ class: 'is-5 is-capitalized' }, title)
       ),
-      ((subtitle !== undefined) ? cr.a({ href: subtitleHref, 'data-navigo': '' }, cr.p({ class: 'subtitle is-6 is-capitalized' }, subtitle)) : null)
+      ((subtitle !== undefined) ? cr.a({ href: subtitleHref, 'data-navigo': '' }, cr.p({ class: 'subtitle is-5 is-capitalized' }, subtitle)) : null)
     )
   }
 
@@ -81,8 +81,8 @@ const domBuilder = (function () {
       tbl.appendChild(cr.tr({ class: ((song.pos === queuePos) ? 'is-playing' : ''), 'data-pos': song.pos },
         cr.td(cr.figure({ class: 'image is-40x40' }, cr.img({ src: song.albumart, loading: 'lazy' }))),
         cr.td({ on: { click: function () { webSocket.action.play(this.closest('tr').dataset.pos) } } },
-          cr.span({ class: 'title is-5' }, song.title),
-          cr.span({ class: 'subtitle is-6' }, song.artist + ' - ' + uiTools.formatTime(song.duration))
+          cr.p({ class: 'is-5' }, song.title),
+          cr.p({ class: 'subtitle is-5' }, song.artist + ' - ' + uiTools.formatTime(song.duration))
         ),
         cr.td({ on: { click: uiTools.handlers.removeSong } }, cr.span({ class: 'delete' }))
       ))
@@ -117,18 +117,24 @@ const domBuilder = (function () {
         const state = dataTools.getState()
         const isLossless = !(parseInt(state.bitrate) <= 320)
         const frag = cr.div({ class: 'container is-fluid' })
+
+        let imgSrc = '/img/notplaying.png'
+        if ('albumart' in state) {
+          imgSrc = state.albumart
+        }
+
         frag.appendChild(
           cr.div({ class: 'columns' },
-            cr.div({ class: 'column is-10-touch is-offset-1-touch is-3-desktop is-2-fullhd' },
-              cr.figure({ id: 'home-albumart', class: 'image albumart' },
-                cr.img({ loading: 'lazy' })
+            cr.div({ class: 'column is-10-touch is-offset-1-touch is-3-desktop is-2-fullhd art' },
+              cr.figure({ id: 'home-albumart', class: 'image is-1by1' },
+                cr.img({ loading: 'lazy', src: imgSrc })
               ),
               cr.div({ id: 'mobile-toolbar', class: 'is-hidden-desktop' },
                 cr.span({}, uiTools.getSVG('heart'))
               )
             ),
             cr.div({ class: 'column is-10-desktop' },
-              cr.p({ id: 'home-title', class: 'title is-2 has-text-centered-touch has-no-overflow' }, state.title || 'Not playing'),
+              cr.p({ id: 'home-title', class: 'is-2 has-text-centered-touch has-no-overflow' }, state.title || 'Not playing'),
               cr.p({ class: 'has-text-centered-touch subtitle is-3 has-no-overflow is-hidden-touch' }, cr.a({ id: 'home-album', href: '/album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album || '')),
               cr.p({ class: 'has-text-centered-touch subtitle is-3 has-no-overflow' }, cr.a({ id: 'home-artist', href: '/artist/' + state.artist, 'data-navigo': '' }, state.artist || '')),
               cr.p({ class: 'has-text-centered-touch' }, cr.span({ id: 'home-quality', class: 'is-small' + ((isLossless) ? '' : ' is-grey') }, uiTools.getQuality(state)))
@@ -154,18 +160,12 @@ const domBuilder = (function () {
           cr.div({ class: 'is-hidden-desktop', id: 'swipe-up-queue', on: { click: () => { document.querySelector('#queue-list').classList.add('is-active') } } }, uiTools.getSVG('chevron-up'))
         )
 
-        if ('albumart' in state) {
-          frag.querySelector('.albumart img').src = state.albumart
-        } else {
-          frag.querySelector('.albumart img').src = '/img/notplaying.png'
-        }
-
         webSocket.get.queue()
 
         frag.appendChild(
           cr.div({ id: 'queue-list' },
             // cr.div({ class: 'container-fluid' },
-            cr.p({ class: 'title is-3 is-hidden-desktop' }, 'Play queue'),
+            cr.p({ class: 'is-3 is-hidden-desktop' }, 'Play queue'),
             cr.div({ id: 'queue-items' })
             // )
           )
@@ -197,7 +197,7 @@ const domBuilder = (function () {
             ),
             cr.div({ class: 'column is-9-desktop is-8-touch' },
               cr.p({ class: 'is-hidden-mobile has-text-weight-normal' }, 'Album'),
-              cr.p({ class: 'title is-3 album-title' }, data.title),
+              cr.p({ class: 'is-3 album-title' }, data.title),
               cr.p(cr.a({ class: 'artist has-text-weight-normal', 'data-navigo': '', href: '/artist/' + encodeURIComponent(data.artist) }, data.artist)),
               ((data.songs[0].date) ? cr.p({ class: 'detail' }, data.songs[0].date) : null),
               ((format !== '') ? cr.p({ class: 'detail' }, format) : null)
@@ -230,11 +230,11 @@ const domBuilder = (function () {
 
         // append the library buttons
         // frag.appendChild(breadcrumb([{ title: 'Albums', url: null, isActive: true }]))
-        frag.appendChild(cr.p({ class: 'title is-3 is-capitalized' }, title))
+        frag.appendChild(cr.h1({ class: 'is-capitalized' }, title))
 
         // add the list of albums
         frag.appendChild(
-          cr.div({ class: 'columns is-mobile is-multiline albumart' },
+          cr.div({ class: 'columns is-mobile is-multiline art-container' },
             data.map(function (album) {
               return buildTile({
                 title: album.title,
@@ -277,7 +277,7 @@ const domBuilder = (function () {
               cr.figure({ class: 'image artistart' },
                 // cr.img({ src: data.artist.albumart, loading: 'lazy' })
                 cr.img({ src: data.artist.background, loading: 'lazy' }),
-                cr.span({ class: 'title is-1' }, data.artist.title)
+                cr.span({ class: 'is-1' }, data.artist.title)
               )
             )
           )
@@ -289,7 +289,7 @@ const domBuilder = (function () {
         )
         // create the list of albums (in tile format)
         frag.appendChild(
-          cr.div({ class: 'columns is-mobile is-multiline albumart' },
+          cr.div({ class: 'container is-fluid art-container' },
             data.albums.map(function (album) {
               return buildTile({
                 title: album.title,
@@ -325,16 +325,17 @@ const domBuilder = (function () {
 
         // append the library buttons
         // frag.appendChild(breadcrumb([{ title: 'Artists', url: null }]))
-        frag.appendChild(cr.p({ class: 'title is-3 is-capitalized' }, title))
+        frag.appendChild(cr.h1({ class: 'is-capitalized' }, title))
 
         // add the list of artists (tiles)
         frag.appendChild(
-          cr.div({ class: 'columns is-mobile is-multiline artistart' },
+          cr.div({ class: 'columns is-mobile is-multiline art-container' },
             data.map(function (artist) {
               return buildTile({
                 title: artist.title,
                 image: artist.albumart,
-                href: '/artist/' + encodeURIComponent(artist.title)
+                href: '/artist/' + encodeURIComponent(artist.title),
+                classes: ''
               })
             })
           )
@@ -346,12 +347,11 @@ const domBuilder = (function () {
         // the main document fragment
         const frag = cr.div({ class: 'container is-fluid' })
 
-        // append the library buttons
-        frag.appendChild(cr.p({ class: 'title is-3 is-capitalized' }, title))
+        frag.appendChild(cr.h1({ class: 'is-capitalized' }, title))
 
         // build the list of genres
         frag.appendChild(
-          cr.div({ class: 'columns is-mobile is-multiline albumart' },
+          cr.div({ class: 'columns is-mobile is-multiline art-container' },
             data.map(function (genre) {
               return buildTile({
                 title: genre,
@@ -365,53 +365,37 @@ const domBuilder = (function () {
         // append the content to the page
         main.appendChild(frag)
       } else if (_loadPage === 'genre') {
-        // <------------------------------------------------------------------------------------------------------------
-        // this needs revisiting. Think the uri attribute needs to be used as this is all kinds of weird...
-        // <------------------------------------------------------------------------------------------------------------
-        title = router.lastRoute().params.genre
-        data = data.navigation.lists
-        data.forEach(function (i) {
-          const container = cr.div({ class: 'columns is-mobile is-multiline' })
+        title = data[0].genre
 
-          // let's check for tracks
-          if (i.title.indexOf('Tracks') > 0) {
-            let lnk = 'artist'
-            if (i.title.indexOf('Albums') === 0) {
-              lnk = 'album'
-              container.classList.add('albumart')
-            } else {
-              container.classList.add('artistart')
-            }
-            i.items.forEach((item) => {
-              let tlnk = lnk
-              if (tlnk === 'album') {
-                tlnk = tlnk + '/' + encodeURIComponent(item.artist.trim())
-              }
-              container.appendChild(buildTile({
-                title: item.title,
-                image: webSocket.getURL(item.albumart),
-                href: '/' + tlnk + '/' + encodeURIComponent(item.title)
-              }))
+        // the main document fragment
+        const frag = cr.div({ class: 'container is-fluid' })
+
+        frag.appendChild(cr.h1({ class: 'is-capitalized' }, title))
+
+        // build the list of genres
+        frag.appendChild(
+          cr.div({ class: 'columns is-mobile is-multiline art-container' },
+            data.map(function (album) {
+              return buildTile({
+                title: album.title,
+                subtitle: album.artist,
+                subtitleHref: '/artist/' + encodeURIComponent(album.artist),
+                image: album.albumart,
+                href: '/album/' + encodeURIComponent(album.artist) + '/' + encodeURIComponent(album.title)
+              })
             })
-          } else {
-            const tbody = cr.tbody()
-            i.items.forEach((item, pos) => {
-              tbody.appendChild(buildTrack(item))
-            })
-            container.appendChild(cr.table({ class: 'table is-fullwidth songs songs-hover' }, tbody))
-          }
-          const frag = cr.div({ class: 'container is-fluid' })
-          frag.appendChild(cr.p({ class: 'title' }, i.title))
-          frag.appendChild(container)
-          main.appendChild(frag)
-        })
+          )
+        )
+
+        // append the content to the page
+        main.appendChild(frag)
       } else if (_loadPage === 'playlists') {
         // the main document fragment
         const frag = cr.div({ class: 'container is-fluid' })
 
         // append the library buttons
         // frag.appendChild(breadcrumb([{ title: 'Playlists', url: null }]))
-        frag.appendChild(cr.p({ class: 'title is-3 is-capitalized page-title' }, title))
+        frag.appendChild(cr.p({ class: 'is-3 is-capitalized page-title' }, title))
 
         // create a tile for each
         frag.appendChild(
@@ -457,7 +441,7 @@ const domBuilder = (function () {
             ),
             cr.div({ class: 'column is-8-desktop is-12-mobile' },
               cr.h5({ class: 'is-uppercase has-text-weight-semibold' }, 'Playlist'),
-              cr.h2({ class: 'title album-title has-text-weight-semibold is-capitalized' }, name),
+              cr.h2({ class: 'album-title has-text-weight-semibold is-capitalized' }, name),
               cr.table({ class: 'table is-fullwidth songs songs-hover' },
                 cr.tbody(
                   songs.map((song) => {
@@ -522,11 +506,11 @@ const domBuilder = (function () {
           document.getElementById('home-artist').innerText = state.artist
         }
       }
-      
+
       if (changed.includes('album') && isHome) {
         document.getElementById('home-album').innerText = state.album
       }
-      
+
       if (changed.includes('repeat')) {
         if (state.repeat === true) {
           document.querySelector('#control-bar .misc-controls .repeat').classList.add('is-active')
@@ -617,7 +601,7 @@ const domBuilder = (function () {
       const main = uiTools.clearNodes('#content-container')
 
       const cont = cr.div({ class: 'container is-fluid', id: 'setting-page' },
-        cr.p({ class: 'title is-4' }, 'Database'),
+        cr.p({ class: 'is-4' }, 'Database'),
         cr.div({ class: 'field is-horizontal' },
           cr.div({ class: 'field-label' },
             cr.label({ class: 'label' }, 'Songs')
@@ -655,7 +639,7 @@ const domBuilder = (function () {
             )
           )
         ),
-        cr.p({ class: 'title is-4' }, 'Network shares'),
+        cr.p({ class: 'is-4' }, 'Network shares'),
         cr.div({ class: 'field is-horizontal' },
           cr.div({ class: 'field-label' },
             cr.label({ class: 'label' }, 'Shares')
@@ -698,7 +682,7 @@ const domBuilder = (function () {
           )
         ),
         */
-        cr.p({ class: 'title is-4' }, 'System'),
+        cr.p({ class: 'is-4' }, 'System'),
         cr.div({ class: 'field is-horizontal' },
           cr.div({ class: 'field-label is-normal' },
             cr.label({ class: 'label' }, 'Power')
@@ -755,7 +739,7 @@ const domBuilder = (function () {
         cr.div({ class: 'modal-content' },
           cr.div({ class: 'box' },
             uiTools.getSVG('server', 'title-icon'),
-            cr.p({ class: 'title' }, 'Add share'),
+            cr.p('Add share'),
             cr.div({ class: 'field' },
               cr.div({ class: 'control' },
                 cr.input({ class: 'input address', type: 'text', placeholder: 'Server address' })
@@ -811,7 +795,7 @@ const domBuilder = (function () {
         cr.div({ class: 'modal-background' }),
         cr.div({ class: 'modal-content' },
           cr.div({ class: 'box' },
-            cr.p({ class: 'title' }, 'Select a playlist'),
+            cr.p('Select a playlist'),
             cr.table({ class: 'table is-fullwidth table-hover' }),
             cr.button({ class: 'button is-light is-fullwidth', on: { click: uiTools.closeModal } }, 'Cancel')
           )

@@ -8434,37 +8434,42 @@ a {
     a:hover p {
       text-decoration: underline; }
 
-.title {
+h1, h2, h3, h4, h5, h6 {
+  font-weight: normal !important; }
+
+h1 {
+  font-size: 1.8rem; }
+
+p, a {
   font-weight: normal;
   color: #FFFFFF; }
-  .title.is-1 {
+  p.is-1, a.is-1 {
     font-size: 1.5rem; }
-  .title.is-2 {
+  p.is-2, a.is-2 {
     font-size: 1.4rem; }
-  .title.is-3 {
+  p.is-3, a.is-3 {
     font-size: 1.3rem; }
-  .title.is-4 {
+  p.is-4, a.is-4 {
     font-size: 1.2rem; }
-  .title.is-5 {
+  p.is-5, a.is-5 {
     font-size: 1.1rem; }
-  .title.is-6 {
+  p.is-6, a.is-6 {
     font-size: 1rem; }
-
-.subtitle {
-  font-weight: normal;
-  color: #f1f1f1; }
-  .subtitle.is-1 {
-    font-size: 1.4rem; }
-  .subtitle.is-2 {
-    font-size: 1.3rem; }
-  .subtitle.is-3 {
-    font-size: 1.2rem; }
-  .subtitle.is-4 {
-    font-size: 1.1rem; }
-  .subtitle.is-5 {
-    font-size: 1rem; }
-  .subtitle.is-6 {
-    font-size: 0.8rem; }
+  p.subtitle, a.subtitle {
+    font-weight: normal;
+    color: #9c9c9c; }
+    p.subtitle.is-1, a.subtitle.is-1 {
+      font-size: 1.4rem; }
+    p.subtitle.is-2, a.subtitle.is-2 {
+      font-size: 1.3rem; }
+    p.subtitle.is-3, a.subtitle.is-3 {
+      font-size: 1.2rem; }
+    p.subtitle.is-4, a.subtitle.is-4 {
+      font-size: 1.1rem; }
+    p.subtitle.is-5, a.subtitle.is-5 {
+      font-size: 1rem; }
+    p.subtitle.is-6, a.subtitle.is-6 {
+      font-size: 0.8rem; }
 
 figure.is-40x40 {
   width: 44px;
@@ -8607,8 +8612,6 @@ figure.is-40x40 {
     padding: 8px 12px;
     left: calc(50vw - 24px);
     bottom: 10px; }
-  #content-container .albumart img {
-    border-radius: 7px; }
 
 @media screen and (max-width: 1023px) {
   table.table.songs tr td:first-child {
@@ -8640,25 +8643,21 @@ table.table.songs span.artist {
   display: block;
   color: #9c9c9c; }
 
-.albumart, .artistart {
-  text-align: center; }
-  .albumart .column, .artistart .column {
-    padding: 35px; }
-    @media screen and (max-width: 1023px) {
-      .albumart .column, .artistart .column {
-        padding: 1em .5em; } }
-  .albumart img, .artistart img {
-    border-radius: 7px; }
-  .albumart .title, .artistart .title {
-    margin-top: 8px; }
+.art-container .column {
+  padding: 27px; }
+  @media screen and (max-width: 1023px) {
+    .art-container .column {
+      padding: 1em .5em; } }
+.art figure {
+  background-color: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  border-radius: 7px;
+  width: 100%; }
+  .art figure img {
+    position: absolute; }
 
-.artistart span {
-  position: absolute;
-  bottom: 0;
-  display: block;
-  width: 100%;
-  text-align: center;
-  z-index: 2; }
+.art a:first-child p {
+  margin-top: 6px; }
 
 @media screen and (max-height: 600px) {
   #mobile-toolbar {

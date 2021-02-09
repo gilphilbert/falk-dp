@@ -107,6 +107,9 @@ const webSocket = (function () {
     albums: function () {
       server.send('getAlbums')
     },
+    genre: function (name) {
+      server.send('getGenre', { name: name })
+    },
     genres: function () {
       server.send('getGenres')
     },
@@ -248,6 +251,7 @@ const webSocket = (function () {
   const start = function () {
     server.bind('pushArtists', domBuilder.page.build)
       .bind('pushAlbums', domBuilder.page.build)
+      .bind('pushGenre', domBuilder.page.build)
       .bind('pushGenres', domBuilder.page.build)
       .bind('pushArtistAlbums', domBuilder.page.build)
       .bind('pushAlbum', domBuilder.page.build)

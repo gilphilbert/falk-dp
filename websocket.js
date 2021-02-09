@@ -171,6 +171,26 @@ async function setup (server) {
         })
     })
 
+    disp.bind('getGenre', function (data) {
+      mpdc.api.db.list('album', `(genre == "${data.name}")`, 'albumartist')
+        .then((d) => {
+          const mod = d.reduce((arr, item) => {
+            item.album.forEach((e) => {
+              const flat = {
+                title: e.album,
+                artist: item.albumartist,
+                albumart: '/art/album/' + encodeURIComponent(item.albumartist) + '/' + encodeURIComponent(e.album) + '.jpg',
+                genre: data.name
+              }
+              arr.push(flat)
+            })
+            return arr
+          }, [])
+          mod.sort((a, b) => (a.title > b.title) ? 1 : -1)
+          disp.send('pushGenre', mod)
+        })
+    })
+
     disp.bind('getGenres', function () {
       mpdc.api.db.list('genre')
         .then((d) => {

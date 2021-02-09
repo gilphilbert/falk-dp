@@ -29,7 +29,13 @@ a
     p
       text-decoration: underline
 
-.title
+h1, h2, h3, h4, h5, h6
+  font-weight: normal!important
+
+h1
+  font-size: 1.8rem
+
+p, a
   font-weight: normal
   color: $white
   &.is-1
@@ -44,21 +50,21 @@ a
     font-size: 1.1rem
   &.is-6
     font-size: 1rem
-.subtitle
-  font-weight: normal
-  color: $grey-light
-  &.is-1
-    font-size: 1.4rem
-  &.is-2
-    font-size: 1.3rem
-  &.is-3
-    font-size: 1.2rem
-  &.is-4
-    font-size: 1.1rem
-  &.is-5
-    font-size: 1rem
-  &.is-6
-    font-size: 0.8rem
+  &.subtitle
+    font-weight: normal
+    color: $grey-dark
+    &.is-1
+      font-size: 1.4rem
+    &.is-2
+      font-size: 1.3rem
+    &.is-3
+      font-size: 1.2rem
+    &.is-4
+      font-size: 1.1rem
+    &.is-5
+      font-size: 1rem
+    &.is-6
+      font-size: 0.8rem
 
 figure.is-40x40
   width: 44px
@@ -213,9 +219,6 @@ figure.is-40x40
     left: calc(50vw - 24px)
     bottom: 10px
 
-  .albumart img
-    border-radius: 7px
-
 table.table.songs
   tr
     td:first-child
@@ -244,25 +247,33 @@ table.table.songs
     display: block
     color: $grey-dark
 
-.albumart, .artistart
-  text-align: center
+.art-container
   .column
-    padding: 35px
+    padding: 27px
     @include until($desktop)
       padding: 1em .5em
-  img
-    border-radius: 7px
-  .title
-    margin-top: 8px
 
-.artistart
-  span
-    position: absolute
-    bottom: 0
-    display: block
+.art
+  figure
+    background-color: rgba(255,255,255,0.1)
+    overflow: hidden
+    border-radius: 7px
     width: 100%
-    text-align: center
-    z-index: 2
+    img
+      position: absolute
+  a:first-child
+    p
+      margin-top: 6px
+
+
+//.artistart
+//  span
+//    position: absolute
+//    bottom: 0
+//    display: block
+//    width: 100%
+//    text-align: center
+//    z-index: 2
 
 #mobile-toolbar
   @media screen and (max-height: 600px)
