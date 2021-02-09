@@ -202,6 +202,7 @@ const uiTools = (function () {
     document.addEventListener('click', function (e) {
       const cl = e.target.classList
       if (!cl.contains('burger')) {
+        console.log('hiding menu')
         hideMenu()
       }
     })
