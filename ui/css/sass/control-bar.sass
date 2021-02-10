@@ -63,10 +63,14 @@
   .playing-controls
     display: flex
     align-items: center
+    >div>.feather
+      &:first-child
+        margin-right: 12px
+      &:last-child
+        margin-left: 12px
+    .is-active
+      stroke: $blue
   //random, repeat
-  .misc-controls
-    svg
-      margin: 0 5px
   .progress-topper
     background-color: $blue
     width: 0

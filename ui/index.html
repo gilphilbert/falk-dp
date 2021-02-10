@@ -55,7 +55,7 @@
     <div id="control-bar" class="is-active">
       <div class="progress-topper"></div>
       <div class="columns is-vcentered is-marginless is-mobile">
-        <div class="column is-narrow-desktop">
+        <div class="column">
           <div class="columns is-vcentered now-playing is-mobile">
             <div class="column is-narrow">
               <figure class="image is-70x70">
@@ -68,35 +68,35 @@
             </div>
           </div>
         </div>
-        <div class="column playing-controls is-narrow">
-          <svg class="feather prev"><use xlink:href="/img/feather-sprite.svg#skip-back"></use></svg>
-          <span class="play-button">
-            <svg class="feather"><use xlink:href="/img/feather-sprite.svg#play"></use></svg>
-          </span>
-          <svg class="feather next"><use xlink:href="/img/feather-sprite.svg#skip-forward"></use></svg>
+        <div class="column playing-controls misc-controls is-narrow-touch">
+          <div class="has-margin-auto">
+            <svg class="random feather is-hidden-touch"><use xlink:href="/img/feather-sprite.svg#shuffle"></use></svg>
+            <svg class="feather prev"><use xlink:href="/img/feather-sprite.svg#skip-back"></use></svg>
+            <span class="play-button">
+              <svg class="feather"><use xlink:href="/img/feather-sprite.svg#play"></use></svg>
+            </span>
+            <svg class="feather next"><use xlink:href="/img/feather-sprite.svg#skip-forward"></use></svg>
+            <svg class="repeat feather is-hidden-touch"><use xlink:href="/img/feather-sprite.svg#repeat"></use></svg>
+          </div>
         </div>
-        <div class="column is-hidden-mobile">
-          <div class="columns play-progress is-gapless">
-            <div class="column is-narrow">
-              <span class="seek"></span>/<span class="duration"></span>
-            </div>
+        <div class="column is-4 has-text-right is-hidden-touch">
+          <div class="play-progress is-inline">
+            <span class="seek"></span>/<span class="duration"></span>
+          </div>
+          <div class="is-inline">
           </div>
         </div>
       </div>
-      <div class="column misc-controls is-narrow is-hidden-mobile">
-        <svg class="random feather"><use xlink:href="/img/feather-sprite.svg#shuffle"></use></svg>
-        <svg class="repeat feather"><use xlink:href="/img/feather-sprite.svg#repeat"></use></svg>
+    </div>
+    <div id="queue-list">
+      <div id="queue-header">
+        <!--<p class="is-3">Play Queue</p>-->
+        <h1>Play Queue</h1>
+        <div id="queue-items">
+          <table></table>
+        </div>
       </div>
     </div>
-<div id="queue-list">
-  <div id="queue-header">
-    <!--<p class="is-3">Play Queue</p>-->
-    <h1>Play Queue</h1>
-    <div id="queue-items">
-      <table></table>
-    </div>
-  </div>
-</div>
     <div id="modal-container"></div>
     <div id="burger" class="is-hidden-desktop">
       <svg class="feather burger"><use xlink:href="/img/feather-sprite.svg#burger"></use></svg>

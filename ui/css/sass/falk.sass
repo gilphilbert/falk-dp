@@ -105,6 +105,9 @@ figure.is-40x40
   padding-top: 0
   padding-bottom: 0
 
+.has-margin-auto
+  margin: auto
+
 .modal
   color: $white
   &.is-small
@@ -166,6 +169,7 @@ figure.is-40x40
         background: none!important
       background-size: cover
       background-repeat: no-repeat
+      background-position: center
       .columns
         backdrop-filter: blur(3px)
         
@@ -271,6 +275,8 @@ body.no-controls #queue-list
   display: block
   background: $grey-darkest
   color: $grey-light
+  padding: 20px 30px
+  overflow-y: scroll
   &.is-active
     right: 0
   a
@@ -322,7 +328,6 @@ body.no-controls #queue-list
     left: 0
     height: 100vh
     width: 100vw
-    overflow: scroll
     padding: 30px 20px 20px 20px
     transition: top 250ms ease 0s
     z-index: 1
