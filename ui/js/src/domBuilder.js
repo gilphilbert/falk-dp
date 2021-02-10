@@ -72,14 +72,8 @@ const domBuilder = (function () {
   }
 
   const queueTable = function (queue) {
-    const el = document.querySelector('#queue-items')
-    if (el === null) {
-      return
-    }
-
+    const tbl = uiTools.clearNodes('#queue-items table')
     const queuePos = dataTools.getState().song
-    // const els = document.createDocumentFragment()
-    const tbl = cr.table()
     queue.forEach((song) => {
       tbl.appendChild(cr.tr({ class: ((song.pos === queuePos) ? 'is-playing' : ''), 'data-pos': song.pos },
         cr.td(cr.figure({ class: 'image is-40x40' }, cr.img({ src: song.albumart, loading: 'lazy' }))),
@@ -90,7 +84,7 @@ const domBuilder = (function () {
         cr.td({ on: { click: uiTools.handlers.removeSong } }, cr.span({ class: 'delete' }))
       ))
     })
-    uiTools.clearNodes(el).appendChild(tbl)
+    // uiTools.clearNodes(el).appendChild(tbl)
     router.update()
   }
 
@@ -119,7 +113,7 @@ const domBuilder = (function () {
       if (_loadPage === 'home') {
         const state = dataTools.getState()
         const isLossless = !(parseInt(state.bitrate) <= 320)
-        const frag = cr.div({ class: 'container is-fluid' })
+        const frag = cr.div({ class: 'container max', style: `background-image: url(/art/artist/background/${encodeURIComponent(state.artist)}.jpg)` })
 
         let imgSrc = '/img/notplaying.png'
         if ('albumart' in state) {
@@ -127,8 +121,8 @@ const domBuilder = (function () {
         }
 
         frag.appendChild(
-          cr.div({ class: 'columns' },
-            cr.div({ class: 'column is-10-touch is-offset-1-touch is-3-desktop is-2-fullhd art' },
+          cr.div({ class: 'columns is-multiline' },
+            cr.div({ class: 'column is-10-touch is-offset-1-touch is-4-desktop is-offset-4-desktop art' },
               cr.figure({ id: 'home-albumart', class: 'image is-1by1' },
                 cr.img({ loading: 'lazy', src: imgSrc })
               ),
@@ -136,24 +130,20 @@ const domBuilder = (function () {
                 cr.span({}, uiTools.getSVG('heart'))
               )
             ),
-            cr.div({ class: 'column is-10-desktop' },
-              cr.p({ id: 'home-title', class: 'is-2 has-text-centered-touch has-no-overflow' }, state.title || 'Not playing'),
-              cr.p({ class: 'has-text-centered-touch subtitle is-3 has-no-overflow is-hidden-touch' }, cr.a({ id: 'home-album', href: '/album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album || '')),
-              cr.p({ class: 'has-text-centered-touch subtitle is-3 has-no-overflow' }, cr.a({ id: 'home-artist', href: '/artist/' + state.artist, 'data-navigo': '' }, state.artist || '')),
-              cr.p({ class: 'has-text-centered-touch' }, cr.span({ id: 'home-quality', class: 'is-small' + ((isLossless) ? '' : ' is-grey') }, uiTools.getQuality(state)))
-            )
-          )
-        )
-        frag.appendChild(
-          cr.div({ class: 'columns is-hidden-desktop' },
-            cr.div({ id: 'mobile-controls', class: 'column mobile-controls is-12' },
+            cr.div({ class: 'column is-10-desktop is-offset-1' },
+              cr.p({ id: 'home-title', class: 'is-2 has-text-centered has-no-overflow' }, state.title || 'Not playing'),
+              cr.p({ class: 'has-text-centered subtitle is-3 has-no-overflow is-hidden-touch' }, cr.a({ id: 'home-album', href: '/album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album || '')),
+              cr.p({ class: 'has-text-centered subtitle is-3 has-no-overflow' }, cr.a({ id: 'home-artist', href: '/artist/' + state.artist, 'data-navigo': '' }, state.artist || '')),
+              cr.p({ class: 'has-text-centered' }, cr.span({ id: 'home-quality', class: 'is-small' + ((isLossless) ? '' : ' is-grey') }, uiTools.getQuality(state)))
+            ),
+            cr.div({ id: 'mobile-controls', class: 'column mobile-controls is-12 is-hidden-desktop' },
               cr.span({ on: { click: webSocket.action.toggleRandom } }, uiTools.getSVG('shuffle', 'random is-small' + ((state.random) ? ' is-active' : ''))),
               cr.span({ on: { click: webSocket.action.prev } }, uiTools.getSVG('skip-back')),
               cr.button({ class: 'button is-primary is-rounded', on: { click: uiTools.handlers.mobileButtons.play } }, uiTools.getSVG(((state.state !== 'play') ? 'play' : 'pause'))),
               cr.span({ on: { click: webSocket.action.next } }, uiTools.getSVG('skip-forward')),
               cr.span({ on: { click: webSocket.action.toggleRepeat } }, uiTools.getSVG('repeat' + ((state.single) ? '-one' : ''), 'repeat is-small' + ((state.repeat) ? ' is-active' : '')))
             ),
-            cr.div({ class: 'column is-10-touch is-offset-1-touch' },
+            cr.div({ class: 'column is-10-touch is-offset-1-touch is-hidden-desktop' },
               cr.progress({ id: 'mobile-progress', class: 'progress', value: 0, max: 1000 }),
               cr.div({ id: 'mobile-progress-bar' }, cr.div())
             )
@@ -163,18 +153,24 @@ const domBuilder = (function () {
           cr.div({ class: 'is-hidden-desktop', id: 'swipe-up-queue', on: { click: () => { document.querySelector('#queue-list').classList.add('is-active') } } }, uiTools.getSVG('chevron-up'))
         )
 
-        webSocket.get.queue()
-
+        /*
         frag.appendChild(
           cr.div({ id: 'queue-list' },
-            // cr.div({ class: 'container-fluid' },
-            cr.p({ class: 'is-3 is-hidden-desktop' }, 'Play queue'),
+            cr.div({ class: 'queue-header' },
+              cr.p({ class: 'is-3 is-hidden-desktop' }, 'Play queue')
+            ),
             cr.div({ id: 'queue-items' })
             // )
           )
         )
+        */
 
+        // attach the elements to the main container
         main.appendChild(frag)
+
+        // last of all, call update to correctly set the progress bar position and get the queue
+        webSocket.get.queue()
+        uiTools.progress.update()
       } else if (_loadPage === 'album') {
         // set the page title
         title = data.title + ' - ' + data.artist
@@ -187,7 +183,7 @@ const domBuilder = (function () {
         }
 
         // create the main fragment
-        const frag = cr.div({ class: 'container is-fluid' })
+        const frag = cr.div({ class: 'container' })
 
         // append the details and list of tracks to the fragment
         frag.appendChild(
@@ -226,7 +222,7 @@ const domBuilder = (function () {
         main.appendChild(frag)
       } else if (_loadPage === 'albums') {
         // create main fragment
-        const frag = cr.div({ class: 'container is-fluid' })
+        const frag = cr.div({ class: 'container' })
 
         // append the library buttons
         // frag.appendChild(breadcrumb([{ title: 'Albums', url: null, isActive: true }]))
@@ -265,7 +261,7 @@ const domBuilder = (function () {
         */
 
         // create main fragment
-        const frag = cr.div({ class: 'container is-fluid' })
+        const frag = cr.div({ class: 'container' })
         // append the library buttons
         // frag.appendChild(breadcrumb([{ data.artist.title: 'Artists', url: 'artists' }, { data.artist.title: data.navigation.info.title, url: null, isActive: true }]))
 
@@ -321,7 +317,7 @@ const domBuilder = (function () {
         main.appendChild(frag)
       } else if (_loadPage === 'artists') {
         // the main document fragment
-        const frag = cr.div({ class: 'container is-fluid' })
+        const frag = cr.div({ class: 'container' })
 
         // append the library buttons
         // frag.appendChild(breadcrumb([{ title: 'Artists', url: null }]))
@@ -345,7 +341,7 @@ const domBuilder = (function () {
         main.appendChild(frag)
       } else if (_loadPage === 'genres') {
         // the main document fragment
-        const frag = cr.div({ class: 'container is-fluid' })
+        const frag = cr.div({ class: 'container' })
 
         frag.appendChild(cr.h1({ class: 'is-capitalized' }, title))
 
@@ -368,7 +364,7 @@ const domBuilder = (function () {
         title = data[0].genre
 
         // the main document fragment
-        const frag = cr.div({ class: 'container is-fluid' })
+        const frag = cr.div({ class: 'container' })
 
         frag.appendChild(cr.h1({ class: 'is-capitalized' }, title))
 
@@ -391,7 +387,7 @@ const domBuilder = (function () {
         main.appendChild(frag)
       } else if (_loadPage === 'playlists') {
         // the main document fragment
-        const frag = cr.div({ class: 'container is-fluid' })
+        const frag = cr.div({ class: 'container' })
 
         // append the library buttons
         // frag.appendChild(breadcrumb([{ title: 'Playlists', url: null }]))
@@ -486,7 +482,7 @@ const domBuilder = (function () {
       if (changed.includes('albumart')) {
         document.querySelector('#control-bar .now-playing img').src = state.albumart
         if (isHome) {
-          document.getElementById('home-albumart').src = state.albumart
+          document.querySelector('#home-albumart img').src = state.albumart
         }
       }
       if (!state.albumart) {
@@ -576,10 +572,7 @@ const domBuilder = (function () {
       if (_loadPage === 'home') {
         page.build('home')
         uiTools.setPageTitle()
-      } else if (changed.includes('status') || changed.includes('title')) {
-        // update the queue when state or track changes
-        webSocket.get.queue()
-        // shortcut to find if we're on the homepage
+        /*
         if (router.lastRoute().url.match(/\//g || []).length === 2) {
           // set the song title
           document.getElementById('home-title').textContent = state.title
@@ -594,13 +587,18 @@ const domBuilder = (function () {
           // set the current song quality
           document.getElementById('home-quality').textContent = uiTools.getQuality(state)
         }
+        */
+      } else if (changed.includes('status') || changed.includes('title')) {
+        // update the queue when state or track changes
+        webSocket.get.queue()
+        // shortcut to find if we're on the homepage
       }
     },
     settings: function () {
       // this is our main container
       const main = uiTools.clearNodes('#content-container')
 
-      const cont = cr.div({ class: 'container is-fluid', id: 'setting-page' },
+      const cont = cr.div({ class: 'container', id: 'setting-page' },
         cr.p({ class: 'is-4' }, 'Database'),
         cr.div({ class: 'field is-horizontal' },
           cr.div({ class: 'field-label' },

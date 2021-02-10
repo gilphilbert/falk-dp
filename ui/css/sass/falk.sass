@@ -17,8 +17,10 @@ body
       #content-container
         padding-bottom: 10px
       #control-bar
-        left: 100vw
-        transition: left 250ms ease 0s
+        bottom: -100px
+        transition: bottom 250ms ease-in-out
+        //left: 100vw
+        //transition: left 250ms ease 0s
 
 a
   text-decoration: none
@@ -77,9 +79,6 @@ figure.is-40x40
   border-radius: 1000px
   background-color: $blue
   color: $white
-
-.container
-  position: inherit
 
 .pointer
   cursor: pointer
@@ -146,7 +145,8 @@ figure.is-40x40
 
 // this contains the right hand content pane
 #content-container
-  padding: 2.5em 1.5em calc(100px + .75em) calc(1.5em + 90px)
+  // padding: 2.5em 1.5em calc(100px + .75em) calc(1.5em + 90px)
+  padding-left: 90px
   @include until($desktop)
     padding: 24px 9px 100px 9px
 
@@ -155,13 +155,20 @@ figure.is-40x40
     background-size: contain
     background-repeat: no-repeat
 
-  >.container.is-fluid
-    @include until($desktop)
-      padding-left: 10px
-      padding-right: 10px
-
-  .container:not(:first-child)
-      margin-top: 25px
+  .container
+    max-width: 90vw
+    position: inherit
+    &.max
+      @include from($desktop)
+        margin: 0
+        width: 65vw
+      @include until($desktop)
+        background: none!important
+      background-size: cover
+      background-repeat: no-repeat
+      .columns
+        backdrop-filter: blur(3px)
+        
 
   .artist-info
     padding-bottom: 50px
@@ -251,64 +258,82 @@ table.table.songs
   @media screen and (max-height: 600px)
     display: none
 
+body.no-controls #queue-list
+  right: 0
 #queue-list
   color: $grey-light
+  position: fixed
+  top: 0
+  height: 100vh
+  width: calc(35vw - 90px)
+  right: 100vw
+  transition: left 0.3s ease-in-out
+  display: block
+  background: $grey-darkest
+  color: $grey-light
+  &.is-active
+    right: 0
   a
     color: $grey-light
     text-decoration: underline
     &:hover
       color: $blue
-  table
-    width: 100%
-    tr
-      &.is-playing
-        font-weight: bold
-      td
-        cursor: pointer
-        vertical-align: middle
-        padding: 8px 0
-        &:first-child
-          width: 44px
-          @include until($desktop)
-            width: 40px
-          padding-right: 8px
-        &:last-child
-          width: 20px
+  .is-playing
+    .title, .subtitle
+      font-weight: bold
+    figure
+      &:before
+        content: ''
+        position: absolute
+        top: 0
+        left: 0
+        height: 100%
+        width: 100%
+        background: rgba(0,0,0,0.5)
+      &:after
+        content: ''
+        position: absolute
+        top: 14px
+        left: 14px
+        width: 0
+        height: 0
+        border-top: 9px solid transparent
+        border-bottom: 9px solid transparent
+        border-left: 12px solid $grey-light
   span
     display: block
+  table
+    width: 100%
+  td
+    cursor: pointer
+    vertical-align: middle
+    padding: 8px 0
+    &:first-child
+      width: 44px
+      @include until($desktop)
+        width: 40px
+      padding-right: 8px
+    &:last-child
+      width: 20px
+
   @include until($desktop)
     position: fixed
     top: 100vh
     left: 0
     height: 100vh
     width: 100vw
-    display: block
-    background: $grey-darkest
-    color: $grey-light
+    overflow: scroll
     padding: 30px 20px 20px 20px
     transition: top 250ms ease 0s
-    .is-playing
-      .title, .subtitle
-        font-weight: bold
-      figure
-        &:before
-          content: ''
-          position: absolute
-          top: 0
-          left: 0
-          height: 100%
-          width: 100%
-          background: rgba(0,0,0,0.5)
-        &:after
-          content: ''
-          position: absolute
-          top: 14px
-          left: 14px
-          width: 0
-          height: 0
-          border-top: 9px solid transparent
-          border-bottom: 9px solid transparent
-          border-left: 12px solid $grey-light
+    z-index: 1
+    padding-top: 20px
+    .queue-header
+      position: absolute
+      left: 0
+      top: 0
+      width: 100%
+      background: $grey-darker
+      padding: 16px
     &.is-active
         top: 0
         transition: top 250ms ease 0s
@@ -325,7 +350,7 @@ table.table.songs
 #burger
   position: absolute
   top: 4px
-  right: 8px
+  left: 8px
   .feather
     height: 32px
     width: 32px

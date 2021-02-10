@@ -8423,8 +8423,8 @@ body {
     body.no-controls #content-container {
       padding-bottom: 10px; }
     body.no-controls #control-bar {
-      left: 100vw;
-      transition: left 250ms ease 0s; } }
+      bottom: -100px;
+      transition: bottom 250ms ease-in-out; } }
 a {
   text-decoration: none; }
   a:hover {
@@ -8481,9 +8481,6 @@ figure.is-40x40 {
   border-radius: 1000px;
   background-color: #4D84C3;
   color: #FFFFFF; }
-
-.container {
-  position: inherit; }
 
 .pointer {
   cursor: pointer; }
@@ -8548,7 +8545,7 @@ figure.is-40x40 {
       background-color: #ffffff28; }
 
 #content-container {
-  padding: 2.5em 1.5em calc(100px + .75em) calc(1.5em + 90px); }
+  padding-left: 90px; }
   @media screen and (max-width: 1023px) {
     #content-container {
       padding: 24px 9px 100px 9px; } }
@@ -8556,12 +8553,21 @@ figure.is-40x40 {
     padding-top: 235px;
     background-size: contain;
     background-repeat: no-repeat; }
-  @media screen and (max-width: 1023px) {
-    #content-container > .container.is-fluid {
-      padding-left: 10px;
-      padding-right: 10px; } }
-  #content-container .container:not(:first-child) {
-    margin-top: 25px; }
+  #content-container .container {
+    max-width: 90vw;
+    position: inherit; }
+    #content-container .container.max {
+      background-size: cover;
+      background-repeat: no-repeat; }
+      @media screen and (min-width: 1024px) {
+        #content-container .container.max {
+          margin: 0;
+          width: 65vw; } }
+      @media screen and (max-width: 1023px) {
+        #content-container .container.max {
+          background: none !important; } }
+      #content-container .container.max .columns {
+        backdrop-filter: blur(3px); }
   #content-container .artist-info {
     padding-bottom: 50px; }
     #content-container .artist-info figure {
@@ -8646,31 +8652,63 @@ table.table.songs span.artist {
   #mobile-toolbar {
     display: none; } }
 
+body.no-controls #queue-list {
+  right: 0; }
+
 #queue-list {
+  color: #f1f1f1;
+  position: fixed;
+  top: 0;
+  height: 100vh;
+  width: calc(35vw - 90px);
+  right: 100vw;
+  transition: left 0.3s ease-in-out;
+  display: block;
+  background: #2A2A2A;
   color: #f1f1f1; }
+  #queue-list.is-active {
+    right: 0; }
   #queue-list a {
     color: #f1f1f1;
     text-decoration: underline; }
     #queue-list a:hover {
       color: #4D84C3; }
-  #queue-list table {
-    width: 100%; }
-    #queue-list table tr.is-playing {
-      font-weight: bold; }
-    #queue-list table tr td {
-      cursor: pointer;
-      vertical-align: middle;
-      padding: 8px 0; }
-      #queue-list table tr td:first-child {
-        width: 44px;
-        padding-right: 8px; }
-        @media screen and (max-width: 1023px) {
-          #queue-list table tr td:first-child {
-            width: 40px; } }
-      #queue-list table tr td:last-child {
-        width: 20px; }
+  #queue-list .is-playing .title, #queue-list .is-playing .subtitle {
+    font-weight: bold; }
+  #queue-list .is-playing figure:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.5); }
+  #queue-list .is-playing figure:after {
+    content: '';
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    width: 0;
+    height: 0;
+    border-top: 9px solid transparent;
+    border-bottom: 9px solid transparent;
+    border-left: 12px solid #f1f1f1; }
   #queue-list span {
     display: block; }
+  #queue-list table {
+    width: 100%; }
+  #queue-list td {
+    cursor: pointer;
+    vertical-align: middle;
+    padding: 8px 0; }
+    #queue-list td:first-child {
+      width: 44px;
+      padding-right: 8px; }
+      @media screen and (max-width: 1023px) {
+        #queue-list td:first-child {
+          width: 40px; } }
+    #queue-list td:last-child {
+      width: 20px; }
   @media screen and (max-width: 1023px) {
     #queue-list {
       position: fixed;
@@ -8678,31 +8716,18 @@ table.table.songs span.artist {
       left: 0;
       height: 100vh;
       width: 100vw;
-      display: block;
-      background: #2A2A2A;
-      color: #f1f1f1;
+      overflow: scroll;
       padding: 30px 20px 20px 20px;
-      transition: top 250ms ease 0s; }
-      #queue-list .is-playing .title, #queue-list .is-playing .subtitle {
-        font-weight: bold; }
-      #queue-list .is-playing figure:before {
-        content: '';
+      transition: top 250ms ease 0s;
+      z-index: 1;
+      padding-top: 20px; }
+      #queue-list .queue-header {
         position: absolute;
-        top: 0;
         left: 0;
-        height: 100%;
+        top: 0;
         width: 100%;
-        background: rgba(0, 0, 0, 0.5); }
-      #queue-list .is-playing figure:after {
-        content: '';
-        position: absolute;
-        top: 14px;
-        left: 14px;
-        width: 0;
-        height: 0;
-        border-top: 9px solid transparent;
-        border-bottom: 9px solid transparent;
-        border-left: 12px solid #f1f1f1; }
+        background: #444444;
+        padding: 16px; }
       #queue-list.is-active {
         top: 0;
         transition: top 250ms ease 0s; } }
@@ -8718,7 +8743,7 @@ table.table.songs span.artist {
 #burger {
   position: absolute;
   top: 4px;
-  right: 8px; }
+  left: 8px; }
   #burger .feather {
     height: 32px;
     width: 32px; }
@@ -8790,16 +8815,15 @@ table.table.songs span.artist {
   color: #FFFFFF;
   box-shadow: 0px -2px 3px 0px rgba(0, 0, 0, 0.15);
   -webkit-box-shadow: 0px -2px 3px 0px rgba(0, 0, 0, 0.15);
-  -moz-box-shadow: 0px -2px 3px 0px rgba(0, 0, 0, 0.15); }
+  -moz-box-shadow: 0px -2px 3px 0px rgba(0, 0, 0, 0.15);
+  transition: bottom 250ms ease-in-out; }
   #control-bar .title {
     color: #FFFFFF; }
   #control-bar .subtitle {
     color: #9c9c9c; }
   @media screen and (max-width: 1023px) {
     #control-bar {
-      height: 78px;
-      left: 0;
-      transition: left 250ms ease 0s; } }
+      height: 78px; } }
   #control-bar .columns {
     height: 100%; }
   #control-bar .play-button {
