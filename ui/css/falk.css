@@ -8560,9 +8560,9 @@ figure.is-40x40 {
     max-width: 90vw;
     position: inherit; }
     #content-container .container.max {
-      background-size: cover;
+      background-size: 100%;
       background-repeat: no-repeat;
-      background-position: center; }
+      background-position: top; }
       @media screen and (min-width: 1024px) {
         #content-container .container.max {
           margin: 0;
@@ -8571,7 +8571,7 @@ figure.is-40x40 {
         #content-container .container.max {
           background: none !important; } }
       #content-container .container.max .columns {
-        backdrop-filter: blur(3px); }
+        backdrop-filter: blur(3px) saturate(0); }
   #content-container .artist-info {
     padding-bottom: 50px; }
     #content-container .artist-info figure {
@@ -8670,8 +8670,12 @@ body.no-controls #queue-list {
   display: block;
   background: #2A2A2A;
   color: #f1f1f1;
-  padding: 20px 30px;
-  overflow-y: scroll; }
+  padding: 20px 30px 100px 30px;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none; }
+  #queue-list::-webkit-scrollbar {
+    display: none; }
   #queue-list.is-active {
     right: 0; }
   #queue-list a {
@@ -8679,8 +8683,6 @@ body.no-controls #queue-list {
     text-decoration: underline; }
     #queue-list a:hover {
       color: #4D84C3; }
-  #queue-list .is-playing .title, #queue-list .is-playing .subtitle {
-    font-weight: bold; }
   #queue-list .is-playing figure:before {
     content: '';
     position: absolute;

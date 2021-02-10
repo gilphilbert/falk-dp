@@ -167,11 +167,11 @@ figure.is-40x40
         width: 65vw
       @include until($desktop)
         background: none!important
-      background-size: cover
+      background-size: 100%
       background-repeat: no-repeat
-      background-position: center
+      background-position: top
       .columns
-        backdrop-filter: blur(3px)
+        backdrop-filter: blur(3px) saturate(0)
         
 
   .artist-info
@@ -275,8 +275,13 @@ body.no-controls #queue-list
   display: block
   background: $grey-darkest
   color: $grey-light
-  padding: 20px 30px
+  padding: 20px 30px 100px 30px
   overflow-y: scroll
+  scrollbar-width: none
+  -ms-overflow-style: none
+  &::-webkit-scrollbar
+    display: none
+
   &.is-active
     right: 0
   a
@@ -285,8 +290,6 @@ body.no-controls #queue-list
     &:hover
       color: $blue
   .is-playing
-    .title, .subtitle
-      font-weight: bold
     figure
       &:before
         content: ''
