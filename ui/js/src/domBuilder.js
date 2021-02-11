@@ -10,24 +10,8 @@ const domBuilder = (function () {
     }
   }
 
-  const pageLoader = function (st, { msg } = {}) {
-    let pl = document.querySelector('.pageloader')
-    if (st === true && pl == null) {
-      pl = cr.div({ class: 'pageloader' },
-        cr.p(msg)
-      )
-      document.body.appendChild(pl)
-      window.setTimeout(() => { pl.classList.add('is-active') }, 200)
-    } else if (st === false) {
-      if (pl !== null) {
-        pl.classList.remove('is-active')
-        window.setTimeout(() => { pl.remove() }, 310)
-      }
-    }
-  }
-
   const buildTile = function ({ title, image, href, subtitle, subtitleHref, classes } = {}) {
-    return cr.div({ class: 'column is-2-desktop is-4-touch art has-text-centered' + ((classes != null) ? ' ' + classes : ''), 'data-title': title, 'data-subtitle': subtitle },
+    return cr.div({ class: 'col-lg-2 col-xs-4 art has-text-centered' + ((classes != null) ? ' ' + classes : ''), 'data-title': title, 'data-subtitle': subtitle },
       cr.a({ href: href, 'data-navigo': '' },
         cr.figure({ class: 'image is-1by1' },
           cr.img({ src: image, loading: 'lazy' })
@@ -42,28 +26,24 @@ const domBuilder = (function () {
     const format = ((data.format) ? data.format.sample_rate_short.value + data.format.sample_rate_short.unit + ' ' + data.format.bits + 'bit' : '')
     const filetype = data.file.split('.')[data.file.split('.').length - 1]
     const tr = cr.tr({ 'data-uri': data.file },
-      (('track' in data) ? cr.td({ class: 'is-narrow pointer', on: { click: uiTools.handlers.tracks } }, data.track) : null),
+      (('track' in data) ? cr.td({ class: 'pointer', on: { click: uiTools.handlers.tracks } }, data.track) : null),
       cr.td({ class: 'pointer', on: { click: uiTools.handlers.tracks } },
         cr.p({ class: 'is-5' }, data.title),
         cr.p({ class: 'subtitle is-5' }, data.artist)
       ),
       ((data.duration) ? cr.td(uiTools.formatTime(data.duration)) : null),
-      ((filetype) ? cr.td({ class: 'is-hidden-mobile' }, filetype.toUpperCase()) : null),
-      ((format) ? cr.td({ class: 'is-hidden-mobile' }, cr.span({ class: 'tag is-rounded' }, format)) : null),
+      ((filetype) ? cr.td({ class: 'hidden--to-tablet' }, filetype.toUpperCase()) : null),
+      ((format) ? cr.td({ class: 'hidden--to-tablet' }, cr.span({ class: 'tag' }, format)) : null),
       cr.td({ class: 'is-narrow' },
         cr.div({ class: 'dropdown is-right' },
-          cr.div({ class: 'dropdown-trigger' },
-            cr.button({ 'aria-haspopup': true, on: { click: uiTools.handlers.dropdown } },
-              uiTools.getSVG('more-vertical')
-            )
+          cr.span({ on: { click: uiTools.handlers.dropdown } },
+            uiTools.getSVG('more-vertical')
           ),
-          cr.div({ class: 'dropdown-menu', role: 'menu' },
-            cr.div({ class: 'dropdown-content' },
-              cr.span({ class: 'dropdown-item', on: { click: uiTools.handlers.addPlay } }, 'Play'),
-              cr.span({ class: 'dropdown-item', on: { click: uiTools.handlers.queueSong } }, 'Add to queue'),
-              cr.span({ class: 'dropdown-item', on: { click: uiTools.handlers.replaceWithSong } }, 'Clear and play'),
-              cr.span({ class: 'dropdown-item', on: { click: (e) => { modals.addToPlaylist(e) } } }, 'Add to playlist')
-            )
+          cr.div({ class: 'dropdown-content' },
+            cr.span({ class: 'dropdown-item', on: { click: uiTools.handlers.addPlay } }, 'Play'),
+            cr.span({ class: 'dropdown-item', on: { click: uiTools.handlers.queueSong } }, 'Add to queue'),
+            cr.span({ class: 'dropdown-item', on: { click: uiTools.handlers.replaceWithSong } }, 'Clear and play'),
+            cr.span({ class: 'dropdown-item', on: { click: (e) => { modals.addToPlaylist(e) } } }, 'Add to playlist')
           )
         )
       )
@@ -76,12 +56,12 @@ const domBuilder = (function () {
     const queuePos = dataTools.getState().song
     queue.forEach((song) => {
       tbl.appendChild(cr.tr({ class: ((song.pos === queuePos) ? 'is-playing' : ''), 'data-pos': song.pos },
-        cr.td(cr.figure({ class: 'image is-40x40' }, cr.img({ src: song.albumart, loading: 'lazy' }))),
+        cr.td(cr.figure({ class: 'image is-40x40' }, cr.img({ src: song.albumart.replace('album/', 'album/thumb/'), loading: 'lazy' }))),
         cr.td({ on: { click: function () { webSocket.action.play(this.closest('tr').dataset.pos) } } },
           cr.p({ class: 'is-5' }, song.title),
           cr.p({ class: 'subtitle is-5' }, song.artist + ' - ' + uiTools.formatTime(song.duration))
         ),
-        cr.td({ on: { click: uiTools.handlers.removeSong } }, cr.span({ class: 'delete' }))
+        cr.td({ on: { click: uiTools.handlers.removeSong } }, cr.span({ class: 'delete' }, uiTools.getSVG('x-circle', 'delete')))
       ))
     })
     // uiTools.clearNodes(el).appendChild(tbl)
@@ -113,9 +93,9 @@ const domBuilder = (function () {
       if (_loadPage === 'home') {
         const state = dataTools.getState()
         const isLossless = !(parseInt(state.bitrate) <= 320)
-        const frag = cr.div({ class: 'container max' })
+        const frag = cr.div({ class: 'container-fluid max' })
 
-        frag.appendChild(cr.div({ class: 'background-container is-hidden-touch' },
+        frag.appendChild(cr.div({ class: 'background-container hidden--to-desktop' },
           cr.figure({ class: 'image' },
             cr.img({ src: `/art/artist/background/blur/${encodeURIComponent(state.artist)}.jpg)` })
           )
@@ -127,36 +107,36 @@ const domBuilder = (function () {
         }
 
         frag.appendChild(
-          cr.div({ class: 'columns is-multiline' },
-            cr.div({ class: 'column is-10-touch is-offset-1-touch is-3-desktop art' },
+          cr.div({ class: 'row' },
+            cr.div({ class: 'col-xs-10 col-md-3 has-margin-auto art' },
               cr.figure({ id: 'home-albumart', class: 'image is-1by1' },
                 cr.img({ loading: 'lazy', src: imgSrc })
               ),
-              cr.div({ id: 'mobile-toolbar', class: 'is-hidden-desktop' },
+              cr.div({ id: 'mobile-toolbar', class: 'hidden--for-desktop' },
                 cr.span({}, uiTools.getSVG('heart'))
               )
             ),
-            cr.div({ class: 'column is-10-desktop is-offset-1' },
+            cr.div({ class: 'col-xs-10 col-xs-offset-1' },
               cr.h1({ id: 'home-title', class: 'has-text-centered has-no-overflow' }, state.title || 'Not playing'),
-              cr.p({ class: 'has-text-centered subtitle is-3 has-no-overflow is-hidden-touch' }, cr.a({ id: 'home-album', href: '/album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album || '')),
+              cr.p({ class: 'has-text-centered subtitle is-3 has-no-overflow hidden--to-desktop' }, cr.a({ id: 'home-album', href: '/album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album || '')),
               cr.p({ class: 'has-text-centered subtitle is-3 has-no-overflow' }, cr.a({ id: 'home-artist', href: '/artist/' + state.artist, 'data-navigo': '' }, state.artist || '')),
-              cr.p({ class: 'has-text-centered' }, cr.span({ id: 'home-quality', class: 'is-small' + ((isLossless) ? '' : ' is-grey') }, uiTools.getQuality(state)))
+              cr.p({ class: 'has-text-centered' }, cr.span({ id: 'home-quality', class: 'tag is-small' + ((isLossless) ? '' : ' is-grey') }, uiTools.getQuality(state)))
             ),
-            cr.div({ id: 'mobile-controls', class: 'column mobile-controls is-12 is-hidden-desktop' },
+            cr.div({ id: 'mobile-controls', class: 'col-xs-12 mobile-controls hidden--for-desktop' },
               cr.span({ on: { click: webSocket.action.toggleRandom } }, uiTools.getSVG('shuffle', 'random is-small' + ((state.random) ? ' is-active' : ''))),
               cr.span({ on: { click: webSocket.action.prev } }, uiTools.getSVG('skip-back')),
               cr.button({ class: 'button is-primary is-rounded', on: { click: uiTools.handlers.mobileButtons.play } }, uiTools.getSVG(((state.state !== 'play') ? 'play' : 'pause'))),
               cr.span({ on: { click: webSocket.action.next } }, uiTools.getSVG('skip-forward')),
               cr.span({ on: { click: webSocket.action.toggleRepeat } }, uiTools.getSVG('repeat' + ((state.single) ? '-one' : ''), 'repeat is-small' + ((state.repeat) ? ' is-active' : '')))
             ),
-            cr.div({ class: 'column is-10-touch is-offset-1-touch is-hidden-desktop' },
-              cr.progress({ id: 'mobile-progress', class: 'progress', value: 0, max: 1000 }),
+            cr.div({ class: 'col-xs-10 col-xs-offset-1 hidden--for-desktop' },
+              // cr.progress({ id: 'mobile-progress', class: 'progress', value: 0, max: 1000 }),
               cr.div({ id: 'mobile-progress-bar' }, cr.div())
             )
           )
         )
         frag.appendChild(
-          cr.div({ class: 'is-hidden-desktop', id: 'swipe-up-queue', on: { click: () => { document.querySelector('#queue-list').classList.add('is-active') } } }, uiTools.getSVG('chevron-up'))
+          cr.div({ class: 'hidden--for-desktop', id: 'swipe-up-queue', on: { click: () => { document.querySelector('#queue-list').classList.add('is-active') } } }, uiTools.getSVG('chevron-up'))
         )
 
         /*
@@ -189,18 +169,18 @@ const domBuilder = (function () {
         }
 
         // create the main fragment
-        const frag = cr.div({ class: 'container' })
+        const frag = cr.div({ class: 'container-fluid' })
 
         // append the details and list of tracks to the fragment
         frag.appendChild(
-          cr.div({ class: 'columns is-multiline is-mobile album-detail' },
-            cr.div({ class: 'column is-3-desktop is-4-touch art' },
-              cr.figure({ class: 'image is-1by1' },
+          cr.div({ class: 'row album-detail' },
+            cr.div({ class: 'col-md-3 col-xs-4 art' },
+              cr.figure({ class: 'image' },
                 cr.img({ src: data.albumart, loading: 'lazy' })
               )
             ),
-            cr.div({ class: 'column is-9-desktop is-8-touch' },
-              cr.p({ class: 'is-5 is-hidden-mobile has-text-weight-normal' }, 'Album'),
+            cr.div({ class: 'col-md-9 col-xs-8' },
+              cr.p({ class: 'is-5 hidden--to-desktop has-text-weight-normal' }, 'Album'),
               cr.h1({ class: 'album-title' }, data.title),
               cr.p(cr.a({ class: 'is-3', 'data-navigo': '', href: '/artist/' + encodeURIComponent(data.artist) }, data.artist)),
               ((data.songs[0].date) ? cr.p({ class: 'is-4 detail' }, data.songs[0].date) : null),
@@ -211,9 +191,9 @@ const domBuilder = (function () {
         )
 
         frag.appendChild(
-          cr.div({ class: 'columns is-multiline is-mobile album-detail' },
-            cr.div({ class: 'column is-9-desktop is-offset-3-desktop is-12-touch' },
-              cr.table({ class: 'table is-fullwidth songs songs-hover' },
+          cr.div({ class: 'row album-detail' },
+            cr.div({ class: 'col-md-9 col-md-offset-3 col-xs-12' },
+              cr.table({ class: 'table songs songs-hover' },
                 cr.tbody(
                   data.songs.map(function (song) {
                     return buildTrack(song)
@@ -228,7 +208,7 @@ const domBuilder = (function () {
         main.appendChild(frag)
       } else if (_loadPage === 'albums') {
         // create main fragment
-        const frag = cr.div({ class: 'container' })
+        const frag = cr.div({ class: 'container-fluid' })
 
         // append the library buttons
         // frag.appendChild(breadcrumb([{ title: 'Albums', url: null, isActive: true }]))
@@ -236,7 +216,7 @@ const domBuilder = (function () {
 
         // add the list of albums
         frag.appendChild(
-          cr.div({ class: 'columns is-mobile is-multiline art-container' },
+          cr.div({ class: 'row is-mobile art-container' },
             data.map(function (album) {
               return buildTile({
                 title: album.title,
@@ -256,7 +236,7 @@ const domBuilder = (function () {
 
         // append directly to the page, we don't want this in the container. <!---------------------------------------------------------------------------------- NEED TO MOVE STYLES TO CSS
         frag.appendChild(cr.figure({ class: 'image' },
-          cr.img({ src: `${data.artist.background}`, style: 'object-fit: cover;height: 30vh;object-position: center;' })
+          cr.img({ src: `${data.artist.background}`, style: 'object-fit: cover;height: 30vh;object-position: center;width: 100%' })
         ))
         // main.style.backgroundImage = `url(${data.artist.background})`
         // main.classList.add('has-background')
@@ -273,14 +253,14 @@ const domBuilder = (function () {
         */
 
         // create main fragment
-        const cont = frag.appendChild(cr.div({ class: 'container' }))
+        const cont = frag.appendChild(cr.div({ class: 'container-fluid' }))
         // append the library buttons
         // frag.appendChild(breadcrumb([{ data.artist.title: 'Artists', url: 'artists' }, { data.artist.title: data.navigation.info.title, url: null, isActive: true }]))
 
         // create the information section
         /*
         frag.appendChild(
-          cr.div({ class: 'columns artist-info is-mobile' },
+          cr.div({ class: 'row artist-info is-mobile' },
             cr.div({ class: 'column is-2-tablet is-2-desktop is-10-touch is-offset-1-touch' },
               cr.figure({ class: 'image artistart' },
                 // cr.img({ src: data.artist.albumart, loading: 'lazy' })
@@ -300,7 +280,7 @@ const domBuilder = (function () {
         )
         // create the list of albums (in tile format)
         cont.appendChild(
-          cr.div({ class: 'columns is-multiline is-mobile art-container' },
+          cr.div({ class: 'row is-mobile art-container' },
             data.albums.map(function (album) {
               return buildTile({
                 title: album.title,
@@ -332,7 +312,7 @@ const domBuilder = (function () {
         main.appendChild(frag)
       } else if (_loadPage === 'artists') {
         // the main document fragment
-        const frag = cr.div({ class: 'container' })
+        const frag = cr.div({ class: 'container-fluid' })
 
         // append the library buttons
         // frag.appendChild(breadcrumb([{ title: 'Artists', url: null }]))
@@ -340,7 +320,7 @@ const domBuilder = (function () {
 
         // add the list of artists (tiles)
         frag.appendChild(
-          cr.div({ class: 'columns is-mobile is-multiline art-container' },
+          cr.div({ class: 'row art-container' },
             data.map(function (artist) {
               return buildTile({
                 title: artist.title,
@@ -356,13 +336,13 @@ const domBuilder = (function () {
         main.appendChild(frag)
       } else if (_loadPage === 'genres') {
         // the main document fragment
-        const frag = cr.div({ class: 'container' })
+        const frag = cr.div({ class: 'container-fluid' })
 
         frag.appendChild(cr.h1({ class: 'is-capitalized' }, title))
 
         // build the list of genres
         frag.appendChild(
-          cr.div({ class: 'columns is-mobile is-multiline art-container' },
+          cr.div({ class: 'row art-container' },
             data.map(function (genre) {
               return buildTile({
                 title: genre,
@@ -379,13 +359,13 @@ const domBuilder = (function () {
         title = data[0].genre
 
         // the main document fragment
-        const frag = cr.div({ class: 'container' })
+        const frag = cr.div({ class: 'container-fluid' })
 
         frag.appendChild(cr.h1({ class: 'is-capitalized' }, title))
 
         // build the list of genres
         frag.appendChild(
-          cr.div({ class: 'columns is-mobile is-multiline art-container' },
+          cr.div({ class: 'row art-container' },
             data.map(function (album) {
               return buildTile({
                 title: album.title,
@@ -402,15 +382,13 @@ const domBuilder = (function () {
         main.appendChild(frag)
       } else if (_loadPage === 'playlists') {
         // the main document fragment
-        const frag = cr.div({ class: 'container' })
+        const frag = cr.div({ class: 'container-fluid' })
 
-        // append the library buttons
-        // frag.appendChild(breadcrumb([{ title: 'Playlists', url: null }]))
-        frag.appendChild(cr.p({ class: 'is-3 is-capitalized page-title' }, title))
+        frag.appendChild(cr.h1({ class: 'is-capitalized' }, title))
 
         // create a tile for each
         frag.appendChild(
-          cr.div({ class: 'columns is-mobile is-multiline playlist-list' },
+          cr.div({ class: 'row playlist-list' },
             data.map(function (playlist) {
               return buildTile({
                 title: playlist,
@@ -444,7 +422,7 @@ const domBuilder = (function () {
           name = data.name
         }
         main.appendChild(
-          cr.div({ class: 'columns is-multiline is-mobile playlist-detail' },
+          cr.div({ class: 'row is-mobile playlist-detail' },
             cr.div({ class: 'column is-4-desktop is-12-mobile' },
               cr.figure({ class: 'image is-1by1 albumart' },
                 cr.img({ src: '/img/icons/playlist-padded.svg' })
@@ -495,7 +473,7 @@ const domBuilder = (function () {
 
       // this whole section updates the footer (now playing) banner
       if (changed.includes('albumart')) {
-        document.querySelector('#control-bar .now-playing img').src = state.albumart
+        document.querySelector('#control-bar .now-playing img').src = state.albumart.replace('album/', 'album/thumb/')
         if (isHome) {
           document.querySelector('#home-albumart img').src = state.albumart
         }
@@ -704,8 +682,8 @@ const domBuilder = (function () {
             cr.div({ class: 'field' },
               cr.div({ class: 'control' },
                 cr.div({ class: 'buttons' },
-                  cr.button({ class: 'button is-rounded is-danger', on: { click: () => { webSocket.action.reboot(); pageLoader(true, { msg: 'Rebooting' }) } } }, 'Reboot'),
-                  cr.button({ class: 'button is-rounded is-danger', on: { click: () => { webSocket.action.shutdown(); pageLoader(true, { msg: 'Powering down' }) } } }, 'Shutdown')
+                  cr.button({ class: 'button is-rounded is-danger', on: { click: () => { webSocket.action.reboot(); domBuilder.disconnected() } } }, 'Reboot'),
+                  cr.button({ class: 'button is-rounded is-danger', on: { click: () => { webSocket.action.shutdown(); domBuilder.disconnected() } } }, 'Shutdown')
                 )
               )
             )
@@ -776,7 +754,7 @@ const domBuilder = (function () {
               ),
               cr.p({ class: 'help is-danger' })
             ),
-            cr.div({ class: 'columns buttons' },
+            cr.div({ class: 'row buttons' },
               cr.div({ class: 'column ' },
                 cr.div({ class: 'field' },
                   cr.div({ class: 'control' },

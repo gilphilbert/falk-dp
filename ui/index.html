@@ -22,7 +22,7 @@
     <script src="/js/delayed-scroll-restoration-polyfill.js"></script>
 
     <!-- application components -->
-    <script src="/js/src/websocket.js"></script>
+    <script src="/js/src/websocket.js" defer></script>
     <script src="/js/src/datatools.js"></script>
     <script src="/js/src/uitools.js"></script>
     <script src="/js/src/domBuilder.js"></script>
@@ -54,32 +54,30 @@
     </aside>
     <div id="control-bar" class="is-active">
       <div class="progress-topper"></div>
-      <div class="columns is-vcentered is-marginless is-mobile">
-        <div class="column">
-          <div class="columns is-vcentered now-playing is-mobile">
-            <div class="column is-narrow">
+      <div class="row is-marginless">
+        <div class="col-xs col-md">
+          <div class="row now-playing">
+            <div class="col-xs is-narrow">
               <figure class="image is-70x70">
                 <img>
               </figure>
             </div>
-            <div class="column">
+            <div class="col-xs">
               <p id="control-bar-title" class="is-5"></p>
               <p id="control-bar-artist" class="subtitle is-5"></p>
             </div>
           </div>
         </div>
-        <div class="column playing-controls misc-controls is-narrow-touch">
-          <div class="has-margin-auto">
-            <svg class="random feather is-hidden-touch"><use xlink:href="/img/feather-sprite.svg#shuffle"></use></svg>
-            <svg class="feather prev"><use xlink:href="/img/feather-sprite.svg#skip-back"></use></svg>
-            <span class="play-button">
-              <svg class="feather"><use xlink:href="/img/feather-sprite.svg#play"></use></svg>
-            </span>
-            <svg class="feather next"><use xlink:href="/img/feather-sprite.svg#skip-forward"></use></svg>
-            <svg class="repeat feather is-hidden-touch"><use xlink:href="/img/feather-sprite.svg#repeat"></use></svg>
-          </div>
+        <div class="col-xs no-grow col-md playing-controls misc-controls">
+          <svg class="random feather hidden--to-desktop"><use xlink:href="/img/feather-sprite.svg#shuffle"></use></svg>
+          <svg class="feather prev"><use xlink:href="/img/feather-sprite.svg#skip-back"></use></svg>
+          <span class="play-button">
+            <svg class="feather"><use xlink:href="/img/feather-sprite.svg#play"></use></svg>
+          </span>
+          <svg class="feather next"><use xlink:href="/img/feather-sprite.svg#skip-forward"></use></svg>
+          <svg class="repeat feather hidden--to-desktop"><use xlink:href="/img/feather-sprite.svg#repeat"></use></svg>
         </div>
-        <div class="column is-4 has-text-right is-hidden-touch">
+        <div class="col-md has-text-right hidden--to-desktop">
           <div class="play-progress is-inline">
             <span class="seek"></span>/<span class="duration"></span>
           </div>
@@ -98,10 +96,10 @@
       </div>
     </div>
     <div id="modal-container"></div>
-    <div id="burger" class="is-hidden-desktop">
+    <div id="burger" class="hidden--for-desktop">
       <svg class="feather burger"><use xlink:href="/img/feather-sprite.svg#burger"></use></svg>
     </div>
-    <div id="search-input-container" class="is-hidden-touch">
+    <div id="search-input-container" class="hidden--to-desktop">
       <input id="search-input" type="text" placeholder="" value=""/>
     </div>
     <div id="disconnect-message">

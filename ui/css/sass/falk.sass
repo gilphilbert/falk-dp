@@ -5,7 +5,7 @@ html
   font-weight: normal
   color: $white
   background: $grey-darkest
-  @include until($desktop)
+  @include media("≤tablet")
     font-size: 13px
 
 body
@@ -13,7 +13,7 @@ body
   background-attachment: fixed
   min-height: 100vh
   &.no-controls
-    @include until($desktop)
+    @include media("≤tablet")
       #content-container
         padding-bottom: 10px
       #control-bar
@@ -34,6 +34,7 @@ h1, h2, h3, h4, h5, h6
 
 h1
   font-size: 1.8rem
+  margin: 0.6rem 0 1.2rem
 
 p, a
   font-weight: normal
@@ -51,6 +52,7 @@ p, a
   &.is-6
     font-size: 1rem
   &.subtitle
+    margin-top: -0.2rem
     font-weight: normal
     color: $grey-dark
     &.is-1
@@ -66,19 +68,56 @@ p, a
     &.is-6
       font-size: 0.8rem
 
-figure.is-40x40
-  width: 44px
-  height: 44px
-  @include until($desktop)
-    width: 40px
-    height: 40px
+p
+  margin: 0.3rem 0 0.4rem 0
 
-// add radius to tags
-.tag:not(body)
+table
+  width: 100%
+  td.is-narrow
+    width: 1%
+    white-space: nowrap
+
+figure
+  img
+    width: 100%
+  &.is-40x40
+    width: 44px
+    height: 44px
+    @include media("≤tablet")
+      width: 40px
+      height: 40px
+
+.button
+  border: none
+  background: $grey
+  &:focus
+    outline: none
+  &:hover
+    filter: brightness(0.1)
+  &.is-rounded
+    border-radius: 1000px
+
+.tag
   font-weight: normal
   border-radius: 1000px
   background-color: $blue
   color: $white
+  display: inline-block
+  padding: 7px 10px
+  &.is-grey
+    background-color: $grey
+
+
+.has-text-centered
+  text-align: center
+.has-text-right
+  text-align: right
+
+.is-capitalized
+  text-transform: capitalize
+
+.has-margin-auto
+  margin: auto
 
 .pointer
   cursor: pointer
@@ -104,6 +143,12 @@ figure.is-40x40
 .has-no-vpadding
   padding-top: 0
   padding-bottom: 0
+
+.no-grow
+  flex-grow: 0
+.no-grow-xs
+  @include media("<=tablet")
+    flex-grow: 0
 
 .has-margin-auto
   margin: auto
@@ -139,18 +184,43 @@ figure.is-40x40
     height: 20px
     width: 20px
 
-.dropdown-content
-  background-color: #696363
-  .dropdown-item
-    cursor: pointer
-    &:hover
-      background-color: #ffffff28
+.delete
+  height: 18px
+  width: 18px
+
+.dropdown
+  position: relative
+  display: inline-block
+  cursor: pointer
+  &.is-right
+    .dropdown-content
+      right: 0
+      left: auto
+  .dropdown-content
+    display: none
+    position: absolute
+    left: 8px
+    top: 15px
+    background-color: #696363
+    min-width: 160px
+    border-radius: 4px
+    overflow: hidden
+    z-index: 1
+  &:hover
+    .dropdown-content
+      display: block
+      span
+        display: block
+        padding: 12px 16px
+        cursor: pointer
+        &:hover
+          background-color: #ffffff28
 
 // this contains the right hand content pane
 #content-container
   // padding: 2.5em 1.5em calc(100px + .75em) calc(1.5em + 90px)
-  // padding: 0 0 120px -90px
-  @include until($desktop)
+  padding: 0 0 120px 90px
+  @include media("≤tablet")
     // padding: 24px 9px 100px 90px
     padding: 0
 
@@ -159,23 +229,24 @@ figure.is-40x40
     background-size: contain
     background-repeat: no-repeat
 
-  .container
+  .container-fluid
     max-width: 90vw
     padding: 40px 0
     &.max
-      position: relative
-      @include from($desktop)
+      @include media("≥desktop")
+        position: relative
         margin: 0
         padding: 0
         // width: 65vw
         margin-right: 450px
-        .columns
+        .row
           padding-top: 20vh
-        .column.art
+        .row.art
           margin: 0 auto
       .background-container
         position: absolute
         width: 100%
+        z-index: -1
         img
           object-fit: cover
           object-position: center
@@ -197,39 +268,41 @@ figure.is-40x40
 
   .album-detail
     p.title
-      @include until($desktop)
+      @include media("≤tablet")
         margin-bottom: 0
 
   .is-reversed-touch
-    @include until($desktop)
+    @include media("≤tablet")
       display: flex
       flex-direction: column-reverse
 
-  #home-quality
-    padding: 7px 10px
-    border-radius: 1000px
-    background-color: $blue
-    color: $white
-    font-size: 0.9rem
-    &.is-grey
-      background-color: $grey
+  //#home-quality
+    //padding: 7px 10px
+    //border-radius: 1000px
+    //background-color: $blue
+    //color: $white
+    //font-size: 0.9rem
+    //&.is-grey
+    //  background-color: $grey
   #swipe-up-queue
     position: absolute
     padding: 8px 12px
-    left: calc(50vw - 24px)
+    left: 0
+    width: 100%
+    text-align: center
     bottom: 10px
 
 table.table.songs
   tr
     td:first-child
-      @include until($desktop)
+      @include media("≤tablet")
         padding-right: 0.75em
     &:hover
       td
         background: rgba(0, 0, 0, 0.08)
   td
     vertical-align: middle
-    @include until($desktop)
+    @include media("≤tablet")
       color: $white
       padding-left: 0
       padding-right: 0
@@ -239,18 +312,18 @@ table.table.songs
       background: none
       svg
         stroke: $grey-dark
-        @include until($desktop)
+        @include media("≤tablet")
           stroke: $white
-      @include until($desktop)
+      @include media("≤tablet")
         padding: 0
   span.artist
     display: block
     color: $grey-dark
 
 .art-container
-  .column
+  .col-lg-2
     padding: 27px
-    @include until($desktop)
+    @include media("≤tablet")
       padding: 1em .5em
 
 .art
@@ -258,9 +331,14 @@ table.table.songs
     background-color: rgba(255,255,255,0.1)
     overflow: hidden
     border-radius: 7px
-    width: 100%
+    position: relative
+    overflow: hidden
+    padding-bottom: 100%
     img
       position: absolute
+      width: 100%
+      left: 0
+      top: 0
   a:first-child
     p
       margin-top: 6px
@@ -299,6 +377,7 @@ body.no-controls #queue-list
       color: $blue
   .is-playing
     figure
+      position: relative
       &:before
         content: ''
         position: absolute
@@ -327,13 +406,13 @@ body.no-controls #queue-list
     padding: 8px 0
     &:first-child
       width: 44px
-      @include until($desktop)
+      @include media("≤tablet")
         width: 40px
       padding-right: 8px
     &:last-child
       width: 20px
 
-  @include until($desktop)
+  @include media("≤tablet")
     position: fixed
     top: 100vh
     left: 0

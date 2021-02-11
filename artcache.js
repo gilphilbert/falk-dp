@@ -85,7 +85,23 @@ router.get('/album/:artist/:album', function (req, res) {
   getArt({ artist: q.artist, album: q.album }, res)
 })
 
-function getArt ({ artist, album, type, blur } = {}, res) {
+router.get('/album/thumb/:artist/:album', function (req, res) {
+  const q = req.params
+
+  // you need to specify an artist!
+  if (!q.artist || !q.artist) {
+    res.json({ error: 'you must specify an artist and/or album' })
+    return
+  }
+
+  if (q.album.indexOf('.jpg') > -1) {
+    q.album = q.album.substr(0, q.album.indexOf('.jpg'))
+  }
+
+  getArt({ artist: q.artist, album: q.album, thumb: true }, res)
+})
+
+function getArt ({ artist, album, type, blur, thumb } = {}, res) {
   const artcache = rootdir + '/artcache/'
 
   // generate a hash from the request
@@ -109,7 +125,11 @@ function getArt ({ artist, album, type, blur } = {}, res) {
       res.set('Cache-control', 'public, max-age=31536000000')
       res.type('image/jpg')
       if (type !== 'bg') {
-        sharp(imgpath).resize(480, 480).pipe(res)
+        if (thumb === true) {
+          sharp(imgpath).resize(70, 70).pipe(res)
+        } else {
+          sharp(imgpath).resize(480, 480).pipe(res)
+        }
       } else {
         if (blur === true) {
           sharp(imgpath).resize(480).greyscale().blur().pipe(res)
@@ -124,12 +144,16 @@ function getArt ({ artist, album, type, blur } = {}, res) {
         getArtistArt(artist, imgpath, res, type, blur)
       } else {
         // we're looking for albumart let's look for some!
-        getAlbumArt(artist, album, imgpath)
+        getAlbumArt(artist, album, imgpath, thumb)
           .then((e) => {
             // we got a file, let's serve it
             res.set('Cache-control', 'public, max-age=31536000000')
             res.type('image/jpg')
-            sharp(imgpath).resize(480, 480).pipe(res)
+            if (thumb === true) {
+              sharp(imgpath).resize(70, 70).pipe(res)
+            } else {
+              sharp(imgpath).resize(480, 480).pipe(res)
+            }
           })
           .catch((e) => {
             // there's no art, serve the default artistart
@@ -186,7 +210,7 @@ async function getArtistArt (artist, imgpath, res, type, blur) {
 }
 
 // update this for fanart.tv?
-async function getAlbumArt (artist, album, imgpath) {
+async function getAlbumArt (artist, album, imgpath, thumb) {
   const _artist = encodeURIComponent(artist)
   const _album = encodeURIComponent(album)
   const info = await axios.get(`http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=250b1448a91894d0f7542cbcdedc936e&artist=${_artist}&album=${_album}&format=json`)

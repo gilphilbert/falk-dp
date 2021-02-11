@@ -10,6 +10,7 @@ $red: #A31621;
 
 $grey-lighter: #F7F7F7;
 $grey-light: #f1f1f1;
+$grey: #7a7a7a;
 $grey-dark: #9c9c9c;
 $grey-darker: #444444;
 $grey-darkest: #2A2A2A;
@@ -43,36 +44,9 @@ $input-background-color: #eeeeee;
 $input-shadow: none;
 $input-focus-box-shadow-size: 0;
 
-// Import only what you need from Bulma
-@import "bulma-0.8.0/bulma.sass";
-
-/*
-@import "bulma-0.8.0/sass/utilities/_all.sass";
-@import "bulma-0.8.0/sass/base/_all.sass";
-
-@import "bulma-0.8.0/sass/form/shared.sass";
-@import "bulma-0.8.0/sass/form/tools.sass";
-@import "bulma-0.8.0/sass/form/input-textarea.sass";
-@import "bulma-0.8.0/sass/form/select.sass";
-
-@import "bulma-0.8.0/sass/components/dropdown.sass";
-@import "bulma-0.8.0/sass/components/modal.sass";
-@import "bulma-0.8.0/sass/components/navbar.sass";
-@import "bulma-0.8.0/sass/components/tabs.sass";
-
-@import "bulma-0.8.0/sass/elements/box.sass";
-@import "bulma-0.8.0/sass/elements/button.sass";
-@import "bulma-0.8.0/sass/elements/container.sass";
-@import "bulma-0.8.0/sass/elements/image.sass";
-@import "bulma-0.8.0/sass/elements/other.sass";
-@import "bulma-0.8.0/sass/elements/progress.sass";
-@import "bulma-0.8.0/sass/elements/table.sass";
-@import "bulma-0.8.0/sass/elements/title.sass";
-
-@import "bulma-0.8.0/sass/grid/columns.sass";
-
-@import "bulma-0.8.0/sass/layout/section.sass";
-*/
+* {
+    box-sizing: border-box;
+}
 
 // Modal minimal setup
 $transition-duration: .3s;
@@ -82,12 +56,16 @@ $transition-duration-3dslit: .5s;
 $modal-perspective: 1300px;
 $modal-bg-color: rgba($black,.86);
 
+@import "components/_normalize";
+@import "components/_reset";
+@import "components/_include-media.scss";
+@import "flexboxgrid.scss";
+
 // import modal-fx component
 @import "components/modal-fx";
 
-@import "pageloader.sass";
-@import "quickview.sass";
 @import "falk.sass";
 @import "control-bar.sass";
 @import "menus.sass";
 @import "audio-wave.sass";
+@import "components/_include-media-hidden-classes";

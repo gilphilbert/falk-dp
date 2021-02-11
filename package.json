@@ -19,6 +19,7 @@
   "homepage": "https://github.com/gilphilbert/mpdui",
   "dependencies": {
     "axios": "^0.21.1",
+    "compression": "^1.7.4",
     "express": "^4.16.2",
     "mpd-api": "^1.0.6",
     "musicbrainz-api": "^0.5.2",

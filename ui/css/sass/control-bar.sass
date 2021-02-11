@@ -16,12 +16,13 @@
   -webkit-box-shadow: 0px -2px 3px 0px rgba(0,0,0,0.15)
   -moz-box-shadow: 0px -2px 3px 0px rgba(0,0,0,0.15)
   transition: bottom 250ms ease-in-out
-  @include until($desktop)
+  @include media("≤tablet")
     height: 78px
     //left: 0
   // make all columns full height
-  .columns
+  .row
     height: 100%
+    align-items: center
   //round play button
   .play-button
     height: 48px
@@ -43,15 +44,18 @@
     stroke: $white
   // currently playing song detail
   .now-playing
-    @include from($desktop)
+    @include media(">=desktop")
       width: 300px
     figure img
       height: 70px
       width: 70px
       border-radius: 4px
-    .column:not(:first-child)
+    .col-xs:first-child
+      flex-grow: 0
+      padding: 0 15px
+    .col-xs:not(:first-child)
       padding-left: 0
-    @include until($desktop)
+    @include media("≤tablet")
       figure img
         height: 48px
         width: 48px
@@ -63,7 +67,7 @@
   .playing-controls
     display: flex
     align-items: center
-    >div>.feather
+    >.feather
       &:first-child
         margin-right: 12px
       &:last-child
@@ -84,8 +88,8 @@
       position: absolute
       right: 0
       top: -4px
-      height: 11px
-      width: 11px
+      height: 6px
+      width: 6px
       background-color: $grey-darkest
       border: 3px solid $blue
       border-radius: 1000px
@@ -140,9 +144,9 @@
       content: ''
       position: absolute
       right: 0
-      top: -3px
-      height: 9px
-      width: 9px
+      top: -5px
+      height: 6px
+      width: 6px
       background: $grey-darkest
       border: 3px solid $blue
       border-radius: 9px

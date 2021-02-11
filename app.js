@@ -1,7 +1,11 @@
 const port = 3000
 const http = require('http')
 const express = require('express')
+const compression = require('compression')
 const app = express()
+
+// enable compression
+app.use(compression())
 
 // include the webservice
 const httpServer = http.createServer(app)

@@ -9,7 +9,7 @@ aside.menu
   z-index: 2
   transition: width 250ms
 
-  @include until($desktop)
+  @include media("≤tablet")
     left: -90px
     transition: 250ms
     &.is-active
@@ -17,7 +17,7 @@ aside.menu
       left: 0
 
   &:hover
-    @include from($desktop)
+    @include media(">tablet")
       width: 180px
       box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
       -webkit-box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
@@ -42,6 +42,8 @@ aside.menu
     display: inline-block
     width: 100%
     padding: .6em 0
+    &:focus
+      outline: none
     &:hover
       background: rgba(255,255,255,0.2)
       text-decoration: none
