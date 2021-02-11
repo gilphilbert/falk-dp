@@ -149,7 +149,7 @@ figure.is-40x40
 // this contains the right hand content pane
 #content-container
   // padding: 2.5em 1.5em calc(100px + .75em) calc(1.5em + 90px)
-  padding-left: 90px
+  padding: 0 0 120px 90px
   @include until($desktop)
     padding: 24px 9px 100px 9px
 
@@ -160,15 +160,18 @@ figure.is-40x40
 
   .container
     max-width: 90vw
+    padding: 40px 0
     &.max
       position: relative
       @include from($desktop)
         margin: 0
+        padding: 0
         // width: 65vw
         margin-right: 450px
         .columns
-          backdrop-filter: blur(3px) saturate(0)
           padding-top: 20vh
+        .column.art
+          margin: 0 auto
       .background-container
         position: absolute
         width: 100%
