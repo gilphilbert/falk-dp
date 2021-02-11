@@ -8548,7 +8548,7 @@ figure.is-40x40 {
       background-color: #ffffff28; }
 
 #content-container {
-  padding-left: 90px; }
+  padding: 0 0 120px 90px; }
   @media screen and (max-width: 1023px) {
     #content-container {
       padding: 24px 9px 100px 9px; } }
@@ -8557,16 +8557,19 @@ figure.is-40x40 {
     background-size: contain;
     background-repeat: no-repeat; }
   #content-container .container {
-    max-width: 90vw; }
+    max-width: 90vw;
+    padding: 40px 0; }
     #content-container .container.max {
       position: relative; }
       @media screen and (min-width: 1024px) {
         #content-container .container.max {
           margin: 0;
+          padding: 0;
           margin-right: 450px; }
           #content-container .container.max .columns {
-            backdrop-filter: blur(3px) saturate(0);
-            padding-top: 20vh; } }
+            padding-top: 20vh; }
+          #content-container .container.max .column.art {
+            margin: 0 auto; } }
       #content-container .container.max .background-container {
         position: absolute;
         width: 100%; }
@@ -9012,7 +9015,7 @@ aside.menu {
     bottom: 0px;
     width: 9px;
     height: 5px;
-    animation: xLoaderAudioWave 1.5s infinite ease-in-out; }
+    animation: xLoaderAudioWave 1.5s infinite linear; }
     .audio-wave span:nth-child(2) {
       animation-delay: .2s; }
     .audio-wave span:nth-child(3) {

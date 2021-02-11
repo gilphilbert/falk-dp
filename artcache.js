@@ -52,6 +52,23 @@ router.get('/artist/background/:artist', function (req, res) {
   getArt({ artist: q.artist, type: 'bg' }, res)
 })
 
+// the albumart service
+router.get('/artist/background/blur/:artist', function (req, res) {
+  const q = req.params
+
+  // you need to specify an artist!
+  if (!q.artist) {
+    res.json({ error: 'you must specify an artist' })
+    return
+  }
+
+  if (q.artist.indexOf('.jpg') > -1) {
+    q.artist = q.artist.substr(0, q.artist.indexOf('.jpg'))
+  }
+
+  getArt({ artist: q.artist, type: 'bg', blur: true }, res)
+})
+
 router.get('/album/:artist/:album', function (req, res) {
   const q = req.params
 
@@ -68,7 +85,7 @@ router.get('/album/:artist/:album', function (req, res) {
   getArt({ artist: q.artist, album: q.album }, res)
 })
 
-function getArt ({ artist, album, type } = {}, res) {
+function getArt ({ artist, album, type, blur } = {}, res) {
   const artcache = rootdir + '/artcache/'
 
   // generate a hash from the request
@@ -94,13 +111,17 @@ function getArt ({ artist, album, type } = {}, res) {
       if (type !== 'bg') {
         sharp(imgpath).resize(480, 480).pipe(res)
       } else {
-        sharp(imgpath).resize(480).pipe(res)
+        if (blur === true) {
+          sharp(imgpath).resize(480).greyscale().blur().pipe(res)
+        } else {
+          sharp(imgpath).resize(480).pipe(res)
+        }
       }
     } else {
       // what art are we looking for?
       if (!album) {
         // we're looking for an artist, let's go look for it and store it if we find it
-        getArtistArt(artist, imgpath, res, type)
+        getArtistArt(artist, imgpath, res, type, blur)
       } else {
         // we're looking for albumart let's look for some!
         getAlbumArt(artist, album, imgpath)
@@ -121,7 +142,7 @@ function getArt ({ artist, album, type } = {}, res) {
   }
 }
 
-async function getArtistArt (artist, imgpath, res, type) {
+async function getArtistArt (artist, imgpath, res, type, blur) {
   const info = await mbApi.searchArtist(artist, 0, 1)
   const mbid = info.artists[0].id
 
@@ -142,7 +163,11 @@ async function getArtistArt (artist, imgpath, res, type) {
             if (type !== 'bg') {
               opts.height = 480
             }
-            sharp(imgpath).resize(opts).pipe(res)
+            if (blur === true) {
+              sharp(imgpath).resize(opts).greyscale().blur().pipe(res)
+            } else {
+              sharp(imgpath).resize(opts).pipe(res)
+            }
           })
         })
         .catch(err => {

@@ -117,7 +117,7 @@ const domBuilder = (function () {
 
         frag.appendChild(cr.div({ class: 'background-container is-hidden-touch' },
           cr.figure({ class: 'image' },
-            cr.img({ src: `/art/artist/background/${encodeURIComponent(state.artist)}.jpg)` })
+            cr.img({ src: `/art/artist/background/blur/${encodeURIComponent(state.artist)}.jpg)` })
           )
         ))
 
@@ -128,7 +128,7 @@ const domBuilder = (function () {
 
         frag.appendChild(
           cr.div({ class: 'columns is-multiline' },
-            cr.div({ class: 'column is-10-touch is-offset-1-touch is-4-desktop is-offset-4-desktop art' },
+            cr.div({ class: 'column is-10-touch is-offset-1-touch is-3-desktop art' },
               cr.figure({ id: 'home-albumart', class: 'image is-1by1' },
                 cr.img({ loading: 'lazy', src: imgSrc })
               ),
@@ -823,9 +823,11 @@ const domBuilder = (function () {
 
   const reconnected = function () {
     document.getElementById('disconnect-message').classList.remove('show')
+    document.querySelector('.animation-container').classList.remove('audio-wave')
   }
   const disconnected = function () {
     document.getElementById('disconnect-message').classList.add('show')
+    document.querySelector('.animation-container').classList.add('audio-wave')
   }
 
   const mounts = function (data) {
