@@ -160,19 +160,22 @@ figure.is-40x40
 
   .container
     max-width: 90vw
-    position: inherit
     &.max
+      position: relative
       @include from($desktop)
         margin: 0
-        width: 65vw
-      @include until($desktop)
-        background: none!important
-      background-size: 100%
-      background-repeat: no-repeat
-      background-position: top
-      .columns
-        backdrop-filter: blur(3px) saturate(0)
-        
+        // width: 65vw
+        margin-right: 450px
+        .columns
+          backdrop-filter: blur(3px) saturate(0)
+          padding-top: 20vh
+      .background-container
+        position: absolute
+        width: 100%
+        img
+          object-fit: cover
+          object-position: center
+          height: 45vh
 
   .artist-info
     padding-bottom: 50px
@@ -269,11 +272,11 @@ body.no-controls #queue-list
   position: fixed
   top: 0
   height: 100vh
-  width: calc(35vw - 90px)
-  right: 100vw
-  transition: left 0.3s ease-in-out
+  width: 450px
+  right: -450px
+  transition: right 0.3s ease-in-out
   display: block
-  background: $grey-darkest
+  background: $grey-darker
   color: $grey-light
   padding: 20px 30px 100px 30px
   overflow-y: scroll
@@ -281,9 +284,10 @@ body.no-controls #queue-list
   -ms-overflow-style: none
   &::-webkit-scrollbar
     display: none
-
   &.is-active
     right: 0
+  h1
+    padding: 10px 0 20px 0
   a
     color: $grey-light
     text-decoration: underline

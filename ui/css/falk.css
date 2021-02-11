@@ -8557,21 +8557,23 @@ figure.is-40x40 {
     background-size: contain;
     background-repeat: no-repeat; }
   #content-container .container {
-    max-width: 90vw;
-    position: inherit; }
+    max-width: 90vw; }
     #content-container .container.max {
-      background-size: 100%;
-      background-repeat: no-repeat;
-      background-position: top; }
+      position: relative; }
       @media screen and (min-width: 1024px) {
         #content-container .container.max {
           margin: 0;
-          width: 65vw; } }
-      @media screen and (max-width: 1023px) {
-        #content-container .container.max {
-          background: none !important; } }
-      #content-container .container.max .columns {
-        backdrop-filter: blur(3px) saturate(0); }
+          margin-right: 450px; }
+          #content-container .container.max .columns {
+            backdrop-filter: blur(3px) saturate(0);
+            padding-top: 20vh; } }
+      #content-container .container.max .background-container {
+        position: absolute;
+        width: 100%; }
+        #content-container .container.max .background-container img {
+          object-fit: cover;
+          object-position: center;
+          height: 45vh; }
   #content-container .artist-info {
     padding-bottom: 50px; }
     #content-container .artist-info figure {
@@ -8664,11 +8666,11 @@ body.no-controls #queue-list {
   position: fixed;
   top: 0;
   height: 100vh;
-  width: calc(35vw - 90px);
-  right: 100vw;
-  transition: left 0.3s ease-in-out;
+  width: 450px;
+  right: -450px;
+  transition: right 0.3s ease-in-out;
   display: block;
-  background: #2A2A2A;
+  background: #444444;
   color: #f1f1f1;
   padding: 20px 30px 100px 30px;
   overflow-y: scroll;
@@ -8678,6 +8680,8 @@ body.no-controls #queue-list {
     display: none; }
   #queue-list.is-active {
     right: 0; }
+  #queue-list h1 {
+    padding: 10px 0 20px 0; }
   #queue-list a {
     color: #f1f1f1;
     text-decoration: underline; }

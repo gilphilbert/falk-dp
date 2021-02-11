@@ -113,7 +113,13 @@ const domBuilder = (function () {
       if (_loadPage === 'home') {
         const state = dataTools.getState()
         const isLossless = !(parseInt(state.bitrate) <= 320)
-        const frag = cr.div({ class: 'container max', style: `background-image: url(/art/artist/background/${encodeURIComponent(state.artist)}.jpg)` })
+        const frag = cr.div({ class: 'container max' })
+
+        frag.appendChild(cr.div({ class: 'background-container is-hidden-touch' },
+          cr.figure({ class: 'image' },
+            cr.img({ src: `/art/artist/background/${encodeURIComponent(state.artist)}.jpg)` })
+          )
+        ))
 
         let imgSrc = '/img/notplaying.png'
         if ('albumart' in state) {
@@ -131,7 +137,7 @@ const domBuilder = (function () {
               )
             ),
             cr.div({ class: 'column is-10-desktop is-offset-1' },
-              cr.p({ id: 'home-title', class: 'is-2 has-text-centered has-no-overflow' }, state.title || 'Not playing'),
+              cr.h1({ id: 'home-title', class: 'has-text-centered has-no-overflow' }, state.title || 'Not playing'),
               cr.p({ class: 'has-text-centered subtitle is-3 has-no-overflow is-hidden-touch' }, cr.a({ id: 'home-album', href: '/album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album || '')),
               cr.p({ class: 'has-text-centered subtitle is-3 has-no-overflow' }, cr.a({ id: 'home-artist', href: '/artist/' + state.artist, 'data-navigo': '' }, state.artist || '')),
               cr.p({ class: 'has-text-centered' }, cr.span({ id: 'home-quality', class: 'is-small' + ((isLossless) ? '' : ' is-grey') }, uiTools.getQuality(state)))
