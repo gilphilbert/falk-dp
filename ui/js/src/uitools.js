@@ -215,13 +215,59 @@ const uiTools = (function () {
       e.preventDefault()
       hideMenu()
     })
+    /*
     document.addEventListener('swiped-up', function (e) {
-      e.preventDefault()
-      const ql = document.querySelector('#queue-list')
-      if (ql != null) {
-        ql.classList.add('is-active')
+      const cont = e.target.closest('.container')
+      if ((cont !== null && cont.classList.contains('max')) || e.target.closest('#control-bar') !== null) {
+        e.preventDefault()
+        e.stopPropagation()
+        const ql = document.querySelector('#queue-list')
+        if (ql != null) {
+          ql.classList.add('is-active')
+        }
+        return false
       }
     })
+    */
+    let ts
+
+    document.getElementById('control-bar').addEventListener('touchstart', function (e) {
+      ts = e.touches[0].clientY
+      e.preventDefault()
+    }, false)
+
+    document.getElementById('control-bar').addEventListener('touchend', function (e) {
+      e.preventDefault()
+      const te = e.changedTouches[0].clientY
+      if (ts > te + 5) {
+        document.getElementById('queue-list').classList.add('is-active')
+      }
+      ts = 0
+    })
+
+    document.getElementById('control-bar').addEventListener('touchmove', function (e) {
+      e.preventDefault()
+    }, false)
+
+    // don't scroll body when scrolling on queue
+    document.getElementById('queue-list').addEventListener('touchmove', function (e) {
+      e.stopPropagation()
+    }, false)
+
+    document.getElementById('queue-list').addEventListener('touchstart', function (e) {
+      ts = e.touches[0].clientY
+      e.preventDefault()
+    }, false)
+
+    document.getElementById('queue-list').addEventListener('touchend', function (e) {
+      e.preventDefault()
+      const te = e.changedTouches[0].clientY
+      if (ts < te - 5) {
+        document.getElementById('queue-list').classList.remove('is-active')
+      }
+    })
+
+    /*
     document.addEventListener('swiped-down', function (e) {
       e.preventDefault()
       const ql = document.querySelector('#queue-list')
@@ -229,6 +275,7 @@ const uiTools = (function () {
         ql.classList.remove('is-active')
       }
     })
+    */
 
     document.getElementById('burger').addEventListener('click', e => {
       e.preventDefault()
