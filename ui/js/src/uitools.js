@@ -215,20 +215,6 @@ const uiTools = (function () {
       e.preventDefault()
       hideMenu()
     })
-    /*
-    document.addEventListener('swiped-up', function (e) {
-      const cont = e.target.closest('.container')
-      if ((cont !== null && cont.classList.contains('max')) || e.target.closest('#control-bar') !== null) {
-        e.preventDefault()
-        e.stopPropagation()
-        const ql = document.querySelector('#queue-list')
-        if (ql != null) {
-          ql.classList.add('is-active')
-        }
-        return false
-      }
-    })
-    */
     let ts
 
     document.getElementById('control-bar').addEventListener('touchstart', function (e) {
@@ -266,16 +252,6 @@ const uiTools = (function () {
         document.getElementById('queue-list').classList.remove('is-active')
       }
     })
-
-    /*
-    document.addEventListener('swiped-down', function (e) {
-      e.preventDefault()
-      const ql = document.querySelector('#queue-list')
-      if (ql != null) {
-        ql.classList.remove('is-active')
-      }
-    })
-    */
 
     document.getElementById('burger').addEventListener('click', e => {
       e.preventDefault()

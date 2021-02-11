@@ -27,7 +27,7 @@ const domBuilder = (function () {
   }
 
   const buildTile = function ({ title, image, href, subtitle, subtitleHref, classes } = {}) {
-    return cr.div({ class: 'column is-tile is-2-desktop is-4-tablet is-4-mobile item-tile art has-text-centered' + ((classes != null) ? ' ' + classes : ''), 'data-title': title, 'data-subtitle': subtitle },
+    return cr.div({ class: 'column is-2-desktop is-4-touch art has-text-centered' + ((classes != null) ? ' ' + classes : ''), 'data-title': title, 'data-subtitle': subtitle },
       cr.a({ href: href, 'data-navigo': '' },
         cr.figure({ class: 'image is-1by1' },
           cr.img({ src: image, loading: 'lazy' })
@@ -287,11 +287,14 @@ const domBuilder = (function () {
         */
 
         frag.appendChild(
+          cr.p({ class: 'is-2' }, data.artist.title)
+        )
+        frag.appendChild(
           cr.p({ class: 'subtitle is-2' }, 'Albums')
         )
         // create the list of albums (in tile format)
         frag.appendChild(
-          cr.div({ class: 'columns is-multiline art-container' },
+          cr.div({ class: 'columns is-multiline is-mobile art-container' },
             data.albums.map(function (album) {
               return buildTile({
                 title: album.title,
