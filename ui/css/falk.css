@@ -8547,69 +8547,74 @@ figure.is-40x40 {
     .dropdown-content .dropdown-item:hover {
       background-color: #ffffff28; }
 
-#content-container {
-  padding: 0 0 120px 90px; }
-  @media screen and (max-width: 1023px) {
-    #content-container {
-      padding: 24px 9px 100px 9px; } }
-  #content-container.has-background {
-    padding-top: 205px;
-    background-size: contain;
-    background-repeat: no-repeat; }
-  #content-container .container {
-    max-width: 90vw;
-    padding: 40px 0; }
-    #content-container .container.max {
-      position: relative; }
-      @media screen and (min-width: 1024px) {
-        #content-container .container.max {
-          margin: 0;
-          padding: 0;
-          margin-right: 450px; }
-          #content-container .container.max .columns {
-            padding-top: 20vh; }
-          #content-container .container.max .column.art {
-            margin: 0 auto; } }
-      #content-container .container.max .background-container {
-        position: absolute;
-        width: 100%; }
-        #content-container .container.max .background-container img {
-          object-fit: cover;
-          object-position: center;
-          height: 45vh; }
-  #content-container .artist-info {
-    padding-bottom: 50px; }
-    #content-container .artist-info figure {
-      border-radius: 7px;
-      overflow: hidden; }
-      #content-container .artist-info figure:after {
-        content: '';
-        background-image: linear-gradient(transparent, #2A2A2ADD);
-        height: 40px;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%; }
-  @media screen and (max-width: 1023px) {
-    #content-container .album-detail p.title {
-      margin-bottom: 0; } }
-  @media screen and (max-width: 1023px) {
-    #content-container .is-reversed-touch {
-      display: flex;
-      flex-direction: column-reverse; } }
-  #content-container #home-quality {
-    padding: 7px 10px;
-    border-radius: 1000px;
-    background-color: #4D84C3;
-    color: #FFFFFF;
-    font-size: 0.9rem; }
-    #content-container #home-quality.is-grey {
-      background-color: #7a7a7a; }
-  #content-container #swipe-up-queue {
-    position: absolute;
-    padding: 8px 12px;
-    left: calc(50vw - 24px);
-    bottom: 10px; }
+@media screen and (max-width: 1023px) {
+  #content-container {
+    padding: 0; } }
+
+#content-container.has-background {
+  padding-top: 27vh;
+  background-size: contain;
+  background-repeat: no-repeat; }
+
+#content-container .container {
+  max-width: 90vw;
+  padding: 40px 0; }
+  #content-container .container.max {
+    position: relative; }
+    @media screen and (min-width: 1024px) {
+      #content-container .container.max {
+        margin: 0;
+        padding: 0;
+        margin-right: 450px; }
+        #content-container .container.max .columns {
+          padding-top: 20vh; }
+        #content-container .container.max .column.art {
+          margin: 0 auto; } }
+    #content-container .container.max .background-container {
+      position: absolute;
+      width: 100%; }
+      #content-container .container.max .background-container img {
+        object-fit: cover;
+        object-position: center;
+        height: 45vh; }
+
+#content-container .artist-info {
+  padding-bottom: 50px; }
+  #content-container .artist-info figure {
+    border-radius: 7px;
+    overflow: hidden; }
+    #content-container .artist-info figure:after {
+      content: '';
+      background-image: linear-gradient(transparent, #2A2A2ADD);
+      height: 40px;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%; }
+
+@media screen and (max-width: 1023px) {
+  #content-container .album-detail p.title {
+    margin-bottom: 0; } }
+
+@media screen and (max-width: 1023px) {
+  #content-container .is-reversed-touch {
+    display: flex;
+    flex-direction: column-reverse; } }
+
+#content-container #home-quality {
+  padding: 7px 10px;
+  border-radius: 1000px;
+  background-color: #4D84C3;
+  color: #FFFFFF;
+  font-size: 0.9rem; }
+  #content-container #home-quality.is-grey {
+    background-color: #7a7a7a; }
+
+#content-container #swipe-up-queue {
+  position: absolute;
+  padding: 8px 12px;
+  left: calc(50vw - 24px);
+  bottom: 10px; }
 
 @media screen and (max-width: 1023px) {
   table.table.songs tr td:first-child {

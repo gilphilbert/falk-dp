@@ -149,12 +149,13 @@ figure.is-40x40
 // this contains the right hand content pane
 #content-container
   // padding: 2.5em 1.5em calc(100px + .75em) calc(1.5em + 90px)
-  padding: 0 0 120px 90px
+  // padding: 0 0 120px -90px
   @include until($desktop)
-    padding: 24px 9px 100px 9px
+    // padding: 24px 9px 100px 90px
+    padding: 0
 
   &.has-background
-    padding-top: 205px
+    padding-top: 27vh
     background-size: contain
     background-repeat: no-repeat
 

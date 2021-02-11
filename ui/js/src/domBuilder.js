@@ -252,8 +252,14 @@ const domBuilder = (function () {
         // append the main fragment to the page
         main.appendChild(frag)
       } else if (_loadPage === 'artist') {
-        main.style.backgroundImage = `url(${data.artist.background})`
-        main.classList.add('has-background')
+        const frag = document.createDocumentFragment()
+
+        // append directly to the page, we don't want this in the container. <!---------------------------------------------------------------------------------- NEED TO MOVE STYLES TO CSS
+        frag.appendChild(cr.figure({ class: 'image' },
+          cr.img({ src: `${data.artist.background}`, style: 'object-fit: cover;height: 30vh;object-position: center;' })
+        ))
+        // main.style.backgroundImage = `url(${data.artist.background})`
+        // main.classList.add('has-background')
         // list of the artist's songs
         // songs = data.navigation.lists[1].items
 
@@ -267,7 +273,7 @@ const domBuilder = (function () {
         */
 
         // create main fragment
-        const frag = cr.div({ class: 'container' })
+        const cont = frag.appendChild(cr.div({ class: 'container' }))
         // append the library buttons
         // frag.appendChild(breadcrumb([{ data.artist.title: 'Artists', url: 'artists' }, { data.artist.title: data.navigation.info.title, url: null, isActive: true }]))
 
@@ -286,14 +292,14 @@ const domBuilder = (function () {
         )
         */
 
-        frag.appendChild(
+        cont.appendChild(
           cr.p({ class: 'is-2' }, data.artist.title)
         )
-        frag.appendChild(
+        cont.appendChild(
           cr.p({ class: 'subtitle is-2' }, 'Albums')
         )
         // create the list of albums (in tile format)
-        frag.appendChild(
+        cont.appendChild(
           cr.div({ class: 'columns is-multiline is-mobile art-container' },
             data.albums.map(function (album) {
               return buildTile({
