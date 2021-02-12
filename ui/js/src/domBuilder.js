@@ -11,7 +11,7 @@ const domBuilder = (function () {
   }
 
   const buildTile = function ({ title, image, href, subtitle, subtitleHref, classes } = {}) {
-    return cr.div({ class: 'col-lg-2 col-xs-4 art has-text-centered' + ((classes != null) ? ' ' + classes : ''), 'data-title': title, 'data-subtitle': subtitle },
+    return cr.div({ class: 'col-lg-2 col-xs-4 art has-text-centered item-tile ' + classes || ' ', 'data-title': title, 'data-subtitle': subtitle || '' },
       cr.a({ href: href, 'data-navigo': '' },
         cr.figure({ class: 'image is-1by1' },
           cr.img({ src: image, loading: 'lazy' })
@@ -681,50 +681,28 @@ const domBuilder = (function () {
   const modals = {
     addShare: function () {
       const modal = cr.div({ id: 'update-detail-modal', class: 'modal is-small modal-fx-3dSignDown' },
-        cr.div({ class: 'modal-background' }),
         cr.div({ class: 'modal-content' },
           cr.div({ class: 'box' },
-            uiTools.getSVG('server', 'title-icon'),
-            cr.p('Add share'),
-            cr.div({ class: 'field' },
-              cr.div({ class: 'control' },
-                cr.input({ class: 'input address', type: 'text', placeholder: 'Server address' })
-              ),
-              cr.p({ class: 'help is-danger' })
+            cr.h1('Add share'),
+            cr.div({ class: '' },
+              cr.input({ class: 'input address', type: 'text', placeholder: 'Server address' }),
+              cr.p({ class: 'help is-danger is-6' })
             ),
-            cr.div({ class: 'field' },
-              cr.div({ class: 'control' },
-                cr.input({ class: 'input path', type: 'text', placeholder: 'Path (e.g. /export/music)' })
-              ),
-              cr.p({ class: 'help is-danger' })
+            cr.div({ class: '' },
+              cr.input({ class: 'input path', type: 'text', placeholder: 'Path (e.g. /export/music)' }),
+              cr.p({ class: 'help is-danger is-6' })
             ),
-            cr.div({ class: 'field' },
-              cr.div({ class: 'control' },
-                cr.div({ class: 'select is-fullwidth' },
-                  cr.select({ class: 'type' },
-                    cr.option({ value: 'nfs' }, 'NFS'),
-                    cr.option({ value: 'smb' }, 'SMB')
-                  )
+            cr.div({ class: '' },
+              cr.div({ class: 'select' },
+                cr.select({ class: 'type' },
+                  cr.option({ value: 'nfs' }, 'NFS'),
+                  cr.option({ value: 'smb' }, 'SMB')
                 )
               ),
-              cr.p({ class: 'help is-danger' })
+              cr.p({ class: 'help is-danger is-6' })
             ),
-            cr.div({ class: 'row buttons' },
-              cr.div({ class: 'column ' },
-                cr.div({ class: 'field' },
-                  cr.div({ class: 'control' },
-                    cr.button({ class: 'button is-text is-rounded is-fullwidth', on: { click: function () { this.closest('.modal').classList.remove('is-active') } } }, 'Close')
-                  )
-                )
-              ),
-              cr.div({ class: 'column' },
-                cr.div({ class: 'field first-button' },
-                  cr.div({ class: 'control' },
-                    cr.button({ class: 'button is-white is-rounded is-fullwidth', on: { click: function () { uiTools.handlers.addShare(this) } } }, 'Add')
-                  )
-                )
-              )
-            )
+            cr.button({ class: 'button is-rounded', on: { click: function () { this.closest('.modal').classList.remove('is-active') } } }, 'Close'),
+            cr.button({ class: 'button is-primary is-rounded', on: { click: function () { uiTools.handlers.addShare(this) } } }, 'Add Share')
           )
         )
       )
@@ -736,30 +714,37 @@ const domBuilder = (function () {
       }, 250)
     },
     addToPlaylist: function (e) {
-      const song = e.target.closest('tr').dataset
-      const modal = cr.div({ class: 'modal is-small modal-fx-3dSignDown' },
-        cr.div({ class: 'modal-background' }),
-        cr.div({ class: 'modal-content' },
-          cr.div({ class: 'box' },
-            cr.p('Select a playlist'),
-            cr.table({ class: 'table is-fullwidth table-hover' }),
-            cr.button({ class: 'button is-light is-fullwidth', on: { click: uiTools.closeModal } }, 'Cancel')
+      console.log(e)
+      webSocket.get.playlists((data) => {
+        console.log(data)
+        const song = e.target.closest('tr').dataset
+        const modal = cr.div({ class: 'modal is-small modal-fx-3dSignDown' },
+          cr.div({ class: 'modal-content' },
+            cr.div({ class: 'box' },
+              cr.h1('Select Playlist'),
+              cr.table({ class: 'table is-fullwidth table-hover' },
+                cr.tbody(
+                  data.map(function (playlist) {
+                    return cr.tr(cr.td(playlist), cr.td(cr.button({ class: 'button', on: { click: () => { webSocket.action.addToPlaylist({ name: `${playlist}`, service: `${song.service}`, uri: `${song.uri}` }); uiTools.closeModal() } } }, 'Select')))
+                  })
+                )
+              ),
+              cr.div(
+                cr.button({ class: 'button is-rounded is-primary', on: { click: (e) => { const el = e.target.closest('div').querySelector('.is-hidden'); el.classList.remove('is-hidden'); el.focus() } } }, '+ New Playlist'),
+                cr.input({ class: 'input is-hidden', type: 'text', placeholder: 'Playlist name' }),
+                cr.p({ class: 'help is-danger is-6' })
+              ),
+              cr.button({ class: 'button is-rounded', on: { click: uiTools.closeModal } }, 'Cancel'),
+              cr.button({ class: 'button is-rounded is-primary', on: { click: uiTools.closeModal } }, 'Save')
+            )
           )
         )
-      )
-      webSocket.get.playlists((data) => {
-        const tbody = cr.tbody(
-          data.map(function (playlist) {
-            return cr.tr(cr.td(playlist), cr.td(cr.button({ class: 'button', on: { click: () => { webSocket.action.addToPlaylist({ name: `${playlist}`, service: `${song.service}`, uri: `${song.uri}` }); uiTools.closeModal() } } }, 'Select')))
-          })
-        )
-        modal.querySelector('table').appendChild(tbody)
+        uiTools.clearNodes('#modal-container').appendChild(modal)
+        // wait for the element to be added to the DOM so we get our nice effects!
+        window.setTimeout(() => {
+          modal.classList.add('is-active')
+        }, 100)
       })
-      uiTools.clearNodes('#modal-container').appendChild(modal)
-      // wait for the element to be added to the DOM so we get our nice effects!
-      window.setTimeout(() => {
-        modal.classList.add('is-active')
-      }, 250)
     }
   }
 

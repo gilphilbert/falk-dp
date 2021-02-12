@@ -90,7 +90,8 @@ const webSocket = (function () {
     queue: function () {
       server.send('getQueue')
     },
-    playlists: function () {
+    playlists: function (callback) {
+      server.bindOnce('pushPlaylists', callback)
       server.send('getPlaylists')
     },
     playlist: function (name) {

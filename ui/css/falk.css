@@ -2462,14 +2462,16 @@ html {
   font-size: 15px;
   font-weight: normal;
   color: #FFFFFF;
-  background: #2A2A2A; }
+  background: #2A2A2A;
+  scrollbar-color: #646464 #333333; }
   @media (max-width: 768px) {
     html {
       font-size: 13px; } }
 body {
   font-family: 'Lexend Deca', sans-serif;
   background-attachment: fixed;
-  min-height: 100vh; }
+  min-height: 100vh;
+  overflow-x: hidden; }
   @media (max-width: 768px) {
     body.no-controls #content-container {
       padding-bottom: 10px; }
@@ -2488,11 +2490,13 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
   font-size: 1.8rem;
-  margin: 0.6rem 0 1.2rem; }
+  margin: 0.6rem 0 1.2rem;
+  padding: 2px 0; }
 
 p, a {
   font-weight: normal;
-  color: #FFFFFF; }
+  color: #FFFFFF;
+  padding: 2px 0; }
   p.is-1, a.is-1 {
     font-size: 1.5rem; }
   p.is-2, a.is-2 {
@@ -2506,7 +2510,7 @@ p, a {
   p.is-6, a.is-6 {
     font-size: 1rem; }
   p.subtitle, a.subtitle {
-    margin-top: -0.2rem;
+    margin-top: -0.3rem;
     font-weight: normal;
     color: #9c9c9c; }
     p.subtitle.is-1, a.subtitle.is-1 {
@@ -2523,7 +2527,7 @@ p, a {
       font-size: 0.8rem; }
 
 p {
-  margin: 0.3rem 0 0.4rem 0; }
+  margin: 0.2rem 0 0.3rem 0; }
 
 table {
   width: 100%; }
@@ -2598,6 +2602,9 @@ figure.is-40x40 {
 .has-no-overflow {
   overflow: hidden; }
 
+.is-hidden {
+  display: none; }
+
 .pointer {
   cursor: pointer; }
 
@@ -2605,19 +2612,23 @@ figure.is-40x40 {
   color: #FFFFFF; }
 
 .select select, .textarea, .input {
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid #888686;
-  border-radius: 0;
-  color: #FFFFFF; }
+  background: #525252;
+  border: 2px solid #525252;
+  border-radius: 7px;
+  color: #FFFFFF;
+  padding: 6px 8px;
+  width: 100%; }
+  .select select:focus, .textarea:focus, .input:focus {
+    outline: none;
+    border-bottom: 2px solid #4D84C3; }
   .select select::-webkit-input-placeholder, .textarea::-webkit-input-placeholder, .input::-webkit-input-placeholder {
-    color: #f1f1f1; }
+    color: #9c9c9c; }
   .select select:-moz-placeholder, .textarea:-moz-placeholder, .input:-moz-placeholder {
-    color: #f1f1f1; }
+    color: #9c9c9c; }
   .select select::-moz-placeholder, .textarea::-moz-placeholder, .input::-moz-placeholder {
-    color: #f1f1f1; }
+    color: #9c9c9c; }
   .select select:-ms-input-placeholder, .textarea:-ms-input-placeholder, .input:-ms-input-placeholder {
-    color: #f1f1f1; }
+    color: #9c9c9c; }
 
 .has-no-vpadding {
   padding-top: 0;
@@ -2634,12 +2645,30 @@ figure.is-40x40 {
   margin: auto; }
 
 .modal {
-  color: #FFFFFF; }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  color: #FFFFFF;
+  z-index: 100;
+  display: flex;
+  align-items: center; }
+  .modal .modal-content {
+    margin: 0 auto; }
   .modal.is-small .modal-content, .modal.is-small .modal-card {
     width: 400px; }
+    @media (max-width: 768px) {
+      .modal.is-small .modal-content, .modal.is-small .modal-card {
+        width: 90vw; } }
+  .modal.is-lg .modal-content, .modal.is-lg .modal-card {
+    width: 600px; }
+    @media (max-width: 768px) {
+      .modal.is-lg .modal-content, .modal.is-lg .modal-card {
+        width: 100vw; } }
   .modal .box {
-    padding: 3rem;
-    background: #4D84C3; }
+    padding: 3rem; }
   .modal .title-icon {
     margin-bottom: 1em; }
   .modal .title {
@@ -2684,13 +2713,13 @@ figure.is-40x40 {
     border-radius: 4px;
     overflow: hidden;
     z-index: 1; }
-  .dropdown:hover .dropdown-content {
+  .dropdown.is-active .dropdown-content {
     display: block; }
-    .dropdown:hover .dropdown-content span {
+    .dropdown.is-active .dropdown-content span {
       display: block;
       padding: 12px 16px;
       cursor: pointer; }
-      .dropdown:hover .dropdown-content span:hover {
+      .dropdown.is-active .dropdown-content span:hover {
         background-color: #ffffff28; }
 
 #content-container {
@@ -2799,18 +2828,10 @@ body.no-controls #queue-list {
   display: block;
   background: #3f3f3f;
   color: #f1f1f1;
-  padding: 20px 30px 100px 30px; }
-  #queue-list #queue-items {
-    height: calc(100% - (90px + 80px));
-    overflow-y: scroll; }
+  padding: 0; }
   #queue-list.is-active {
     right: 0; }
-  #queue-list h1 {
-    padding: 10px 0 20px 0; }
-  #queue-list a {
-    color: #f1f1f1;
-    text-decoration: underline; }
-    #queue-list a:hover {
+    #queue-list.is-active:hover {
       color: #4D84C3; }
   #queue-list .is-playing figure {
     position: relative; }
@@ -2832,6 +2853,19 @@ body.no-controls #queue-list {
       border-top: 9px solid transparent;
       border-bottom: 9px solid transparent;
       border-left: 12px solid #f1f1f1; }
+  #queue-list h1 {
+    margin: 0;
+    padding: 0; }
+  #queue-list a {
+    color: #f1f1f1;
+    text-decoration: underline; }
+  #queue-list #queue-header {
+    background: #2A2A2A;
+    padding: 25px 20px 25px 20px; }
+  #queue-list #queue-items {
+    padding: 0 20px 0 20px;
+    height: calc(100% - 50px - 1.8rem - 100px);
+    overflow-y: scroll; }
   #queue-list td {
     cursor: pointer;
     vertical-align: middle;
@@ -2846,26 +2880,15 @@ body.no-controls #queue-list {
       width: 20px; }
   @media (max-width: 768px) {
     #queue-list {
-      position: fixed;
       top: 100vh;
       left: 0;
-      height: 100vh;
       width: 100vw;
-      padding: 0;
       transition: top 250ms ease 0s;
       z-index: 1; }
-      #queue-list h1 {
-        margin: 0;
-        padding: 0; }
-      #queue-list #queue-header {
-        background: #2A2A2A;
-        padding: 25px 20px 25px 20px; }
       #queue-list #queue-items {
-        height: calc(100% - 50px - 1.8rem - 78px);
-        padding: 0 20px 0 20px; }
+        height: calc(100% - 50px - 1.8rem - 78px); }
       #queue-list.is-active {
-        top: 0;
-        transition: top 250ms ease 0s; } }
+        top: 0; } }
 #setting-page .label {
   color: inherit; }
 
@@ -2938,6 +2961,23 @@ body.no-controls #queue-list {
   #disconnect-message.show {
     top: 0;
     transition: top 0.3s ease; }
+
+/* width */
+::-webkit-scrollbar {
+  width: 12px; }
+
+/* Track */
+::-webkit-scrollbar-track {
+  background-color: #222222; }
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #525252;
+  border-radius: 5px; }
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #9c9c9c; }
 
 #control-bar {
   position: fixed;

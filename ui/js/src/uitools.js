@@ -30,7 +30,7 @@ const uiTools = (function () {
     const svgElem = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
     svgElem.classList.add('feather')
     const useElem = document.createElementNS('http://www.w3.org/2000/svg', 'use')
-    useElem.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '/img/feather-sprite.svg#' + iconName)
+    useElem.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '/img/feather-sprite.svg#' + iconName)
     svgElem.appendChild(useElem)
     if (cls) {
       cls.split(' ').forEach(c => svgElem.classList.add(c))
@@ -202,7 +202,6 @@ const uiTools = (function () {
     document.addEventListener('click', function (e) {
       const cl = e.target.classList
       if (!cl.contains('burger')) {
-        console.log('hiding menu')
         hideMenu()
       }
     })
@@ -271,7 +270,13 @@ const uiTools = (function () {
     })
 
     document.getElementById('search-input').addEventListener('keyup', (e) => {
-      pageSearch()
+      if (e.which === 27) {
+        e.target.value = ''
+        e.target.blur()
+        pageSearch()
+      } else {
+        pageSearch()
+      }
     })
 
     document.getElementById('queue-toggle').addEventListener('click', (e) => {
@@ -300,7 +305,6 @@ const uiTools = (function () {
     const ss = document.getElementById('search-input').value.toLowerCase()
     tiles.forEach((t) => {
       if (t.dataset.title.toLowerCase().indexOf(ss) === -1 && t.dataset.subtitle.toLowerCase().indexOf(ss) === -1) {
-        // console.log(t)
         t.classList.add('is-hidden')
       } else {
         t.classList.remove('is-hidden')

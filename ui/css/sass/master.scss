@@ -7,6 +7,11 @@
   @return $new-color;
 }
 
+@function dark($color) {
+    $new-color: scale-color($color, $lightness: -10%);
+    @return $new-color;
+}
+
 // Set your brand colors
 $green: #4BBE87;
 $blue: #4D84C3;
