@@ -2752,7 +2752,8 @@ table.songs tr:hover td {
   background: #3f3f3f; }
 
 table.songs td {
-  vertical-align: middle; }
+  vertical-align: middle;
+  padding: 5px 0 2px 0; }
 
 .art-container .col-lg-2 {
   padding: 27px; }
