@@ -1,4 +1,11 @@
 @charset "utf-8";
+@use "sass:color";
+
+
+@function light($color) {
+  $new-color: scale-color($color, $lightness: 10%);
+  @return $new-color;
+}
 
 // Set your brand colors
 $green: #4BBE87;
@@ -6,14 +13,17 @@ $blue: #4D84C3;
 $yellow: #E3B505;
 $orange: #FF6B35;
 $white: #FFFFFF;
+
 $red: #A31621;
+$danger: $red;
 
 $grey-lighter: #F7F7F7;
 $grey-light: #f1f1f1;
 $grey: #7a7a7a;
+$grey-hover: #888888;
 $grey-dark: #9c9c9c;
-$grey-darker: #444444;
 $grey-darkest: #2A2A2A;
+$grey-darker: light($grey-darkest);
 
 $black: #000;
 

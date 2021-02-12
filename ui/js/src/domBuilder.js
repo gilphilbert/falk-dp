@@ -493,6 +493,7 @@ const domBuilder = (function () {
         document.querySelector('#control-bar-artist').innerText = state.artist
         if (isHome) {
           document.getElementById('home-artist').innerText = state.artist
+          document.querySelector('.background-container img').src = `/art/artist/background/blur/${encodeURIComponent(state.artist)}.jpg`
         }
       }
 
@@ -591,73 +592,36 @@ const domBuilder = (function () {
       // this is our main container
       const main = uiTools.clearNodes('#content-container')
 
-      const cont = cr.div({ class: 'container', id: 'setting-page' },
-        cr.p({ class: 'is-4' }, 'Database'),
-        cr.div({ class: 'field is-horizontal' },
-          cr.div({ class: 'field-label' },
-            cr.label({ class: 'label' }, 'Songs')
+      const cont = cr.div({ class: 'container-fluid', id: 'setting-page' },
+        cr.h1('Settings'),
+        cr.p({ class: 'is-1' }, 'Database'),
+        cr.div({ class: 'box row has-text-centered' },
+          cr.div({ class: 'col-lg-4 col-xs-12' },
+            cr.h1({ class: 'song-count' }, 'Loading'),
+            cr.p({ class: 'subtitle is-3' }, 'Songs')
           ),
-          cr.div({ class: 'field-body' },
-            cr.div({ class: 'field song-count' }, 'Loading')
+          cr.div({ class: 'col-lg-4 col-xs-12' },
+            cr.h1({ class: 'artist-count' }, 'Loading'),
+            cr.p({ class: 'subtitle is-3' }, 'Artists')
+          ),
+          cr.div({ class: 'col-lg-4 col-xs-12' },
+            cr.h1({ class: 'album-count' }, 'Loading'),
+            cr.p({ class: 'subtitle is-3' }, 'Albums')
           )
         ),
-        cr.div({ class: 'field is-horizontal' },
-          cr.div({ class: 'field-label' },
-            cr.label({ class: 'label' }, 'Artists')
-          ),
-          cr.div({ class: 'field-body' },
-            cr.div({ class: 'field artist-count' }, 'Loading')
-          )
-        ),
-        cr.div({ class: 'field is-horizontal' },
-          cr.div({ class: 'field-label' },
-            cr.label({ class: 'label' }, 'Albums')
-          ),
-          cr.div({ class: 'field-body' },
-            cr.div({ class: 'field album-count' }, 'Loading')
-          )
-        ),
-        cr.div({ class: 'field is-horizontal' },
-          cr.div({ class: 'field-label' }),
-          cr.div({ class: 'field-body' },
-            cr.div({ class: 'field' },
-              cr.div({ class: 'control' },
-                cr.div({ class: 'buttons' },
-                  cr.button({ class: 'button is-rounded is-primary', on: { click: () => { webSocket.action.updateLibrary() } } }, 'Update Library'),
-                  cr.button({ class: 'button is-rounded is-primary', on: { click: () => { webSocket.action.rescanLibrary() } } }, 'Rescan Library')
-                )
-              )
+        cr.button({ class: 'button is-rounded is-primary', on: { click: () => { webSocket.action.updateLibrary() } } }, 'Update Library'),
+        cr.button({ class: 'button is-rounded is-primary', on: { click: () => { webSocket.action.rescanLibrary() } } }, 'Rescan Library'),
+
+        cr.p({ class: 'is-1' }, 'Network shares'),
+        cr.table({ id: 'mount-table', class: 'table' },
+          cr.thead(
+            cr.tr(
+              cr.th('Name'), cr.th('Server'), cr.th('Share'), cr.th('Type'), cr.th()
             )
-          )
-        ),
-        cr.p({ class: 'is-4' }, 'Network shares'),
-        cr.div({ class: 'field is-horizontal' },
-          cr.div({ class: 'field-label' },
-            cr.label({ class: 'label' }, 'Shares')
           ),
-          cr.div({ class: 'field-body' },
-            cr.table({ id: 'mount-table', class: 'table is-fullwidth' },
-              cr.thead(
-                cr.tr(
-                  cr.th('Name'), cr.th('Server'), cr.th('Share'), cr.th('Type')
-                )
-              ),
-              cr.tbody()
-            )
-          )
+          cr.tbody()
         ),
-        cr.div({ class: 'field is-horizontal' },
-          cr.div({ class: 'field-label' }),
-          cr.div({ class: 'field-body' },
-            cr.div({ class: 'field' },
-              cr.div({ class: 'control' },
-                cr.div({ class: 'buttons' },
-                  cr.button({ class: 'button is-rounded is-primary', on: { click: function () { modals.addShare() } } }, 'Add share')
-                )
-              )
-            )
-          )
-        ),
+        cr.button({ class: 'button is-rounded is-primary', on: { click: function () { modals.addShare() } } }, 'Add share'),
         /*
         cr.div({ class: 'field is-horizontal' },
           cr.div({ class: 'field-label' },
@@ -673,28 +637,15 @@ const domBuilder = (function () {
           )
         ),
         */
-        cr.p({ class: 'is-4' }, 'System'),
-        cr.div({ class: 'field is-horizontal' },
-          cr.div({ class: 'field-label is-normal' },
-            cr.label({ class: 'label' }, 'Power')
-          ),
-          cr.div({ class: 'field-body' },
-            cr.div({ class: 'field' },
-              cr.div({ class: 'control' },
-                cr.div({ class: 'buttons' },
-                  cr.button({ class: 'button is-rounded is-danger', on: { click: () => { webSocket.action.reboot(); domBuilder.disconnected() } } }, 'Reboot'),
-                  cr.button({ class: 'button is-rounded is-danger', on: { click: () => { webSocket.action.shutdown(); domBuilder.disconnected() } } }, 'Shutdown')
-                )
-              )
-            )
-          )
-        )
+        cr.p({ class: 'is-1' }, 'System'),
+        cr.button({ class: 'button is-rounded is-danger', on: { click: () => { webSocket.action.reboot(); domBuilder.disconnected() } } }, 'Reboot'),
+        cr.button({ class: 'button is-rounded is-danger', on: { click: () => { webSocket.action.shutdown(); domBuilder.disconnected() } } }, 'Shutdown')
       )
       // load the database stats
       webSocket.get.libraryStats((data) => {
-        cont.querySelector('.field.song-count').innerText = data.songs
-        cont.querySelector('.field.artist-count').innerText = data.artists
-        cont.querySelector('.field.album-count').innerText = data.albums
+        cont.querySelector('.song-count').innerText = data.songs
+        cont.querySelector('.artist-count').innerText = data.artists
+        cont.querySelector('.album-count').innerText = data.albums
       })
       webSocket.get.shares((data) => {
         const tbl = document.querySelector('#mount-table tbody')
@@ -704,7 +655,11 @@ const domBuilder = (function () {
           const share = m.storage.substr(6 + host.length)
           tbl.appendChild(
             cr.tr({ 'data-id': m.mount },
-              cr.td(m.mount), cr.td(host), cr.td(share), cr.td(type.toUpperCase()), cr.td(cr.span({ class: 'delete' }))
+              cr.td(cr.p({ class: 'is-6' }, m.mount)),
+              cr.td(cr.p({ class: 'is-6' }, host)),
+              cr.td(cr.p({ class: 'is-6' }, share)),
+              cr.td(cr.p({ class: 'is-6' }, type.toUpperCase())),
+              cr.td(cr.span({ class: 'delete' }, uiTools.getSVG('x-circle', 'delete')))
             )
           )
         })

@@ -73,6 +73,10 @@ p
 
 table
   width: 100%
+  th
+    text-align: left
+    font-size: 1.2rem
+    border-bottom: 3px solid $grey-darker
   td.is-narrow
     width: 1%
     white-space: nowrap
@@ -90,23 +94,40 @@ figure
 .button
   border: none
   background: $grey
+  padding: 7px 19px
+  margin: 0 0.5rem 0.5rem 0
+  color: $white
+  transition: background 0.25s ease
   &:focus
     outline: none
   &:hover
-    filter: brightness(0.1)
+    background: $grey-hover
   &.is-rounded
     border-radius: 1000px
+  &.is-primary
+    background-color: $primary
+    &:hover
+      background-color: light($primary)
+  &.is-danger
+    background-color: $danger
+    &:hover
+      background-color: light($danger)
 
 .tag
   font-weight: normal
   border-radius: 1000px
-  background-color: $blue
+  background-color: $primary
   color: $white
   display: inline-block
   padding: 7px 10px
   &.is-grey
     background-color: $grey
 
+.box
+  background: light($grey-darkest)
+  border-radius: 7px
+  padding: 20px 0
+  margin: 10px 0
 
 .has-text-centered
   text-align: center
@@ -160,7 +181,7 @@ figure
       width: 400px
   .box
     padding: 3rem
-    background: $blue
+    background: $primary
   .title-icon
     margin-bottom: 1em
   .title
@@ -168,7 +189,7 @@ figure
   .buttons
     margin-top: 1em
   .select select option
-    color: $blue
+    color: $primary
 
 .feather
   width: 24px
@@ -179,7 +200,7 @@ figure
   stroke-linejoin: round
   fill: none
   &.is-active
-    stroke: $blue
+    stroke: $primary
   &.is-small
     height: 20px
     width: 20px
@@ -276,14 +297,6 @@ figure
       display: flex
       flex-direction: column-reverse
 
-  //#home-quality
-    //padding: 7px 10px
-    //border-radius: 1000px
-    //background-color: $blue
-    //color: $white
-    //font-size: 0.9rem
-    //&.is-grey
-    //  background-color: $grey
   #swipe-up-queue
     position: absolute
     padding: 8px 12px
@@ -374,7 +387,7 @@ body.no-controls #queue-list
     color: $grey-light
     text-decoration: underline
     &:hover
-      color: $blue
+      color: $primary
   .is-playing
     figure
       position: relative
@@ -437,7 +450,7 @@ body.no-controls #queue-list
   .label
     color: inherit
   p.title
-    border-bottom: 2px solid $blue
+    border-bottom: 2px solid $primary
     &:not(:first-child)
       padding-top: 17px
       margin-top: 17px
@@ -495,7 +508,7 @@ body.no-controls #queue-list
   width: 100vw
   // top: 0
   left: 0
-  background: $blue
+  background: $primary
   z-index: 1000
   display: flex
   align-items: center

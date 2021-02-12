@@ -4,7 +4,7 @@
   height: 100px
   width: 100%
   bottom: 0
-  background: #383838 //$grey-light
+  background: #383838
   z-index: 3
   line-height: 1
   color: $white
@@ -38,10 +38,6 @@
     svg
       margin: 0 auto
   //icons
-  .feather
-    height: 20px
-    width: 20px
-    stroke: $white
   // currently playing song detail
   .now-playing
     @include media(">=desktop")
@@ -68,12 +64,17 @@
     display: flex
     align-items: center
     >.feather
+      height: 20px
+      width: 20px
+      stroke: $white
       &:first-child
         margin-right: 12px
       &:last-child
         margin-left: 12px
     .is-active
       stroke: $blue
+  .queue
+    margin: 0 10px
   //random, repeat
   .progress-topper
     background-color: $blue

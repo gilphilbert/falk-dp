@@ -262,6 +262,16 @@ const uiTools = (function () {
       pageSearch()
     })
 
+    document.getElementById('queue-toggle').addEventListener('click', (e) => {
+      const classList = document.getElementById('queue-list').classList
+      classList.toggle('is-active')
+      if (classList.contains('is-active')) {
+        document.getElementById('queue-toggle').classList.add('is-active')
+      } else {
+        document.getElementById('queue-toggle').classList.remove('is-active')
+      }
+    })
+
     document.addEventListener('keypress', (e) => {
       if (e.target === document.body || e.target.nodeName === 'A') { // <!-------------------------------------------------------------------------- NEEDS TO CHANGE TO != INPUT (or include menu...)
         document.getElementById('search-input').focus()
