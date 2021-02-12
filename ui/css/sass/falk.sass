@@ -305,33 +305,13 @@ figure
     text-align: center
     bottom: 10px
 
-table.table.songs
+table.songs
   tr
-    td:first-child
-      @include media("≤tablet")
-        padding-right: 0.75em
     &:hover
       td
-        background: rgba(0, 0, 0, 0.08)
+        background: $grey-darker
   td
     vertical-align: middle
-    @include media("≤tablet")
-      color: $white
-      padding-left: 0
-      padding-right: 0
-    .dropdown button
-      vertical-align: middle
-      border: none
-      background: none
-      svg
-        stroke: $grey-dark
-        @include media("≤tablet")
-          stroke: $white
-      @include media("≤tablet")
-        padding: 0
-  span.artist
-    display: block
-    color: $grey-dark
 
 .art-container
   .col-lg-2

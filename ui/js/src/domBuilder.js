@@ -25,10 +25,10 @@ const domBuilder = (function () {
   const buildTrack = function (data) {
     const format = ((data.format) ? data.format.sample_rate_short.value + data.format.sample_rate_short.unit + ' ' + data.format.bits + 'bit' : '')
     const filetype = data.file.split('.')[data.file.split('.').length - 1]
+    const track = (('track' in data) ? data.track + '. ' : '')
     const tr = cr.tr({ 'data-uri': data.file },
-      (('track' in data) ? cr.td({ class: 'pointer', on: { click: uiTools.handlers.tracks } }, data.track) : null),
       cr.td({ class: 'pointer', on: { click: uiTools.handlers.tracks } },
-        cr.p({ class: 'is-5' }, data.title),
+        cr.p({ class: 'is-5' }, track + data.title),
         cr.p({ class: 'subtitle is-5' }, data.artist)
       ),
       ((data.duration) ? cr.td(uiTools.formatTime(data.duration)) : null),
@@ -193,7 +193,7 @@ const domBuilder = (function () {
         frag.appendChild(
           cr.div({ class: 'row album-detail' },
             cr.div({ class: 'col-md-9 col-md-offset-3 col-xs-12' },
-              cr.table({ class: 'table songs songs-hover' },
+              cr.table({ class: 'table songs' },
                 cr.tbody(
                   data.songs.map(function (song) {
                     return buildTrack(song)
