@@ -140,6 +140,9 @@ figure
 .has-margin-auto
   margin: auto
 
+.has-no-overflow
+  overflow: hidden
+
 .pointer
   cursor: pointer
 
@@ -252,7 +255,7 @@ figure
 
   .container-fluid
     max-width: 90vw
-    padding: 40px 0
+    padding: 40px 0 0 0
     &.max
       @include media("≥desktop")
         position: relative
@@ -343,6 +346,10 @@ table.songs
 
 body.no-controls #queue-list
   right: 0
+  @include media("≤tablet")
+    #queue-items
+      // height: calc(100% - 73px)
+      height: calc(100% - 50px - 1.8rem)
 #queue-list
   color: $grey-light
   position: fixed
@@ -355,11 +362,14 @@ body.no-controls #queue-list
   background: $grey-darker
   color: $grey-light
   padding: 20px 30px 100px 30px
-  overflow-y: scroll
-  scrollbar-width: none
-  -ms-overflow-style: none
-  &::-webkit-scrollbar
-    display: none
+  #queue-items
+    height: calc(100% - (90px + 80px))
+    overflow-y: scroll
+    //padding-bottom: 140px
+    //scrollbar-width: none
+    //-ms-overflow-style: none
+    //&::-webkit-scrollbar
+    //  display: none
   &.is-active
     right: 0
   h1
@@ -390,10 +400,6 @@ body.no-controls #queue-list
         border-top: 9px solid transparent
         border-bottom: 9px solid transparent
         border-left: 12px solid $grey-light
-  span
-    display: block
-  table
-    width: 100%
   td
     cursor: pointer
     vertical-align: middle
@@ -412,17 +418,19 @@ body.no-controls #queue-list
     left: 0
     height: 100vh
     width: 100vw
-    padding: 30px 20px 20px 20px
+    padding: 0
     transition: top 250ms ease 0s
     z-index: 1
-    padding-top: 20px
-    .queue-header
-      position: absolute
-      left: 0
-      top: 0
-      width: 100%
-      background: $grey-darker
-      padding: 16px
+    h1
+      margin: 0
+      padding: 0
+    #queue-header
+      background: $grey-darkest
+      padding: 25px 20px 25px 20px
+    #queue-items
+      // height: calc(100% - (70px + 80px))
+      height: calc(100% - 50px - 1.8rem - 78px)
+      padding: 0 20px 0 20px
     &.is-active
         top: 0
         transition: top 250ms ease 0s

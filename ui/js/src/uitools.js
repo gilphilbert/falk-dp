@@ -227,6 +227,7 @@ const uiTools = (function () {
       const te = e.changedTouches[0].clientY
       if (ts > te + 5) {
         document.getElementById('queue-list').classList.add('is-active')
+        document.body.classList.add('has-no-overflow')
       }
       ts = 0
     })
@@ -236,20 +237,31 @@ const uiTools = (function () {
     }, false)
 
     // don't scroll body when scrolling on queue
-    document.getElementById('queue-list').addEventListener('touchmove', function (e) {
+    document.getElementById('queue-items').addEventListener('touchstart', function (e) {
+      e.stopPropagation()
+    }, false)
+    document.getElementById('queue-items').addEventListener('touchend', function (e) {
+      e.stopPropagation()
+    }, false)
+    document.getElementById('queue-items').addEventListener('touchmove', function (e) {
       e.stopPropagation()
     }, false)
 
-    document.getElementById('queue-list').addEventListener('touchstart', function (e) {
+    document.getElementById('queue-header').addEventListener('touchmove', function (e) {
+      e.stopPropagation()
+    }, false)
+
+    document.getElementById('queue-header').addEventListener('touchstart', function (e) {
       ts = e.touches[0].clientY
       e.preventDefault()
     }, false)
 
-    document.getElementById('queue-list').addEventListener('touchend', function (e) {
+    document.getElementById('queue-header').addEventListener('touchend', function (e) {
       e.preventDefault()
       const te = e.changedTouches[0].clientY
       if (ts < te - 5) {
         document.getElementById('queue-list').classList.remove('is-active')
+        document.body.classList.remove('has-no-overflow')
       }
     })
 

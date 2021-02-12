@@ -2595,6 +2595,9 @@ figure.is-40x40 {
 .has-margin-auto {
   margin: auto; }
 
+.has-no-overflow {
+  overflow: hidden; }
+
 .pointer {
   cursor: pointer; }
 
@@ -2701,7 +2704,7 @@ figure.is-40x40 {
     background-repeat: no-repeat; }
   #content-container .container-fluid {
     max-width: 90vw;
-    padding: 40px 0; }
+    padding: 40px 0 0 0; }
     @media (min-width: 1024px) {
       #content-container .container-fluid.max {
         position: relative;
@@ -2782,7 +2785,9 @@ table.songs td {
 
 body.no-controls #queue-list {
   right: 0; }
-
+  @media (max-width: 768px) {
+    body.no-controls #queue-list #queue-items {
+      height: calc(100% - 50px - 1.8rem); } }
 #queue-list {
   color: #f1f1f1;
   position: fixed;
@@ -2794,12 +2799,10 @@ body.no-controls #queue-list {
   display: block;
   background: #3f3f3f;
   color: #f1f1f1;
-  padding: 20px 30px 100px 30px;
-  overflow-y: scroll;
-  scrollbar-width: none;
-  -ms-overflow-style: none; }
-  #queue-list::-webkit-scrollbar {
-    display: none; }
+  padding: 20px 30px 100px 30px; }
+  #queue-list #queue-items {
+    height: calc(100% - (90px + 80px));
+    overflow-y: scroll; }
   #queue-list.is-active {
     right: 0; }
   #queue-list h1 {
@@ -2829,10 +2832,6 @@ body.no-controls #queue-list {
       border-top: 9px solid transparent;
       border-bottom: 9px solid transparent;
       border-left: 12px solid #f1f1f1; }
-  #queue-list span {
-    display: block; }
-  #queue-list table {
-    width: 100%; }
   #queue-list td {
     cursor: pointer;
     vertical-align: middle;
@@ -2852,17 +2851,18 @@ body.no-controls #queue-list {
       left: 0;
       height: 100vh;
       width: 100vw;
-      padding: 30px 20px 20px 20px;
+      padding: 0;
       transition: top 250ms ease 0s;
-      z-index: 1;
-      padding-top: 20px; }
-      #queue-list .queue-header {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        background: #3f3f3f;
-        padding: 16px; }
+      z-index: 1; }
+      #queue-list h1 {
+        margin: 0;
+        padding: 0; }
+      #queue-list #queue-header {
+        background: #2A2A2A;
+        padding: 25px 20px 25px 20px; }
+      #queue-list #queue-items {
+        height: calc(100% - 50px - 1.8rem - 78px);
+        padding: 0 20px 0 20px; }
       #queue-list.is-active {
         top: 0;
         transition: top 250ms ease 0s; } }
