@@ -2998,9 +2998,6 @@ body.no-controls #queue-list {
       stroke: #FFFFFF; }
     #control-bar .play-button svg {
       margin: 0 auto; }
-  @media (min-width: 1024px) {
-    #control-bar .now-playing {
-      width: 300px; } }
   #control-bar .now-playing figure img {
     height: 70px;
     width: 70px;
