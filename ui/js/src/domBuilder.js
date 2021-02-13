@@ -519,9 +519,9 @@ const domBuilder = (function () {
         if (state.single === true) {
           rpt += '-one'
         }
-        document.querySelector('#control-bar .repeat use').setAttribute('xlink:href', '/img/feather-sprite.svg#' + rpt)
+        document.querySelector('#control-bar .repeat use').setAttribute('href', '/img/feather-sprite.svg#' + rpt)
         if (mc) {
-          mc.querySelector('.repeat use').setAttribute('xlink:href', '/img/feather-sprite.svg#' + rpt)
+          mc.querySelector('.repeat use').setAttribute('href', '/img/feather-sprite.svg#' + rpt)
         }
       }
       if (changed.includes('random')) {
@@ -546,15 +546,15 @@ const domBuilder = (function () {
       if (changed.includes('state')) {
         const use = document.querySelector('.playing-controls .play-button use')
         if (state.state === 'play') {
-          use.setAttribute('xlink:href', '/img/feather-sprite.svg#pause')
+          use.setAttribute('href', '/img/feather-sprite.svg#pause')
           if (mc) {
-            mc.querySelector('button use').setAttribute('xlink:href', '/img/feather-sprite.svg#pause')
+            mc.querySelector('button use').setAttribute('href', '/img/feather-sprite.svg#pause')
           }
           uiTools.progress.start()
         } else {
-          use.setAttribute('xlink:href', '/img/feather-sprite.svg#play')
+          use.setAttribute('href', '/img/feather-sprite.svg#play')
           if (mc) {
-            mc.querySelector('button use').setAttribute('xlink:href', '/img/feather-sprite.svg#play')
+            mc.querySelector('button use').setAttribute('href', '/img/feather-sprite.svg#play')
           }
           uiTools.progress.stop()
           uiTools.progress.update()
