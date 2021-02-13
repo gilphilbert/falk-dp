@@ -303,10 +303,11 @@ figure
 body.no-controls #content-container
   height: 100vh
   padding: 0 0 40px 0
-  .container-fluid.max
-    height: 100%
-    .row
+  @include media("≤tablet")
+    .container-fluid.max
       height: 100%
+      .row
+        height: 100%
 //.artist-info
 //  padding-bottom: 50px
 //  figure

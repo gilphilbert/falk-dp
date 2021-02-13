@@ -2755,11 +2755,11 @@ figure.is-40x40 {
 body.no-controls #content-container {
   height: 100vh;
   padding: 0 0 40px 0; }
-  body.no-controls #content-container .container-fluid.max {
-    height: 100%; }
-    body.no-controls #content-container .container-fluid.max .row {
+  @media (max-width: 768px) {
+    body.no-controls #content-container .container-fluid.max {
       height: 100%; }
-
+      body.no-controls #content-container .container-fluid.max .row {
+        height: 100%; } }
 @media (max-width: 768px) {
   .is-reversed-touch {
     display: flex;

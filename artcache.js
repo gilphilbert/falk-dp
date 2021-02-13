@@ -124,19 +124,23 @@ function getArt ({ artist, album, type, blur, thumb } = {}, res) {
       // we have the file in the cache, so serve it
       res.set('Cache-control', 'public, max-age=31536000000')
       res.type('image/jpg')
+      const opts = { width: 480 }
       if (type !== 'bg') {
         if (thumb === true) {
-          sharp(imgpath).resize(70, 70).pipe(res)
+          opts.width = 70
+          opts.height = 70
+          // sharp(imgpath).resize(70, 70).pipe(res)
         } else {
-          sharp(imgpath).resize(480, 480).pipe(res)
+          opts.width = 480
+          opts.height = 480
+          // sharp(imgpath).resize(480, 480).pipe(res)
         }
-      } else {
-        if (blur === true) {
-          sharp(imgpath).resize(480).greyscale().blur().pipe(res)
-        } else {
-          sharp(imgpath).resize(480).pipe(res)
-        }
+      } else if (blur === true) {
+        opts.width = 1000
+        sharp(imgpath).resize(1000).greyscale().pipe(res)
+        return
       }
+      sharp(imgpath).resize(opts).pipe(res)
     } else {
       // what art are we looking for?
       if (!album) {
@@ -185,7 +189,11 @@ async function getArtistArt (artist, imgpath, res, type, blur) {
             res.type('image/jpg')
             const opts = { width: 480 }
             if (type !== 'bg') {
-              opts.height = 480
+              if (blur) {
+                opts.width = 1000
+              } else {
+                opts.height = 480
+              }
             }
             if (blur === true) {
               sharp(imgpath).resize(opts).greyscale().blur().pipe(res)
