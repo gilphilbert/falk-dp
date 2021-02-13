@@ -268,7 +268,7 @@ async function setup (server) {
       mpdc.api.queue.info()
         .then((d) => {
           d.forEach((i) => {
-            i.albumart = '/art/album/' + encodeURIComponent(i.artist) + '/' + encodeURIComponent(i.album) + '.jpg'
+            i.albumart = '/art/album/' + encodeURIComponent(i.albumartist) + '/' + encodeURIComponent(i.album) + '.jpg'
           })
           disp.send('pushQueue', d)
         })
