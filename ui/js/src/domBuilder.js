@@ -125,7 +125,7 @@ const domBuilder = (function () {
             cr.div({ id: 'mobile-controls', class: 'col-xs-12 mobile-controls hidden--for-desktop' },
               cr.span({ on: { click: webSocket.action.toggleRandom } }, uiTools.getSVG('shuffle', 'random is-small' + ((state.random) ? ' is-active' : ''))),
               cr.span({ on: { click: webSocket.action.prev } }, uiTools.getSVG('skip-back')),
-              cr.button({ class: 'button is-primary is-rounded', on: { click: uiTools.handlers.mobileButtons.play } }, uiTools.getSVG(((state.state !== 'play') ? 'play' : 'pause'))),
+              cr.button({ class: 'button is-primary is-rounded has-no-margin', on: { click: uiTools.handlers.mobileButtons.play } }, uiTools.getSVG(((state.state !== 'play') ? 'play' : 'pause'))),
               cr.span({ on: { click: webSocket.action.next } }, uiTools.getSVG('skip-forward')),
               cr.span({ on: { click: webSocket.action.toggleRepeat } }, uiTools.getSVG('repeat' + ((state.single) ? '-one' : ''), 'repeat is-small' + ((state.repeat) ? ' is-active' : '')))
             ),

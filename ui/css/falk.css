@@ -2472,12 +2472,10 @@ body {
   background-attachment: fixed;
   min-height: 100vh;
   overflow-x: hidden; }
-  @media (max-width: 768px) {
-    body.no-controls #content-container {
-      padding-bottom: 10px; }
-    body.no-controls #control-bar {
-      bottom: -100px;
-      transition: bottom 250ms ease-in-out; } }
+  body.no-controls #control-bar {
+    bottom: -100px;
+    transition: bottom 250ms ease-in-out; }
+
 a {
   text-decoration: none; }
   a:hover {
@@ -2570,6 +2568,8 @@ figure.is-40x40 {
     background-color: #A31621; }
     .button.is-danger:hover {
       background-color: #c01a27; }
+  .button.has-no-margin {
+    margin: 0; }
 
 .tag {
   font-weight: normal;
@@ -2726,7 +2726,7 @@ figure.is-40x40 {
   padding: 0 0 120px 90px; }
   @media (max-width: 768px) {
     #content-container {
-      padding: 0; } }
+      padding: 0 0 88px 0; } }
   #content-container.has-background {
     padding-top: 27vh;
     background-size: contain;
@@ -2752,33 +2752,27 @@ figure.is-40x40 {
         object-fit: cover;
         object-position: center;
         height: 45vh; }
-  #content-container .artist-info {
-    padding-bottom: 50px; }
-    #content-container .artist-info figure {
-      border-radius: 7px;
-      overflow: hidden; }
-      #content-container .artist-info figure:after {
-        content: '';
-        background-image: linear-gradient(transparent, #2A2A2ADD);
-        height: 40px;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%; }
-  @media (max-width: 768px) {
-    #content-container .album-detail p.title {
-      margin-bottom: 0; } }
-  @media (max-width: 768px) {
-    #content-container .is-reversed-touch {
-      display: flex;
-      flex-direction: column-reverse; } }
-  #content-container #swipe-up-queue {
-    position: absolute;
-    padding: 8px 12px;
-    left: 0;
-    width: 100%;
-    text-align: center;
-    bottom: 10px; }
+
+body.no-controls #content-container {
+  height: 100vh;
+  padding: 0 0 40px 0; }
+  body.no-controls #content-container .container-fluid.max {
+    height: 100%; }
+    body.no-controls #content-container .container-fluid.max .row {
+      height: 100%; }
+
+@media (max-width: 768px) {
+  .is-reversed-touch {
+    display: flex;
+    flex-direction: column-reverse; } }
+
+#swipe-up-queue {
+  position: absolute;
+  padding: 8px 12px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  bottom: 10px; }
 
 table.songs tr:hover td {
   background: #3f3f3f; }

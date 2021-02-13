@@ -15,14 +15,9 @@ body
   min-height: 100vh
   overflow-x: hidden
   &.no-controls
-    @include media("≤tablet")
-      #content-container
-        padding-bottom: 10px
-      #control-bar
-        bottom: -100px
-        transition: bottom 250ms ease-in-out
-        //left: 100vw
-        //transition: left 250ms ease 0s
+    #control-bar
+      bottom: -100px
+      transition: bottom 250ms ease-in-out
 a
   text-decoration: none
   &:hover
@@ -115,6 +110,8 @@ figure
     background-color: $danger
     &:hover
       background-color: light($danger)
+  &.has-no-margin
+    margin: 0
 
 .tag
   font-weight: normal
@@ -130,7 +127,7 @@ figure
   background: light($grey-darkest)
   border-radius: 7px
   padding: 20px 0
-  margin: 10px 0
+  margin: 10px 0      
 
 .has-text-centered
   text-align: center
@@ -275,7 +272,7 @@ figure
   padding: 0 0 120px 90px
   @include media("≤tablet")
     // padding: 24px 9px 100px 90px
-    padding: 0
+    padding: 0 0 88px 0
 
   &.has-background
     padding-top: 27vh
@@ -290,7 +287,6 @@ figure
         position: relative
         margin: 0
         padding: 0
-        // width: 65vw
         margin-right: 450px
         .row
           padding-top: 20vh
@@ -305,37 +301,39 @@ figure
           object-position: center
           height: 45vh
 
-  .artist-info
-    padding-bottom: 50px
-    figure
-      border-radius: 7px
-      overflow: hidden
-      &:after
-        content: ''
-        background-image: linear-gradient(transparent, #2A2A2ADD)
-        height: 40px
-        position: absolute
-        bottom: 0
-        left: 0
-        width: 100%
+body.no-controls #content-container
+  height: 100vh
+  padding: 0 0 40px 0
+  .container-fluid.max
+    height: 100%
+    .row
+      height: 100%
+//.artist-info
+//  padding-bottom: 50px
+//  figure
+//    border-radius: 7px
+//    overflow: hidden
+//    &:after
+//      content: ''
+//      background-image: linear-gradient(transparent, #2A2A2ADD)
+//      height: 40px
+//      position: absolute
+//      bottom: 0
+//      left: 0
+//      width: 100%
 
-  .album-detail
-    p.title
-      @include media("≤tablet")
-        margin-bottom: 0
+.is-reversed-touch
+  @include media("≤tablet")
+    display: flex
+    flex-direction: column-reverse
 
-  .is-reversed-touch
-    @include media("≤tablet")
-      display: flex
-      flex-direction: column-reverse
-
-  #swipe-up-queue
-    position: absolute
-    padding: 8px 12px
-    left: 0
-    width: 100%
-    text-align: center
-    bottom: 10px
+#swipe-up-queue
+  position: absolute
+  padding: 8px 12px
+  left: 0
+  width: 100%
+  text-align: center
+  bottom: 10px
 
 table.songs
   tr
