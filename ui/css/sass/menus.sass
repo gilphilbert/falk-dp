@@ -9,22 +9,6 @@ aside.menu
   z-index: 2
   transition: width 250ms
 
-  @include media("≤tablet")
-    left: -90px
-    transition: 250ms
-    &.is-active
-      transition: 250ms
-      left: 0
-
-  &:hover
-    @include media(">tablet")
-      width: 180px
-      box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
-      -webkit-box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
-      -moz-box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15)
-      .detail
-        visibility: visible
-
   .image.menu-brand
     width: 55px
     height: auto
@@ -41,7 +25,9 @@ aside.menu
   .menu-list a
     display: inline-block
     width: 100%
-    padding: .6em 0
+    padding: 14px 0
+    background: transparent
+    transition: background 200ms linear
     &:focus
       outline: none
     &:hover
@@ -51,3 +37,25 @@ aside.menu
   .detail
     margin-top: 5px
     visibility: hidden
+    opacity: 0
+    transition: visibility 0s linear 300ms, opacity 300ms
+    
+  @include media("≤tablet")
+    left: -90px
+    transition: 250ms
+    &.is-active
+      transition: 250ms
+      left: 0
+    .detail
+      display: none
+    .menu-list a
+      padding: 18px 0
+
+  @include media(">tablet")
+    &:hover
+      width: 180px
+      .detail
+        visibility: visible
+        opacity: 1
+        transition: visibility 0s linear 0s, opacity 300ms
+
