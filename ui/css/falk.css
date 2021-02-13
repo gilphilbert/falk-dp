@@ -2533,9 +2533,11 @@ table {
     text-align: left;
     font-size: 1.2rem;
     border-bottom: 3px solid #3f3f3f; }
-  table td.is-narrow {
-    width: 1%;
-    white-space: nowrap; }
+  table td {
+    vertical-align: middle; }
+    table td.is-narrow {
+      width: 1%;
+      white-space: nowrap; }
 
 figure img {
   width: 100%; }
