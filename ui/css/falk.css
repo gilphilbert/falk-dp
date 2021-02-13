@@ -2472,9 +2472,6 @@ body {
   background-attachment: fixed;
   min-height: 100vh;
   overflow-x: hidden; }
-  body.no-controls #control-bar {
-    bottom: -100px;
-    transition: bottom 250ms ease-in-out; }
 
 a {
   text-decoration: none; }
@@ -3118,6 +3115,11 @@ body.no-controls #queue-list {
       background: #2A2A2A;
       border: 3px solid #4D84C3;
       border-radius: 9px; }
+
+@media (max-width: 768px) {
+  body.no-controls #control-bar {
+    bottom: -100px;
+    transition: bottom 250ms ease-in-out; } }
 
 aside.menu {
   height: 100%;

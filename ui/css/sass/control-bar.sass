@@ -150,3 +150,9 @@
       background: $grey-darkest
       border: 3px solid $blue
       border-radius: 9px
+
+body.no-controls
+  @include media("≤tablet")
+    #control-bar
+      bottom: -100px
+      transition: bottom 250ms ease-in-out
