@@ -169,7 +169,7 @@ const domBuilder = (function () {
         }
 
         // create the main fragment
-        const frag = cr.div({ class: 'container-fluid' })
+        const frag = cr.div({ class: 'container' })
 
         // append the details and list of tracks to the fragment
         frag.appendChild(
@@ -192,7 +192,7 @@ const domBuilder = (function () {
 
         frag.appendChild(
           cr.div({ class: 'row album-detail' },
-            cr.div({ class: 'col-md-9 col-md-offset-3 col-xs-12' },
+            cr.div({ class: 'col-xs-12' },
               cr.table({ class: 'table songs' },
                 cr.tbody(
                   data.songs.map(function (song) {
@@ -234,52 +234,25 @@ const domBuilder = (function () {
       } else if (_loadPage === 'artist') {
         const frag = document.createDocumentFragment()
 
-        // append directly to the page, we don't want this in the container. <!---------------------------------------------------------------------------------- NEED TO MOVE STYLES TO CSS
-        frag.appendChild(cr.figure({ class: 'image' },
+        // append directly to the page, we don't want this in the container
+        frag.appendChild(cr.figure({ class: 'image hidden--for-desktop' },
           cr.img({ src: `${data.artist.background}`, style: 'object-fit: cover;height: 30vh;object-position: center;width: 100%' })
         ))
-        // main.style.backgroundImage = `url(${data.artist.background})`
-        // main.classList.add('has-background')
-        // list of the artist's songs
-        // songs = data.navigation.lists[1].items
-
-        // find all the songs that aren't in an album
-        /*
-        var orphanSongs = songs.filter(function (song) {
-          if (song.album === '') {
-            return song
-          }
-        })
-        */
 
         // create main fragment
-        const cont = frag.appendChild(cr.div({ class: 'container-fluid' }))
-        // append the library buttons
-        // frag.appendChild(breadcrumb([{ data.artist.title: 'Artists', url: 'artists' }, { data.artist.title: data.navigation.info.title, url: null, isActive: true }]))
-
-        // create the information section
-        /*
-        frag.appendChild(
-          cr.div({ class: 'row artist-info is-mobile' },
-            cr.div({ class: 'column is-2-tablet is-2-desktop is-10-touch is-offset-1-touch' },
-              cr.figure({ class: 'image artistart' },
-                // cr.img({ src: data.artist.albumart, loading: 'lazy' })
-                cr.img({ src: data.artist.background, loading: 'lazy' }),
-                cr.span({ class: 'is-1' }, data.artist.title)
+        console.log(data)
+        frag.appendChild(cr.div({ class: 'container-fluid' },
+          cr.div({ class: 'row center' },
+            cr.div({ class: 'col-md-2 hidden--to-tablet' },
+              cr.figure({ class: 'image is-rounded has-no-overflow' },
+                cr.img({ src: data.artist.albumart })
               )
+            ),
+            cr.div({ class: 'col-xs-12 col-md-6' },
+              cr.h1(data.artist.title) // ,
+              // cr.p({ class: 'subtitle is-2' }, 'Albums')
             )
-          )
-        )
-        */
-
-        cont.appendChild(
-          cr.p({ class: 'is-2' }, data.artist.title)
-        )
-        cont.appendChild(
-          cr.p({ class: 'subtitle is-2' }, 'Albums')
-        )
-        // create the list of albums (in tile format)
-        cont.appendChild(
+          ),
           cr.div({ class: 'row is-mobile art-container' },
             data.albums.map(function (album) {
               return buildTile({
@@ -289,24 +262,7 @@ const domBuilder = (function () {
               })
             })
           )
-        )
-
-        // append any 'orphan' songs (songs not in an album)
-        /*
-        frag.appendChild(
-          cr.table({ class: 'table is-fullwidth songs songs-hover' },
-            cr.tbody(
-              orphanSongs.filter(function (song) {
-                if (song.album === '') {
-                  return song
-                }
-              }).map(function (song) {
-                return buildTrack(song)
-              })
-            )
-          )
-        )
-        */
+        ))
 
         // append the main fragment to the page
         main.appendChild(frag)
