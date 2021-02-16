@@ -186,7 +186,7 @@ const domBuilder = (function () {
                   cr.h1({ class: 'album-title' }, data.title),
                   cr.p({ class: 'subtitle is-1' }, cr.a({ 'data-navigo': '', href: '/artist/' + encodeURIComponent(data.artist) }, data.artist)),
                   ((data.songs[0].date) ? cr.p({ class: 'is-4 detail' }, data.songs[0].date) : null),
-                  cr.p({ class: 'is-4' }, cr.a({ 'data-navigo': '', href: '/genres/' + encodeURIComponent(data.songs[0].genre) }, data.songs[0].genre)),
+                  ((data.songs[0].genre !== undefined && data.songs[0].genre !== '') ? cr.p({ class: 'is-4' }, cr.a({ 'data-navigo': '', href: '/genres/' + encodeURIComponent(data.songs[0].genre) }, data.songs[0].genre)) : null),
                   ((format !== '') ? cr.p({ class: 'is-6 tag is-rounded detail' }, format) : null)
                 )
               )
