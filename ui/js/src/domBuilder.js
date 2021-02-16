@@ -169,35 +169,39 @@ const domBuilder = (function () {
         }
 
         // create the main fragment
-        const frag = cr.div({ class: 'container' })
+        const frag = cr.div({ class: 'container-fluid' })
 
         // append the details and list of tracks to the fragment
         frag.appendChild(
-          cr.div({ class: 'row album-detail' },
-            cr.div({ class: 'col-md-3 col-xs-4 art' },
-              cr.figure({ class: 'image' },
-                cr.img({ src: data.albumart, loading: 'lazy' })
+          cr.div({ class: 'row' },
+            cr.div({ class: 'col-xs-12 col-md-5 has-text-centered-desktop' },
+              cr.div({ class: 'row album-detail' },
+                cr.div({ class: 'col-md-8 col-md-offset-2 col-xs-4 art' },
+                  cr.figure({ class: 'image' },
+                    cr.img({ src: data.albumart, loading: 'lazy' })
+                  )
+                ),
+                cr.div({ class: 'col-md-8 col-md-offset-2 col-xs-8' },
+                  // cr.p({ class: 'is-5 hidden--to-desktop has-text-weight-normal' }, 'Album'),
+                  cr.h1({ class: 'album-title' }, data.title),
+                  cr.p({ class: 'subtitle is-1' }, cr.a({ 'data-navigo': '', href: '/artist/' + encodeURIComponent(data.artist) }, data.artist)),
+                  ((data.songs[0].date) ? cr.p({ class: 'is-4 detail' }, data.songs[0].date) : null),
+                  cr.p({ class: 'is-4' }, cr.a({ 'data-navigo': '', href: '/genres/' + encodeURIComponent(data.songs[0].genre) }, data.songs[0].genre)),
+                  ((format !== '') ? cr.p({ class: 'is-6 tag is-rounded detail' }, format) : null)
+                )
               )
             ),
-            cr.div({ class: 'col-md-9 col-xs-8' },
-              cr.p({ class: 'is-5 hidden--to-desktop has-text-weight-normal' }, 'Album'),
-              cr.h1({ class: 'album-title' }, data.title),
-              cr.p(cr.a({ class: 'is-3', 'data-navigo': '', href: '/artist/' + encodeURIComponent(data.artist) }, data.artist)),
-              ((data.songs[0].date) ? cr.p({ class: 'is-4 detail' }, data.songs[0].date) : null),
-              cr.p(cr.a({ class: 'is-4', 'data-navigo': '', href: '/genres/' + encodeURIComponent(data.songs[0].genre) }, data.songs[0].genre)),
-              ((format !== '') ? cr.p({ class: 'is-6 tag is-rounded detail' }, format) : null)
-            )
-          )
-        )
-
-        frag.appendChild(
-          cr.div({ class: 'row album-detail' },
-            cr.div({ class: 'col-xs-12' },
-              cr.table({ class: 'table songs' },
-                cr.tbody(
-                  data.songs.map(function (song) {
-                    return buildTrack(song)
-                  })
+            cr.div({ class: 'col-xs-12 col-md-7' },
+              cr.div({ class: 'row album-detail' },
+                cr.div({ class: 'col-xs-12 col-md-11' },
+                  cr.h1({ class: 'hidden--to-tablet' }, 'Album Tracks'),
+                  cr.table({ class: 'table songs' },
+                    cr.tbody(
+                      data.songs.map(function (song) {
+                        return buildTrack(song)
+                      })
+                    )
+                  )
                 )
               )
             )
