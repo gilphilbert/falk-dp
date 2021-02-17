@@ -3012,7 +3012,8 @@ body.no-controls #queue-list {
     color: #bbb; }
   @media (max-width: 768px) {
     #control-bar {
-      height: 78px; } }
+      height: 78px;
+      padding-right: 8px; } }
   #control-bar .row {
     height: 100%;
     align-items: center; }
@@ -3096,9 +3097,11 @@ body.no-controls #queue-list {
     min-width: 48px;
     max-width: 48px;
     padding: 0;
-    background: #4D84C3; }
+    background: #4D84C3;
+    display: flex;
+    align-items: center; }
     .mobile-controls .button .feather {
-      margin: 0;
+      margin: 0 auto;
       stroke: #FFFFFF; }
 
 #mobile-progress {

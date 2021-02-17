@@ -150,7 +150,6 @@ const uiTools = (function () {
 
     document.querySelector('.playing-controls .play-button').addEventListener('click', function (e) {
       const state = dataTools.getState().state
-
       // if (this.classList.contains('playing')) {
       if (state === 'play') {
         webSocket.action.pause()
@@ -218,11 +217,9 @@ const uiTools = (function () {
 
     document.getElementById('control-bar').addEventListener('touchstart', function (e) {
       ts = e.touches[0].clientY
-      e.preventDefault()
     }, false)
 
     document.getElementById('control-bar').addEventListener('touchend', function (e) {
-      e.preventDefault()
       const te = e.changedTouches[0].clientY
       if (ts > te + 5) {
         document.getElementById('queue-list').classList.add('is-active')

@@ -4,6 +4,7 @@ async function setup (server) {
   const wss = new WebSocket.Server({ server: server })
 
   let mpdc = null
+  let init = true
   async function connectMPD () {
     console.log('Connecting to MPD...')
     try {
@@ -42,8 +43,13 @@ async function setup (server) {
         connectMPD()
       })
     } catch (e) {
-      console.log('Couldn\'t connect to MPD')
-      console.log(e)
+      if (init === true) {
+        console.log('Could not connect to MPD... is MPD running?')
+        process.exit(0)
+      } else {
+        console.log('Couldn\'t connect to MPD, retrying')
+        console.log(e)
+      }
     }
   }
   await connectMPD()

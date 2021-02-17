@@ -18,6 +18,7 @@
   transition: bottom 250ms ease-in-out
   @include media("≤tablet")
     height: 78px
+    padding-right: 8px
     //left: 0
   // make all columns full height
   .row
@@ -110,9 +111,11 @@
     min-width: 48px
     max-width: 48px
     padding: 0
-    background: $blue
+    background: $primary
+    display: flex
+    align-items: center
     .feather
-      margin: 0
+      margin: 0 auto
       stroke: $white
 
 #mobile-progress
