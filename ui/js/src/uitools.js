@@ -1,6 +1,5 @@
 import { action } from './websocket.js'
 import { getState } from './datatools.js'
-import { update } from './router.js'
 
 let _title = ''
 
@@ -386,7 +385,7 @@ const handlers = {
   },
   mobileButtons: {
     play: () => {
-      const state = dataTools.getState().state
+      const state = getState().state
       if (state === 'play') {
         action.pause()
       } else {
