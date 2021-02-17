@@ -1,8 +1,8 @@
 
-import { get, set, getURL, action } from './websocket.js'
-import { update } from './router.js'
-import { handlers, formatTime, getSVG, clearNodes, getQuality, progress, setPageTitle, closeModal } from './uitools.js'
-import { getState, changeState } from './datatools.js'
+import { get, set, getURL, action } from './falk-socket.js'
+import { update } from './falk-router.js'
+import { handlers, formatTime, getSVG, clearNodes, getQuality, progress, setPageTitle, closeModal } from './falk-uitools.js'
+import { getState, changeState } from './falk-datatools.js'
 
 const cr = window.crel.proxy
 let _loadPage = ''
@@ -59,7 +59,7 @@ const queueTable = function (queue) {
   const queuePos = getState().song
   queue.forEach((song) => {
     tbl.appendChild(cr.tr({ class: ((song.pos === queuePos) ? 'is-playing' : ''), 'data-pos': song.pos },
-      cr.td(cr.figure({ class: 'image is-40x40' }, cr.img({ src: song.albumart.replace('album/', 'album/thumb/'), loading: 'lazy' }))),
+      cr.td(cr.figure({ class: 'image is-40x40' }, cr.img({ src: song.thumb, loading: 'lazy' }))),
       cr.td({ on: { click: function () { action.play(this.closest('tr').dataset.pos) } } },
         cr.p({ class: 'is-5' }, song.title),
         cr.p({ class: 'subtitle is-5' }, song.artist + ' - ' + formatTime(song.duration))
@@ -95,12 +95,13 @@ const page = {
     // run the right code based on the page
     if (_loadPage === 'home') {
       const state = getState()
+      console.log(state)
       const isLossless = !(parseInt(state.bitrate) <= 320)
       const frag = cr.div({ class: 'container-fluid max' })
 
       frag.appendChild(cr.div({ class: 'background-container hidden--to-desktop' },
         cr.figure({ class: 'image' },
-          cr.img({ src: `/art/artist/background/blur/${encodeURIComponent(state.artist)}.jpg)` })
+          cr.img({ src: state.artistBgBlur })
         )
       ))
 

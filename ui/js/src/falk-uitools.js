@@ -1,5 +1,5 @@
-import { action } from './websocket.js'
-import { getState } from './datatools.js'
+import { action } from './falk-socket.js'
+import { getState } from './falk-datatools.js'
 
 let _title = ''
 

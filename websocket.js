@@ -76,7 +76,13 @@ async function setup (server) {
       status.album = songdetail.album
       status.genre = songdetail.genre
       status.date = songdetail.date
-      status.albumart = '/art/album/' + encodeURIComponent(songdetail.artist) + '/' + encodeURIComponent(songdetail.album) + '.jpg'
+      // status.albumart = '/art/album/' + encodeURIComponent(songdetail.artist) + '/' + encodeURIComponent(songdetail.album) + '.jpg'
+
+      const aa = status.albumartist || status.artist || ''
+      status.albumart = '/art/album/' + encodeURIComponent(aa) + '/' + encodeURIComponent(status.album) + '.jpg'
+      status.thumb = '/art/album/thumb/' + encodeURIComponent(aa) + '/' + encodeURIComponent(status.album) + '.jpg'
+      status.artistBg = `/art/artist/background/${encodeURIComponent(status.artist)}.jpg`
+      status.artistBgBlur = `/art/artist/background/blur/${encodeURIComponent(status.artist)}.jpg`
 
       if (status.time) {
         status.duration = status.time.total
@@ -274,7 +280,11 @@ async function setup (server) {
       mpdc.api.queue.info()
         .then((d) => {
           d.forEach((i) => {
-            i.albumart = '/art/album/' + encodeURIComponent(i.albumartist) + '/' + encodeURIComponent(i.album) + '.jpg'
+            const aa = i.albumartist || i.artist || ''
+            i.albumart = '/art/album/' + encodeURIComponent(aa) + '/' + encodeURIComponent(i.album) + '.jpg'
+            i.thumb = '/art/album/thumb/' + encodeURIComponent(aa) + '/' + encodeURIComponent(i.album) + '.jpg'
+            i.artistBg = `/art/artist/background/${encodeURIComponent(i.artist)}.jpg`
+            i.artistBgBlur = `/art/artist/background/blur/${encodeURIComponent(i.artist)}.jpg`
           })
           disp.send('pushQueue', d)
         })

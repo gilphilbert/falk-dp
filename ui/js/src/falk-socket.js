@@ -1,7 +1,7 @@
-import { queueTable, mounts, database, page, disconnected, reconnected } from '/js/src/domBuilder.js'
-import { initUI } from './uitools.js'
-import { initRouter } from './router.js'
-import { getState } from './datatools.js'
+import { queueTable, mounts, database, page, disconnected, reconnected } from '/js/src/falk-dom.js'
+import { initUI } from './falk-uitools.js'
+import { initRouter } from './falk-router.js'
+import { getState } from './falk-datatools.js'
 
 /* ----------- PRIVATE VARIABLES ----------- */
 const _host = ''

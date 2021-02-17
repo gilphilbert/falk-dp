@@ -1,7 +1,7 @@
-import { page } from './domBuilder.js'
-import { control, hideMenu, setPageTitle } from './uitools.js'
-import { get } from './websocket.js'
-import { getState } from './datatools.js'
+import { page } from './falk-dom.js'
+import { control, hideMenu, setPageTitle } from './falk-uitools.js'
+import { get } from './falk-socket.js'
+import { getState } from './falk-datatools.js'
 
 const _router = new window.Navigo('/')
 
