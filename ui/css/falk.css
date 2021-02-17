@@ -2511,7 +2511,7 @@ p, a {
   p.subtitle, a.subtitle {
     margin-top: -0.3rem;
     font-weight: normal;
-    color: #9c9c9c; }
+    color: #bbb; }
     p.subtitle.is-1, a.subtitle.is-1 {
       font-size: 1.4rem; }
     p.subtitle.is-2, a.subtitle.is-2 {
@@ -2633,13 +2633,13 @@ figure.is-40x40 {
     outline: none;
     border-bottom: 2px solid #4D84C3; }
   .select select::-webkit-input-placeholder, .textarea::-webkit-input-placeholder, .input::-webkit-input-placeholder {
-    color: #9c9c9c; }
+    color: #bbb; }
   .select select:-moz-placeholder, .textarea:-moz-placeholder, .input:-moz-placeholder {
-    color: #9c9c9c; }
+    color: #bbb; }
   .select select::-moz-placeholder, .textarea::-moz-placeholder, .input::-moz-placeholder {
-    color: #9c9c9c; }
+    color: #bbb; }
   .select select:-ms-input-placeholder, .textarea:-ms-input-placeholder, .input:-ms-input-placeholder {
-    color: #9c9c9c; }
+    color: #bbb; }
 
 .has-no-vpadding {
   padding-top: 0;
@@ -2991,7 +2991,7 @@ body.no-controls #queue-list {
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #9c9c9c; }
+  background: #bbb; }
 
 #control-bar {
   position: fixed;
@@ -3009,7 +3009,7 @@ body.no-controls #queue-list {
   #control-bar .title {
     color: #FFFFFF; }
   #control-bar .subtitle {
-    color: #9c9c9c; }
+    color: #bbb; }
   @media (max-width: 768px) {
     #control-bar {
       height: 78px; } }
