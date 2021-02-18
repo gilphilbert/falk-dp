@@ -2772,7 +2772,7 @@ figure.is-40x40 {
       z-index: -1; }
       #content-container .container-fluid.max .background-container img {
         object-fit: cover;
-        object-position: center;
+        object-position: top;
         height: 45vh; }
 
 body.no-controls #content-container {
@@ -3026,8 +3026,10 @@ body.no-controls #queue-list {
     background: #4D84C3;
     border-radius: 1000px;
     display: inline-flex;
-    align-items: center;
-    margin: 0 7px; }
+    align-items: center; }
+    @media (max-width: 768px) {
+      #control-bar .play-button {
+        margin: 0 7px; } }
     #control-bar .play-button .feather {
       stroke: #FFFFFF; }
     #control-bar .play-button svg {
@@ -3053,13 +3055,25 @@ body.no-controls #queue-list {
     display: flex;
     align-items: center; }
     #control-bar .playing-controls > .feather {
-      height: 20px;
-      width: 20px;
-      stroke: #FFFFFF; }
-      #control-bar .playing-controls > .feather:first-child {
-        margin-right: 12px; }
-      #control-bar .playing-controls > .feather:last-child {
-        margin-left: 12px; }
+      cursor: pointer;
+      stroke: #FFFFFF;
+      padding: 12px;
+      box-sizing: content-box;
+      height: 24px;
+      width: 24px; }
+      @media (min-width: 1024px) {
+        #control-bar .playing-controls > .feather:first-child, #control-bar .playing-controls > .feather:last-child {
+          height: 20px;
+          width: 20px; } }
+      @media (max-width: 768px) {
+        #control-bar .playing-controls > .feather {
+          height: 20px;
+          width: 20px;
+          padding: 0; }
+          #control-bar .playing-controls > .feather:first-child {
+            margin-right: 12px; }
+          #control-bar .playing-controls > .feather:last-child {
+            margin-left: 12px; } }
     #control-bar .playing-controls .is-active {
       stroke: #4D84C3; }
   #control-bar .queue {

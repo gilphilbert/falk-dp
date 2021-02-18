@@ -527,6 +527,14 @@ const page = {
       setPageTitle({ state })
     }
 
+    if (changed.includes('updating')) {
+      if (state.updating) {
+        document.getElementById('falk-logo-white-bg').classList.add('animate')
+      } else {
+        document.getElementById('falk-logo-white-bg').classList.remove('animate')
+      }
+    }
+
     // if we're currently loading the home page create it
     if (_loadPage === 'home') {
       page.build('home')
@@ -561,15 +569,15 @@ const page = {
       cr.h1('Settings'),
       cr.p({ class: 'is-1' }, 'Database'),
       cr.div({ class: 'box row has-text-centered' },
-        cr.div({ class: 'col-lg-4 col-xs-12' },
+        cr.div({ class: 'col-xs-4' },
           cr.h1({ class: 'song-count' }, 'Loading'),
           cr.p({ class: 'subtitle is-3' }, 'Songs')
         ),
-        cr.div({ class: 'col-lg-4 col-xs-12' },
+        cr.div({ class: 'col-xs-4' },
           cr.h1({ class: 'artist-count' }, 'Loading'),
           cr.p({ class: 'subtitle is-3' }, 'Artists')
         ),
-        cr.div({ class: 'col-lg-4 col-xs-12' },
+        cr.div({ class: 'col-xs-4' },
           cr.h1({ class: 'album-count' }, 'Loading'),
           cr.p({ class: 'subtitle is-3' }, 'Albums')
         )

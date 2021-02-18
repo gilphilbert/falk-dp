@@ -31,7 +31,16 @@ async function setup (server) {
               .then(d => broadcast('pushPlaylist', d))
             break
           case 'database':
-            // what do we do here? pushStatus seems most logical. How do the clients know when new files have been found?
+            // what do we do here? need to broadcast that new files have been added so screens can update
+            break
+          case 'mount':
+          case 'mounts':
+            // if mounts have changed, update the database
+            updateDB()
+            break
+          case 'update':
+            getStatus().then(status => broadcast('pushStatus', status))
+            // not much to do here
             break
           default:
             console.log('[MPD] Unknown State Change:' + e)
@@ -102,10 +111,28 @@ async function setup (server) {
         status.bits = 0
         status.channels = 0
       }
+      status.updating = 'updating_db' in status //status.updating_db || false
+      delete (status.updating_db)
       delete (status.playlist)
       delete (status.songid)
     }
     return status
+  }
+
+  function updateDB() {
+    mpdc.api.db.update()
+    mpdc.api.mounts.list()
+      .then((mounts) => {
+        const netmount = mounts.filter((m) => {
+          if ('storage' in m) {
+            return m.storage.startsWith('smb') || m.storage.startsWith('nfs')
+          }
+          return false
+        }).map((m) => {
+          return m.mount
+        })
+        netmount.forEach(i => mpdc.api.db.update(i).then(d => console.log(d)))
+      })
   }
 
   wss.on('connection', function (ws) {
@@ -140,19 +167,7 @@ async function setup (server) {
     })
 
     disp.bind('updateDB', function () {
-      mpdc.api.db.update()
-      mpdc.api.mounts.list()
-        .then((mounts) => {
-          const netmount = mounts.filter((m) => {
-            if ('storage' in m) {
-              return m.storage.startsWith('smb') || m.storage.startsWith('nfs')
-            }
-            return false
-          }).map((m) => {
-            return m.mount
-          })
-          netmount.forEach(i => mpdc.api.db.update(i).then(d => console.log(d)))
-        })
+      updateDB()
     })
 
     // db listing
@@ -206,7 +221,7 @@ async function setup (server) {
     disp.bind('getGenres', function () {
       mpdc.api.db.list('genre')
         .then((d) => {
-          const mod = d.map(i => i.genre)
+          const mod = d.filter(i => { return i.genre !== '' }).map(i => i.genre)
           disp.send('pushGenres', mod)
         })
     })
