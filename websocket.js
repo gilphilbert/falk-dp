@@ -74,20 +74,18 @@ async function setup (server) {
 
   async function getStatus () {
     const status = await mpdc.api.status.get()
-    const queue = await mpdc.api.queue.info()
-    if (status.song !== undefined && queue.length > 0) {
-      const songdetail = queue.filter((qs) => {
-        return qs.pos === status.song
-      })[0]
+    const currentSong = await mpdc.api.status.currentsong()
+    if (status.song !== undefined) {
 
-      status.title = songdetail.title
-      status.artist = songdetail.artist
-      status.album = songdetail.album
-      status.genre = songdetail.genre
-      status.date = songdetail.date
+      status.title = currentSong.title
+      status.artist = currentSong.artist
+      status.album = currentSong.album
+      status.genre = currentSong.genre
+      status.date = currentSong.date
       // status.albumart = '/art/album/' + encodeURIComponent(songdetail.artist) + '/' + encodeURIComponent(songdetail.album) + '.jpg'
 
-      const aa = status.albumartist || status.artist || ''
+      //console.log(status)
+      const aa = currentSong.albumartist|| currentSong.artist || ''
       status.albumart = `/art/album/${encodeURIComponent(aa)}/${encodeURIComponent(status.album)}.jpg`
       status.thumb = `/art/album/thumb/${encodeURIComponent(aa)}/${encodeURIComponent(status.album)}.jpg`
       status.artistBg = `/art/artist/background/${encodeURIComponent(aa)}.jpg`
@@ -98,7 +96,7 @@ async function setup (server) {
         status.elapsed = status.time.elapsed
         delete (status.time)
       } else {
-        status.duration = songdetail.duration
+        status.duration = currentSong.duration
         status.elapsed = 0
       }
       if (status.audio) {
@@ -111,7 +109,7 @@ async function setup (server) {
         status.bits = 0
         status.channels = 0
       }
-      status.updating = 'updating_db' in status //status.updating_db || false
+      status.updating = 'updating_db' in status
       delete (status.updating_db)
       delete (status.playlist)
       delete (status.songid)
@@ -131,7 +129,7 @@ async function setup (server) {
         }).map((m) => {
           return m.mount
         })
-        netmount.forEach(i => mpdc.api.db.update(i).then(d => console.log(d)))
+        netmount.forEach(i => mpdc.api.db.update(i))
       })
   }
 
@@ -162,7 +160,7 @@ async function setup (server) {
           }).map((m) => {
             return m.mount
           })
-          netmount.forEach(i => mpdc.api.db.rescan(i).then(d => console.log(d)))
+          netmount.forEach(i => mpdc.api.db.rescan(i))
         })
     })
 
@@ -301,6 +299,7 @@ async function setup (server) {
             i.artistBg = `/art/artist/background/${encodeURIComponent(i.artist)}.jpg`
             i.artistBgBlur = `/art/artist/background/blur/${encodeURIComponent(i.artist)}.jpg`
           })
+          console.log(d)
           disp.send('pushQueue', d)
         })
     })

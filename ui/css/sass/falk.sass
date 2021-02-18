@@ -306,7 +306,6 @@ figure
         margin: 0
         padding: 0
         margin-right: 450px
-        margin-left: 90px
         .row
           padding-top: 20vh
         .row.art
@@ -321,9 +320,10 @@ figure
           height: 45vh
 
 body.no-controls #content-container
-  height: 100vh
-  padding: 0 0 40px 0
+  // padding-right: 450px
   @include media("≤tablet")
+    height: 100vh
+    padding: 0 0 40px 0
     .container-fluid.max
       height: 100%
       .row

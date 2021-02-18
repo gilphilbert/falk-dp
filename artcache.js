@@ -172,7 +172,6 @@ function getArt ({ artist, album, type, blur, thumb } = {}, res) {
 
 async function getArtistArt (artist, imgpath, res, type, blur) {
   try {
-    console.log(artist)
     const info = await mbApi.searchArtist(artist, 0, 1)
     const mbid = info.artists[0].id
 

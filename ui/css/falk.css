@@ -2760,8 +2760,7 @@ figure.is-40x40 {
         position: relative;
         margin: 0;
         padding: 0;
-        margin-right: 450px;
-        margin-left: 90px; }
+        margin-right: 450px; }
         #content-container .container-fluid.max .row {
           padding-top: 20vh; }
         #content-container .container-fluid.max .row.art {
@@ -2775,14 +2774,15 @@ figure.is-40x40 {
         object-position: top;
         height: 45vh; }
 
-body.no-controls #content-container {
-  height: 100vh;
-  padding: 0 0 40px 0; }
-  @media (max-width: 768px) {
+@media (max-width: 768px) {
+  body.no-controls #content-container {
+    height: 100vh;
+    padding: 0 0 40px 0; }
     body.no-controls #content-container .container-fluid.max {
       height: 100%; }
       body.no-controls #content-container .container-fluid.max .row {
         height: 100%; } }
+
 @media (max-width: 768px) {
   .is-reversed-touch {
     display: flex;
