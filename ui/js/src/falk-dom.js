@@ -95,7 +95,6 @@ const page = {
     // run the right code based on the page
     if (_loadPage === 'home') {
       const state = getState()
-      console.log(state)
       const isLossless = !(parseInt(state.bitrate) <= 320)
       const frag = cr.div({ class: 'container-fluid max' })
 

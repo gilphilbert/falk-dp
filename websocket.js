@@ -79,8 +79,8 @@ async function setup (server) {
       // status.albumart = '/art/album/' + encodeURIComponent(songdetail.artist) + '/' + encodeURIComponent(songdetail.album) + '.jpg'
 
       const aa = status.albumartist || status.artist || ''
-      status.albumart = '/art/album/' + encodeURIComponent(aa) + '/' + encodeURIComponent(status.album) + '.jpg'
-      status.thumb = '/art/album/thumb/' + encodeURIComponent(aa) + '/' + encodeURIComponent(status.album) + '.jpg'
+      status.albumart = `/art/album/${encodeURIComponent(aa)}/${encodeURIComponent(status.album)}.jpg`
+      status.thumb = `/art/album/thumb/${encodeURIComponent(aa)}/${encodeURIComponent(status.album)}.jpg`
       status.artistBg = `/art/artist/background/${encodeURIComponent(aa)}.jpg`
       status.artistBgBlur = `/art/artist/background/blur/${encodeURIComponent(aa)}.jpg`
 
