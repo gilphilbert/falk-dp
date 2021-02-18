@@ -39,28 +39,17 @@ const getSVG = function (iconName, cls) {
 }
 
 const setPageTitle = function ({ title, state } = {}) {
-  let t = ''
-  if (title !== undefined) { // if there's a title
-    _title = title // save it
-    t = title // set it
-  } else {
-    t = _title // otherwise, use the existing title
+  _title = title || _title
+  state = state || getState()
+
+  let pageTitle = _title.charAt(0).toUpperCase() + _title.slice(1)
+
+  if (state.state === 'play') { // if playing
+    pageTitle = state.title + ' - ' + state.artist // set the title to the current song instead of the page title
   }
 
-  // at this point, t should be the title of the current page
-
-  if (state !== undefined && state.status === 'play') { // if playing
-    t = state.title + ' - ' + state.artist // set the title to the current song instead of the page title
-  }
-
-  // capitalize first letter...
-  if (t !== undefined) {
-    t = t.charAt(0).toUpperCase() + t.slice(1)
-  } else {
-    t = 'Audiophile Music Player'
-  }
   // set the title
-  document.title = t + ' | FALK'
+  document.title = pageTitle + ' | FALK DP-01'
 }
 
 const progress = {

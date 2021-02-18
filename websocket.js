@@ -57,7 +57,6 @@ async function setup (server) {
         process.exit(0)
       } else {
         console.log('Couldn\'t connect to MPD, retrying')
-        console.log(e)
       }
     }
   }
@@ -82,9 +81,7 @@ async function setup (server) {
       status.album = currentSong.album
       status.genre = currentSong.genre
       status.date = currentSong.date
-      // status.albumart = '/art/album/' + encodeURIComponent(songdetail.artist) + '/' + encodeURIComponent(songdetail.album) + '.jpg'
 
-      //console.log(status)
       const aa = currentSong.albumartist|| currentSong.artist || ''
       status.albumart = `/art/album/${encodeURIComponent(aa)}/${encodeURIComponent(status.album)}.jpg`
       status.thumb = `/art/album/thumb/${encodeURIComponent(aa)}/${encodeURIComponent(status.album)}.jpg`
@@ -299,7 +296,6 @@ async function setup (server) {
             i.artistBg = `/art/artist/background/${encodeURIComponent(i.artist)}.jpg`
             i.artistBgBlur = `/art/artist/background/blur/${encodeURIComponent(i.artist)}.jpg`
           })
-          console.log(d)
           disp.send('pushQueue', d)
         })
     })

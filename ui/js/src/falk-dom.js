@@ -239,6 +239,7 @@ const page = {
       // append the main fragment to the page
       main.appendChild(frag)
     } else if (_loadPage === 'artist') {
+      title = data.artist.title
       const frag = document.createDocumentFragment()
 
       // append directly to the page, we don't want this in the container
