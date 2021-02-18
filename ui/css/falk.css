@@ -2760,7 +2760,8 @@ figure.is-40x40 {
         position: relative;
         margin: 0;
         padding: 0;
-        margin-right: 450px; }
+        margin-right: 450px;
+        margin-left: 90px; }
         #content-container .container-fluid.max .row {
           padding-top: 20vh; }
         #content-container .container-fluid.max .row.art {

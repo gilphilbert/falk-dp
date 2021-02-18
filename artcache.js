@@ -172,55 +172,56 @@ function getArt ({ artist, album, type, blur, thumb } = {}, res) {
 
 async function getArtistArt (artist, imgpath, res, type, blur) {
   try {
+    console.log(artist)
     const info = await mbApi.searchArtist(artist, 0, 1)
     const mbid = info.artists[0].id
+
+    // now get the fanart from fanart.tv
+    axios.get('https://webservice.fanart.tv/v3/music/' + mbid + '&?api_key=fd55f4282969cb8b8d09f470e3d18c51&format=json')
+      .then(function (response) {
+        const fanart = response.data
+        const url = ((type === 'bg') ? fanart.artistbackground[0].url : fanart.artistthumb[0].url)
+        axios({ url: url, method: 'GET', responseType: 'stream' })
+          .then(function (response) {
+            // write the file
+            const writer = fs.createWriteStream(imgpath)
+            response.data.pipe(writer)
+            writer.on('finish', () => {
+              res.set('Cache-control', 'public, max-age=31536000000')
+              res.type('image/jpg')
+              const opts = { width: 480 }
+              if (type !== 'bg') {
+                if (blur) {
+                  opts.width = 1000
+                } else {
+                  opts.height = 480
+                }
+              }
+              if (blur === true) {
+                sharp(imgpath).resize(opts).greyscale().blur().pipe(res)
+              } else {
+                sharp(imgpath).resize(opts).pipe(res)
+              }
+            })
+          })
+          .catch(err => {
+            if (err) {
+              const artcache = rootdir + '/artcache/'
+              res.sendFile(artcache + 'artist.png', { maxAge: 86400000 }) // refresh this every day, in case a new image is uploaded
+            }
+          })
+      })
+      .catch(err => {
+        if (err) {
+          const artcache = rootdir + '/artcache/'
+          res.sendFile(artcache + 'artist.png', { maxAge: 86400000 }) // refresh this every day, in case a new image is uploaded
+        }
+      })
   } catch(err) {
     console.log(err)
     const artcache = rootdir + '/artcache/'
     res.sendFile(artcache + 'artist.png', { maxAge: 86400000 }) // refresh this every day, in case a new image is uploaded
   }
-
-  // now get the fanart from fanart.tv
-  axios.get('https://webservice.fanart.tv/v3/music/' + mbid + '&?api_key=fd55f4282969cb8b8d09f470e3d18c51&format=json')
-    .then(function (response) {
-      const fanart = response.data
-      const url = ((type === 'bg') ? fanart.artistbackground[0].url : fanart.artistthumb[0].url)
-      axios({ url: url, method: 'GET', responseType: 'stream' })
-        .then(function (response) {
-          // write the file
-          const writer = fs.createWriteStream(imgpath)
-          response.data.pipe(writer)
-          writer.on('finish', () => {
-            res.set('Cache-control', 'public, max-age=31536000000')
-            res.type('image/jpg')
-            const opts = { width: 480 }
-            if (type !== 'bg') {
-              if (blur) {
-                opts.width = 1000
-              } else {
-                opts.height = 480
-              }
-            }
-            if (blur === true) {
-              sharp(imgpath).resize(opts).greyscale().blur().pipe(res)
-            } else {
-              sharp(imgpath).resize(opts).pipe(res)
-            }
-          })
-        })
-        .catch(err => {
-          if (err) {
-            const artcache = rootdir + '/artcache/'
-            res.sendFile(artcache + 'artist.png', { maxAge: 86400000 }) // refresh this every day, in case a new image is uploaded
-          }
-        })
-    })
-    .catch(err => {
-      if (err) {
-        const artcache = rootdir + '/artcache/'
-        res.sendFile(artcache + 'artist.png', { maxAge: 86400000 }) // refresh this every day, in case a new image is uploaded
-      }
-    })
 }
 
 // update this for fanart.tv?
