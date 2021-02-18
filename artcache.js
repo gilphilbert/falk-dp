@@ -171,8 +171,14 @@ function getArt ({ artist, album, type, blur, thumb } = {}, res) {
 }
 
 async function getArtistArt (artist, imgpath, res, type, blur) {
-  const info = await mbApi.searchArtist(artist, 0, 1)
-  const mbid = info.artists[0].id
+  try {
+    const info = await mbApi.searchArtist(artist, 0, 1)
+    const mbid = info.artists[0].id
+  } catch(err) {
+    console.log(err)
+    const artcache = rootdir + '/artcache/'
+    res.sendFile(artcache + 'artist.png', { maxAge: 86400000 }) // refresh this every day, in case a new image is uploaded
+  }
 
   // now get the fanart from fanart.tv
   axios.get('https://webservice.fanart.tv/v3/music/' + mbid + '&?api_key=fd55f4282969cb8b8d09f470e3d18c51&format=json')
