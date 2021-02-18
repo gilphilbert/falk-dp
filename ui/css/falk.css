@@ -2496,7 +2496,7 @@ p, a {
   font-weight: normal;
   color: #FFFFFF;
   padding: 2px 0;
-  word-break: break-all; }
+  word-break: break-word; }
   p.is-1, a.is-1 {
     font-size: 1.5rem; }
   p.is-2, a.is-2 {
