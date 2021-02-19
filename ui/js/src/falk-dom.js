@@ -241,7 +241,6 @@ const page = {
     } else if (_loadPage === 'artist') {
       title = data.artist.title
       const frag = document.createDocumentFragment()
-
       // append directly to the page, we don't want this in the container
       frag.appendChild(cr.figure({ class: 'image hidden--for-desktop' },
         cr.img({ src: `${data.artist.background}`, style: 'object-fit: cover;height: 30vh;object-position: center;width: 100%' })
@@ -264,6 +263,7 @@ const page = {
           data.albums.map(function (album) {
             return buildTile({
               title: album.title,
+              subtitle: album.date,
               image: album.albumart,
               href: '/album/' + encodeURIComponent(data.artist.title) + '/' + encodeURIComponent(album.title)
             })
@@ -525,7 +525,6 @@ const page = {
         progress.stop()
         progress.update()
       }
-      setPageTitle({ state })
     }
 
     if (changed.includes('updating')) {
@@ -535,6 +534,9 @@ const page = {
         document.getElementById('falk-logo-white-bg').classList.remove('animate')
       }
     }
+
+    //always update the page, because something has changed!
+    setPageTitle({ state })
 
     // if we're currently loading the home page create it
     if (_loadPage === 'home') {

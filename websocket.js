@@ -235,14 +235,34 @@ async function setup (server) {
     })
 
     disp.bind('getArtistAlbums', function (data) {
-      mpdc.api.db.list('album', `(albumartist == "${data.artist}")`)
-        .then((d) => {
-          const mod = d.map((d) => {
-            return {
-              title: d.album,
-              albumart: '/art/album/' + encodeURIComponent(data.artist) + '/' + encodeURIComponent(d.album) + '.jpg'
-            }
-          })
+      function compare(a, b) {
+        let comparison = 0;
+        if (a.date > b.year) {
+          comparison = 1;
+        } else if (a.date < b.date) {
+          comparison = -1;
+        }
+        return comparison;
+      }
+
+      mpdc.api.db.list('album', `(albumartist == "${data.artist}")`, 'date')
+        .then((res) => {
+          const mod = res.reduce((arr, year) => {
+            const date = year.date
+
+            const albums = year.album.reduce((acc, item) => {
+              acc.push({
+                title: item.album,
+                date: date,
+                albumart: '/art/album/' + encodeURIComponent(data.artist) + '/' + encodeURIComponent(item.album) + '.jpg'
+              })
+              return acc
+            }, [])
+
+            arr = arr.concat(albums)
+            return arr
+          }, [])
+          mod.sort(compare)
           const out = {
             artist: {
               title: data.artist,
