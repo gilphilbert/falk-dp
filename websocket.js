@@ -3,6 +3,8 @@ async function setup (server) {
   const mpdapi = require('mpd-api')
   const wss = new WebSocket.Server({ server: server })
 
+  const artCache = require('./artcache')
+
   let mpdc = null
   let init = true
   async function connectMPD () {
@@ -139,33 +141,7 @@ async function setup (server) {
       getStatus().then(status => disp.send('pushStatus', status))
     })
 
-    // db management
-    disp.bind('getStats', function () {
-      mpdc.api.status.stats()
-        .then(d => disp.send('pushStats', d))
-    })
-
-    disp.bind('rescanDB', function () {
-      mpdc.api.db.rescan()
-      mpdc.api.mounts.list()
-        .then((mounts) => {
-          const netmount = mounts.filter((m) => {
-            if ('storage' in m) {
-              return m.storage.startsWith('smb') || m.storage.startsWith('nfs')
-            }
-            return false
-          }).map((m) => {
-            return m.mount
-          })
-          netmount.forEach(i => mpdc.api.db.rescan(i))
-        })
-    })
-
-    disp.bind('updateDB', function () {
-      updateDB()
-    })
-
-    // db listing
+    // library
     disp.bind('getArtists', function () {
       mpdc.api.db.list('albumartist')
         .then(async (d) => {
@@ -267,56 +243,12 @@ async function setup (server) {
             artist: {
               title: data.artist,
               albumart: '/art/artist/' + encodeURIComponent(data.artist) + '.jpg',
-              background: '/art/artist/background/' + encodeURIComponent(data.artist) + '.jpg'
+              background: '/art/artist/background/' + encodeURIComponent(data.artist) + '.jpg',
+              banner: '/art/artist/banner/' + encodeURIComponent(data.artist) + '.jpg'
             },
             albums: mod
           }
           disp.send('pushArtistAlbums', out)
-        })
-    })
-
-    // mounts
-    disp.bind('getMounts', function () {
-      mpdc.api.mounts.list()
-        .then((data) => {
-          const mounts = data.filter(mount => mount.mount)
-          disp.send('pushMounts', mounts)
-        })
-    })
-
-    disp.bind('addMount', function (data) {
-      const point = data.path.substr(data.path.lastIndexOf('/') + 1, data.path.length)
-      const share = data.type + '://' + data.host + '/' + data.path
-      mpdc.api.mounts.mount(point, share)
-        .then(() => {
-          mpdc.api.mounts.list()
-            .then((d) => {
-              disp.send('pushMounts', d)
-            })
-        })
-    })
-
-    disp.bind('unmount', function (data) {
-      mpdc.api.mounts.unmount(data.mountpoint)
-        .then((resp) => {
-          mpdc.api.mounts.list((d) => {
-            disp.send('pushMounts', d)
-          })
-        })
-    })
-
-    // queue
-    disp.bind('getQueue', function () {
-      mpdc.api.queue.info()
-        .then((d) => {
-          d.forEach((i) => {
-            const aa = i.albumartist || i.artist || ''
-            i.albumart = '/art/album/' + encodeURIComponent(aa) + '/' + encodeURIComponent(i.album) + '.jpg'
-            i.thumb = '/art/album/thumb/' + encodeURIComponent(aa) + '/' + encodeURIComponent(i.album) + '.jpg'
-            i.artistBg = `/art/artist/background/${encodeURIComponent(i.artist)}.jpg`
-            i.artistBgBlur = `/art/artist/background/blur/${encodeURIComponent(i.artist)}.jpg`
-          })
-          disp.send('pushQueue', d)
         })
     })
 
@@ -335,10 +267,6 @@ async function setup (server) {
       }
     })
 
-    disp.bind('clearQueue', function () {
-      mpdc.api.queue.clear()
-    })
-
     disp.bind('addPlay', function (data) {
       const pos = data.pos || 0
       if (data.uri) {
@@ -353,12 +281,6 @@ async function setup (server) {
         Promise.all(promises).then((values) => {
           mpdc.api.playback.playid(values[pos])
         })
-      }
-    })
-
-    disp.bind('removeFromQueue', function (data) {
-      if (data.pos) {
-        mpdc.api.queue.delete(data.pos)
       }
     })
 
@@ -387,9 +309,34 @@ async function setup (server) {
       }
     })
 
+    // queue
     disp.bind('saveQueue', function (data) {
       if (data.name) {
         mpdc.api.playlists.save(data.name)
+      }
+    })
+
+    disp.bind('clearQueue', function () {
+      mpdc.api.queue.clear()
+    })
+
+    disp.bind('getQueue', function () {
+      mpdc.api.queue.info()
+        .then((d) => {
+          d.forEach((i) => {
+            const aa = i.albumartist || i.artist || ''
+            i.albumart = '/art/album/' + encodeURIComponent(aa) + '/' + encodeURIComponent(i.album) + '.jpg'
+            i.thumb = '/art/album/thumb/' + encodeURIComponent(aa) + '/' + encodeURIComponent(i.album) + '.jpg'
+            i.artistBg = `/art/artist/background/${encodeURIComponent(i.artist)}.jpg`
+            i.artistBgBlur = `/art/artist/background/blur/${encodeURIComponent(i.artist)}.jpg`
+          })
+          disp.send('pushQueue', d)
+        })
+    })
+
+    disp.bind('removeFromQueue', function (data) {
+      if (data.pos) {
+        mpdc.api.queue.delete(data.pos)
       }
     })
 
@@ -433,12 +380,6 @@ async function setup (server) {
       if (data.state !== undefined) {
         mpdc.api.playback.random(data.state)
       }
-    })
-
-    // output devices
-    disp.bind('getOutputs', function () {
-      mpdc.api.outputs.list()
-        .then(d => disp.send('pushOutputs', d))
     })
 
     // playlists
@@ -498,6 +439,68 @@ async function setup (server) {
               })
           })
       }
+    })
+
+    // mounts
+    disp.bind('getMounts', function () {
+      mpdc.api.mounts.list()
+        .then((data) => {
+          const mounts = data.filter(mount => mount.mount)
+          disp.send('pushMounts', mounts)
+        })
+    })
+
+    disp.bind('addMount', function (data) {
+      const point = data.path.substr(data.path.lastIndexOf('/') + 1, data.path.length)
+      const share = data.type + '://' + data.host + '/' + data.path
+      mpdc.api.mounts.mount(point, share)
+        .then(() => {
+          mpdc.api.mounts.list()
+            .then((d) => {
+              disp.send('pushMounts', d)
+            })
+        })
+    })
+
+    disp.bind('unmount', function (data) {
+      mpdc.api.mounts.unmount(data.mountpoint)
+        .then((resp) => {
+          mpdc.api.mounts.list((d) => {
+            disp.send('pushMounts', d)
+          })
+        })
+    })
+
+
+    // db management
+    disp.bind('getStats', function () {
+      mpdc.api.status.stats()
+        .then(d => disp.send('pushStats', d))
+    })
+
+    disp.bind('rescanDB', function () {
+      mpdc.api.db.rescan()
+      mpdc.api.mounts.list()
+        .then((mounts) => {
+          const netmount = mounts.filter((m) => {
+            if ('storage' in m) {
+              return m.storage.startsWith('smb') || m.storage.startsWith('nfs')
+            }
+            return false
+          }).map((m) => {
+            return m.mount
+          })
+          netmount.forEach(i => mpdc.api.db.rescan(i))
+        })
+    })
+
+    disp.bind('updateDB', function () {
+      updateDB()
+    })
+
+    //art
+    disp.bind('updateArt', function () {
+      artCache.updateArt()
     })
   })
 }

@@ -21,7 +21,11 @@ const buildTile = function ({ title, image, href, subtitle, subtitleHref, classe
       ),
       cr.p({ class: 'is-5 is-capitalized' }, title)
     ),
-    ((subtitle !== undefined) ? cr.a({ href: subtitleHref, 'data-navigo': '' }, cr.p({ class: 'subtitle is-5 is-capitalized' }, subtitle)) : null)
+    ((subtitle !== undefined) ? (( subtitleHref !== undefined ) ?
+      cr.a({ href: subtitleHref, 'data-navigo': '' }, cr.p({ class: 'subtitle is-5 is-capitalized' }, subtitle))
+    :
+      cr.p({ class: 'subtitle is-5 is-capitalized' }, subtitle)
+    ) : null)
   )
 }
 
@@ -613,6 +617,10 @@ const page = {
         )
       ),
       */
+      cr.p({ class: 'is-1' }, 'Artwork'),
+      cr.p('Artwork is usually automatically downloaded when new music is detected. If you believe artwork is missing, you can try to gather by clicking "Update Art". If your images are all missing or are corrupt, click on "Regenerate Artwork". For larger collections, building the artcache can take a long time'),
+      cr.button({ class: 'button is-rounded is-primary', on: { click: () => { action.updateArt() } } }, 'Update Art'),
+      cr.button({ class: 'button is-rounded is-danger', on: { click: () => { action.regenerateArt() } } }, 'Regnerate Art'),
       cr.p({ class: 'is-1' }, 'System'),
       cr.button({ class: 'button is-rounded is-danger', on: { click: () => { action.reboot(); domBuilder.disconnected() } } }, 'Reboot'),
       cr.button({ class: 'button is-rounded is-danger', on: { click: () => { action.shutdown(); domBuilder.disconnected() } } }, 'Shutdown')

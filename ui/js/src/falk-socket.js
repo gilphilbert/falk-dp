@@ -221,6 +221,13 @@ const action = {
   rescanLibrary: function () {
     server.send('rescanDB')
   },
+  updateArt: function () {
+    console.log('here')
+    server.send('updateArt')
+  },
+  regenerateArt: function () {
+    server.send('regenerateArt')
+  },
   addShare: function ({ host, path, type } = {}) {
     if (path.indexOf('/') === 0) {
       path = path.substr(1)

@@ -24,7 +24,7 @@ try {
 }
 
 // include the artcache
-const artcache = require('./artcache')
+const artcache = require('./artserver')
 app.use('/art', artcache)
 
 app.use('/lcd', express.static('lcd'))
