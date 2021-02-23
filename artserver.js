@@ -8,14 +8,6 @@ const rootdir = path.resolve(__dirname)
 
 const sharp = require('sharp')
 
-const MusicBrainzApi = require('musicbrainz-api').MusicBrainzApi
-const { brotliDecompress } = require('zlib')
-const mbApi = new MusicBrainzApi({
-  appName: 'FALK',
-  appVersion: '0.0.1',
-  appContactInfo: 'gil.philbert@gmail.com'
-})
-
 function generateFilename({ artist, album, type } = {}) {
   const artcache = rootdir + '/artcache/'
 
@@ -163,9 +155,10 @@ function getArt ({ artist, album, type, blur, thumb } = {}, res) {
     body.type = type.toLowerCase()
   }
   const imgpath = generateFilename(body)
+
   // for now, we'll resize everything to 480x480, it should cover most screens. Later, we'll ask the artcache server for the size wanted
   try {
-    if (fs.existsSync(imgpath)) {
+    if (imgpath !== null && fs.existsSync(imgpath)) {
       // we have the file in the cache, so serve it
       res.set('Cache-control', 'public, max-age=31536000000')
       res.type('image/jpg')
@@ -182,12 +175,12 @@ function getArt ({ artist, album, type, blur, thumb } = {}, res) {
         }
       } else if (blur === true) {
         opts.width = 1000
-        sharp(imgpath).resize(1000).greyscale().pipe(res)
+        sharp(imgpath).resize(1000).greyscale().pipe(res).catch(e => { console.log('Could not serve image') })
         return
       } else if (type === 'musicbanner') {
-        sharp(imgpath).pipe(res)
+        sharp(imgpath).pipe(res).catch(e => { console.log('Could not serve image') })
       }
-      sharp(imgpath).resize(opts).pipe(res)
+      sharp(imgpath).resize(opts).pipe(res).catch(e => { console.log('Could not serve image') })
     } else {
       if (!album) {
         // there's no art, serve the default artistart
