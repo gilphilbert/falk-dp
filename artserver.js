@@ -145,6 +145,17 @@ router.get('/album/thumb/:artist/:album', function (req, res) {
 })
 
 function getArt ({ artist, album, type, blur, thumb } = {}, res) {
+  const sendDefault = () => {
+    if (!album) {
+      // there's no art, serve the default artistart
+      res.sendFile(rootdir + '/artcache/' + 'artist.png', { maxAge: 0 }) // refresh this every day, in case a new image is uploaded
+    } else {
+      // there's no art, serve the default artistart
+      res.sendFile(rootdir + '/artcache/' + 'album.png', { maxAge: 0 }) // refresh this every day, in case a new image is uploaded
+    }
+  }
+
+
   body = {
     artist: artist.toLowerCase()
   }
@@ -158,130 +169,37 @@ function getArt ({ artist, album, type, blur, thumb } = {}, res) {
 
   // for now, we'll resize everything to 480x480, it should cover most screens. Later, we'll ask the artcache server for the size wanted
   try {
-    if (imgpath !== null && fs.existsSync(imgpath)) {
+    const pipeline = sharp(imgpath).on('error', err => {
+      console.log('Sharp Error')
+      sendDefault()
+    })
+    if (imgpath !== null) {
       // we have the file in the cache, so serve it
       res.set('Cache-control', 'public, max-age=31536000000')
       res.type('image/jpg')
       const opts = { width: 480 }
-      if (type !== 'artistbackground' && type !== 'musicbanner') {
+      //if (type !== 'artistbackground' && type !== 'musicbanner') {
+      if (type === 'artistthumb') {
         if (thumb === true) {
-          opts.width = 70
-          opts.height = 70
-          // sharp(imgpath).resize(70, 70).pipe(res)
+          pipeline.resize(70, 70)
         } else {
-          opts.width = 480
-          opts.height = 480
-          // sharp(imgpath).resize(480, 480).pipe(res)
+          pipeline.resize(480, 480)
         }
-      } else if (blur === true) {
-        opts.width = 1000
-        sharp(imgpath).resize(1000).greyscale().pipe(res).catch(e => { console.log('Could not serve image') })
-        return
+      } else if (type === 'artistbackground') {
+        pipeline.resize(1000)
+        if (blur === true) {
+          pipeline.greyscale()
+        }
       } else if (type === 'musicbanner') {
-        sharp(imgpath).pipe(res).catch(e => { console.log('Could not serve image') })
+        // do nothing 
       }
-      sharp(imgpath).resize(opts).pipe(res).catch(e => { console.log('Could not serve image') })
+      pipeline.pipe(res)
     } else {
-      if (!album) {
-        // there's no art, serve the default artistart
-        res.sendFile(rootdir + '/artcache/' + 'artist.png', { maxAge: 0 }) // refresh this every day, in case a new image is uploaded
-      } else {
-        // there's no art, serve the default artistart
-        res.sendFile(rootdir + '/artcache/' + 'album.png', { maxAge: 0 }) // refresh this every day, in case a new image is uploaded
-      }
+      sendDefault()
     }
   } catch (err) {
-    res.json({ error: 'unable to generate image' })
+    sendDefault()
   }
 }
-/*
-async function getArtistArt (artist, imgpath, res, type, blur) {
-  try {
-    const info = await mbApi.searchArtist(artist, 0, 1)
-    const mbid = info.artists[0].id
-
-    // now get the fanart from fanart.tv
-    axios.get('https://webservice.fanart.tv/v3/music/' + mbid + '&?api_key=fd55f4282969cb8b8d09f470e3d18c51&format=json')
-      .then(function (response) {
-        const fanart = response.data
-        const url = ((type === 'bg') ? fanart.artistbackground[0].url : fanart.artistthumb[0].url)
-        axios({ url: url, method: 'GET', responseType: 'stream' })
-          .then(function (response) {
-            // write the file
-            const writer = fs.createWriteStream(imgpath)
-            response.data.pipe(writer)
-            writer.on('finish', () => {
-              res.set('Cache-control', 'public, max-age=31536000000')
-              res.type('image/jpg')
-              const opts = { width: 480 }
-              if (type !== 'bg') {
-                if (blur) {
-                  opts.width = 1000
-                } else {
-                  opts.height = 480
-                }
-              }
-              if (blur === true) {
-                sharp(imgpath).resize(opts).greyscale().blur().pipe(res)
-              } else {
-                sharp(imgpath).resize(opts).pipe(res)
-              }
-            })
-          })
-          .catch(err => {
-            if (err) {
-              const artcache = rootdir + '/artcache/'
-              res.sendFile(artcache + 'artist.png', { maxAge: 86400000 }) // refresh this every day, in case a new image is uploaded
-            }
-          })
-      })
-      .catch(err => {
-        if (err) {
-          const artcache = rootdir + '/artcache/'
-          res.sendFile(artcache + 'artist.png', { maxAge: 86400000 }) // refresh this every day, in case a new image is uploaded
-        }
-      })
-  } catch(err) {
-    console.log(err)
-    const artcache = rootdir + '/artcache/'
-    res.sendFile(artcache + 'artist.png', { maxAge: 86400000 }) // refresh this every day, in case a new image is uploaded
-  }
-}
-
-// update this for fanart.tv?
-async function getAlbumArt (artist, album, imgpath, thumb) {
-  const _artist = encodeURIComponent(artist)
-  const _album = encodeURIComponent(album)
-  const info = await axios.get(`http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=250b1448a91894d0f7542cbcdedc936e&artist=${_artist}&album=${_album}&format=json`)
-
-  const images = info.data.album.image
-
-  const _img = images.filter(img => {
-    return img.size === 'extralarge'
-  })
-  let imageurl = false
-  if (_img && _img.length > 0) {
-    imageurl = _img[0]['#text']
-  }
-
-  if (imageurl) {
-    // fetch the image file
-    const response = await axios({ url: imageurl, method: 'GET', responseType: 'stream' })
-
-    // write the file
-    const writer = fs.createWriteStream(imgpath)
-    await response.data.pipe(writer)
-
-    // return a promise
-    return new Promise((resolve, reject) => {
-      writer.on('finish', resolve)
-      writer.on('error', reject)
-    })
-  }
-
-  // we didn't find an image, panic!
-  throw new Error(1)
-}
-*/
 
 module.exports = router
