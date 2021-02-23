@@ -10,7 +10,7 @@ async function setup (server) {
   async function connectMPD () {
     console.log('Connecting to MPD...')
     try {
-      mpdc = await mpdapi.connect({ path: '/var/lib/mpd/socket' })
+      mpdc = await mpdapi.connect({ path: '/run/mpd/socket' })
       console.log('Connected to MPD')
 
       mpdc.on('system', (e) => {
