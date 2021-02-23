@@ -5,6 +5,39 @@ async function setup (server) {
 
   const artCache = require('./artcache')
 
+  let curSongUri = ''
+
+  function incrementTrack() {
+    mpdc.api.status.currentsong()
+      .then(currentSong => {
+        if (currentSong && curSongUri !== currentSong.file) {
+          curSongUri = currentSong.file
+          mpdc.api.sticker.get(curSongUri, 'playCount')
+            .then(count => {
+              if (count !== undefined && !isNaN(count)) {
+                _c = parseInt(count)
+                _c++
+              } else {
+                _c = 1
+              }
+              mpdc.api.sticker.set(curSongUri, 'playCount', _c)
+            })
+        }
+      }).catch(e => {
+        // console.log('Not playing')
+        // nothing to do here
+      })
+  }
+
+  function getSongArt(song) {
+    const aa = song.albumartist|| song.artist || ''
+    song.albumart = `/art/album/${encodeURIComponent(aa)}/${encodeURIComponent(song.album)}.jpg`
+    song.thumb = `/art/album/thumb/${encodeURIComponent(aa)}/${encodeURIComponent(song.album)}.jpg`
+    song.artistBg = `/art/artist/background/${encodeURIComponent(aa)}.jpg`
+    song.artistBgBlur = `/art/artist/background/blur/${encodeURIComponent(aa)}.jpg`
+    return song
+  }
+
   let mpdc = null
   let init = true
   async function connectMPD () {
@@ -20,11 +53,14 @@ async function setup (server) {
               .then((d) => {
                 d.forEach((i) => {
                   i.albumart = '/art/album/' + encodeURIComponent(i.artist) + '/' + encodeURIComponent(i.album) + '.jpg'
+                  i.thumb = '/art/album/thumb/' + encodeURIComponent(i.artist) + '/' + encodeURIComponent(i.album) + '.jpg'
                 })
+                
                 broadcast('pushQueue', d)
               })
             break
           case 'player':
+            incrementTrack()
           case 'options':
             getStatus().then(status => broadcast('pushStatus', status))
             break
@@ -42,7 +78,9 @@ async function setup (server) {
             break
           case 'update':
             getStatus().then(status => broadcast('pushStatus', status))
-            // not much to do here
+            break
+          case 'sticker':
+            // no action for stickers
             break
           default:
             console.log('[MPD] Unknown State Change:' + e)
@@ -440,6 +478,36 @@ async function setup (server) {
           })
       }
     })
+
+    // dynamic playlists
+    disp.bind('getMostPlayed', function () {
+      mpdc.api.sticker.find('playCount', '')
+        .then(async (data) => {
+          const fileList = data.sort((a, b) => (a.playCount > b.playCount) ? -1 : 1).slice(0, 99)
+          let songList = []
+          for (i in fileList) {
+            const _filename = fileList[i].file.substr(fileList[i].file.lastIndexOf('/') + 1)
+            const songArr = await mpdc.api.db.search('filename', _filename)
+            // need to check if there are more than one responses!
+            if (songArr.length === 1) {
+              let song = songArr[0]
+              song.track = parseInt(i) + 1
+              songList.push(getSongArt(song))
+              // console.log(song)
+            } else if (songArr.length > 1) {
+              // now check each file's URI to see if it matches our full URI or not...
+            }
+          }
+          const ret = {
+            name: 'Most Played',
+            description: 'The top 100 most played songs',
+            songs: songList,
+            albumart: ((songList.length > 0) ? songList[0].albumart : '')
+          }
+          disp.send('pushMostPlayed', ret)
+        })
+    })
+
 
     // mounts
     disp.bind('getMounts', function () {

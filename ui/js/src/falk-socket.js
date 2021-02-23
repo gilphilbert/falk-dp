@@ -99,6 +99,11 @@ const get = {
   playlist: function (name) {
     server.send('getPlaylist', { name: name })
   },
+  autoPlaylists: {
+    mostPlayed: function() {
+      server.send('getMostPlayed')
+    }
+  },
   artists: function () {
     server.send('getArtists')
   },
@@ -272,6 +277,7 @@ const start = function () {
     .bind('pushQueue', queueTable)
     .bind('pushMounts', mounts)
     .bind('database', database)
+    .bind('pushMostPlayed', page.build)
   get.state()
 }
 
@@ -305,5 +311,7 @@ document.addEventListener('DOMContentLoaded', function () {
   init(window.location.host, () => {
     initUI()
     initRouter()
+
+    server.send('getMostPlayed')
   })
 })

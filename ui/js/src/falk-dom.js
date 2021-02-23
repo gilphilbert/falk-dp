@@ -354,6 +354,20 @@ const page = {
       frag.appendChild(cr.h1({ class: 'is-capitalized' }, title))
 
       // create a tile for each
+      const auto = [{ name: 'Most Played', link: '/playlist/auto/most-played' }, { name: 'Added Recently', link: '/playlist/auto/most-recent' }]
+      frag.appendChild(
+        cr.div({ class: 'row playlist-list' },
+          auto.map(function (playlist) {
+            return buildTile({
+              title: playlist.name,
+              image: '/img/icons/playlist-padded.svg',
+              href: playlist.link
+            })
+          })
+        )
+      )
+
+      // create a tile for each
       frag.appendChild(
         cr.div({ class: 'row playlist-list' },
           data.map(function (playlist) {
@@ -424,6 +438,48 @@ const page = {
           )
         )
       )
+    } else if (_loadPage.startsWith('auto-')) {
+      // set the page title
+      title = data.name
+
+      // create the main fragment
+      const frag = cr.div({ class: 'container-fluid' })
+
+      // append the details and list of tracks to the fragment
+      frag.appendChild(
+        cr.div({ class: 'row' },
+          cr.div({ class: 'col-xs-12 col-md-5 has-text-centered-desktop' },
+            cr.div({ class: 'row album-detail' },
+              cr.div({ class: 'col-md-8 col-md-offset-2 col-xs-4 art' },
+                cr.figure({ class: 'image' },
+                  cr.img({ src: data.albumart, loading: 'lazy' })
+                )
+              ),
+              cr.div({ class: 'col-md-8 col-md-offset-2 col-xs-8' },
+                cr.h1({ class: 'album-title' }, data.name),
+                cr.p({ class: 'subtitle is-1' }, data.description),
+              )
+            )
+          ),
+          cr.div({ class: 'col-xs-12 col-md-7' },
+            cr.div({ class: 'row album-detail' },
+              cr.div({ class: 'col-xs-12 col-md-11' },
+                cr.h1({ class: 'hidden--to-tablet' }, 'Playlist Tracks'),
+                cr.table({ class: 'table songs' },
+                  cr.tbody(
+                    data.songs.map(function (song) {
+                      return buildTrack(song)
+                    })
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+
+      // append the main fragment to the page
+      main.appendChild(frag)
     }
     setPageTitle({ title })
     update()

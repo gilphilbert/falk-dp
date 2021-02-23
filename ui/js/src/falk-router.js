@@ -15,6 +15,16 @@ const initRouter = function () {
         control.show()
         hideMenu()
       },
+      'playlist/auto/:name': function (params) {
+        switch (params.data.name) {
+          case 'most-played':
+            page.setLoad('auto-mostPlayed')
+            get.autoPlaylists.mostPlayed()
+            break
+        }
+        control.show()
+        hideMenu()
+      },
       'playlist/:playlist': function (params) {
         page.setLoad('playlist')
         get.playlist(params.data.playlist)
