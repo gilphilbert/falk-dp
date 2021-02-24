@@ -1,6 +1,7 @@
 async function setup (server) {
   const WebSocket = require('ws')
   const mpdapi = require('mpd-api')
+
   const wss = new WebSocket.Server({ server: server })
 
   const artCache = require('./artcache')
@@ -52,8 +53,9 @@ async function setup (server) {
             mpdc.api.queue.info()
               .then((d) => {
                 d.forEach((i) => {
-                  i.albumart = '/art/album/' + encodeURIComponent(i.artist) + '/' + encodeURIComponent(i.album) + '.jpg'
-                  i.thumb = '/art/album/thumb/' + encodeURIComponent(i.artist) + '/' + encodeURIComponent(i.album) + '.jpg'
+                  //i.albumart = '/art/album/' + encodeURIComponent(i.artist) + '/' + encodeURIComponent(i.album) + '.jpg'
+                  //i.thumb = '/art/album/thumb/' + encodeURIComponent(i.artist) + '/' + encodeURIComponent(i.album) + '.jpg'
+                  i = getSongArt(i)
                 })
                 
                 broadcast('pushQueue', d)
@@ -77,10 +79,12 @@ async function setup (server) {
             updateDB()
             break
           case 'update':
+            // if the database has changed, update the art and then send a message to the clients
+            artCache.updateArt()
             getStatus().then(status => broadcast('pushStatus', status))
             break
           case 'sticker':
-            // no action for stickers
+            // no action for stickers but we want to hide logging of the event
             break
           default:
             console.log('[MPD] Unknown State Change:' + e)
@@ -112,7 +116,7 @@ async function setup (server) {
   }
 
   async function getStatus () {
-    const status = await mpdc.api.status.get()
+    let status = await mpdc.api.status.get()
     const currentSong = await mpdc.api.status.currentsong()
     if (status.song !== undefined) {
 
@@ -122,11 +126,7 @@ async function setup (server) {
       status.genre = currentSong.genre
       status.date = currentSong.date
 
-      const aa = currentSong.albumartist|| currentSong.artist || ''
-      status.albumart = `/art/album/${encodeURIComponent(aa)}/${encodeURIComponent(status.album)}.jpg`
-      status.thumb = `/art/album/thumb/${encodeURIComponent(aa)}/${encodeURIComponent(status.album)}.jpg`
-      status.artistBg = `/art/artist/background/${encodeURIComponent(aa)}.jpg`
-      status.artistBgBlur = `/art/artist/background/blur/${encodeURIComponent(aa)}.jpg`
+      status = getSongArt(status)
 
       if (status.time) {
         status.duration = status.time.total
@@ -183,7 +183,9 @@ async function setup (server) {
     disp.bind('getArtists', function () {
       mpdc.api.db.list('albumartist')
         .then(async (d) => {
-          const mod = d.map(i => { return { title: i.albumartist, albumart: '/art/artist/' + encodeURIComponent(i.albumartist) + '.jpg' } })
+          let mod = d.map(i => { return { title: i.albumartist, albumart: '/art/artist/' + encodeURIComponent(i.albumartist) + '.jpg' } })
+          // filter out items that have no artist set, we have no way to show them in this view
+          mod = mod.filter(item => { return item.title !== '' })
           disp.send('pushArtists', mod)
         })
     })
@@ -193,12 +195,13 @@ async function setup (server) {
         .then((d) => {
           const mod = d.reduce((arr, item) => {
             item.album.forEach((e) => {
-              const flat = {
-                title: e.album,
-                artist: item.albumartist,
-                albumart: '/art/album/' + encodeURIComponent(item.albumartist) + '/' + encodeURIComponent(e.album) + '.jpg'
+              if (e.album !== '') {
+                arr.push({
+                  title: e.album,
+                  artist: item.albumartist,
+                  albumart: '/art/album/' + encodeURIComponent(item.albumartist) + '/' + encodeURIComponent(e.album) + '.jpg'
+                })
               }
-              arr.push(flat)
             })
             return arr
           }, [])
@@ -238,11 +241,26 @@ async function setup (server) {
     disp.bind('getAlbum', function (data) {
       mpdc.api.db.find(`((album == "${data.title}") AND (albumartist == "${data.artist}"))`)
         .then((d) => {
+
+          const discs = d.reduce(function(disc_arr, x) {
+            // set disc to 1 if empty
+            x.disc = x.disc || 1
+            // if the array doesn't exist in the object create it
+            if (!disc_arr[x['disc']]) {
+              disc_arr[x['disc']] = []
+            }
+            // add this track
+            disc_arr[x['disc']].push(x);
+            // return the updated array
+            return disc_arr;
+          }, {})
+
           const out = {
             artist: data.artist,
             title: data.title,
             albumart: '/art/album/' + encodeURIComponent(data.artist) + '/' + encodeURIComponent(data.title) + '.jpg',
-            songs: d
+            songs: d,
+            discs: discs
           }
           disp.send('pushAlbum', out)
         })
@@ -362,11 +380,7 @@ async function setup (server) {
       mpdc.api.queue.info()
         .then((d) => {
           d.forEach((i) => {
-            const aa = i.albumartist || i.artist || ''
-            i.albumart = '/art/album/' + encodeURIComponent(aa) + '/' + encodeURIComponent(i.album) + '.jpg'
-            i.thumb = '/art/album/thumb/' + encodeURIComponent(aa) + '/' + encodeURIComponent(i.album) + '.jpg'
-            i.artistBg = `/art/artist/background/${encodeURIComponent(i.artist)}.jpg`
-            i.artistBgBlur = `/art/artist/background/blur/${encodeURIComponent(i.artist)}.jpg`
+            i = getSongArt(i)
           })
           disp.send('pushQueue', d)
         })
@@ -486,17 +500,9 @@ async function setup (server) {
           const fileList = data.sort((a, b) => (a.playCount > b.playCount) ? -1 : 1).slice(0, 99)
           let songList = []
           for (i in fileList) {
-            const _filename = fileList[i].file.substr(fileList[i].file.lastIndexOf('/') + 1)
-            const songArr = await mpdc.api.db.search('filename', _filename)
-            // need to check if there are more than one responses!
-            if (songArr.length === 1) {
-              let song = songArr[0]
-              song.track = parseInt(i) + 1
-              songList.push(getSongArt(song))
-              // console.log(song)
-            } else if (songArr.length > 1) {
-              // now check each file's URI to see if it matches our full URI or not...
-            }
+            let song = await mpdc.api.db.songinfo(fileList[i].file)
+            song.track = parseInt(i) + 1
+            songList.push(getSongArt(song))
           }
           const ret = {
             name: 'Most Played',
@@ -507,7 +513,6 @@ async function setup (server) {
           disp.send('pushMostPlayed', ret)
         })
     })
-
 
     // mounts
     disp.bind('getMounts', function () {

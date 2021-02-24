@@ -36,11 +36,9 @@ const buildTrack = function (data) {
   const tr = cr.tr({ 'data-uri': data.file },
     cr.td({ class: 'pointer', on: { click: handlers.tracks } },
       cr.p({ class: 'is-5' }, track + data.title),
-      cr.p({ class: 'subtitle is-5' }, data.artist)
+      cr.p({ class: 'subtitle is-5' }, data.artist, ((data.duration) ? ' - ' + formatTime(data.duration) : ''))
     ),
-    ((data.duration) ? cr.td(formatTime(data.duration)) : null),
-    ((filetype) ? cr.td({ class: 'hidden--to-tablet' }, filetype.toUpperCase()) : null),
-    ((format) ? cr.td({ class: 'hidden--to-tablet' }, cr.span({ class: 'tag' }, format)) : null),
+    ((format) ? cr.td({ class: 'hidden--to-tablet' }, cr.span({ class: 'tag' + ((filetype.toLowerCase() === 'mp3') ? ' is-gray' : '') }, format)) : null),
     cr.td({ class: 'is-narrow' },
       cr.div({ class: 'dropdown is-right' },
         cr.span({ on: { click: handlers.dropdown } },
@@ -102,16 +100,20 @@ const page = {
       const isLossless = !(parseInt(state.bitrate) <= 320)
       const frag = cr.div({ class: 'container-fluid max' })
 
-      frag.appendChild(cr.div({ class: 'background-container hidden--to-desktop' },
-        cr.figure({ class: 'image' },
-          cr.img({ src: state.artistBgBlur })
-        )
-      ))
+      if (state.state === 'play') {
+        frag.appendChild(cr.div({ class: 'background-container hidden--to-desktop' },
+          cr.figure({ class: 'image' },
+            cr.img({ src: state.artistBgBlur })
+          )
+        ))
+      }
 
       let imgSrc = '/img/notplaying.png'
       if ('albumart' in state) {
         imgSrc = state.albumart
       }
+
+      const quality = getQuality(state)
 
       frag.appendChild(
         cr.div({ class: 'row' },
@@ -127,7 +129,7 @@ const page = {
             cr.h1({ id: 'home-title', class: 'has-text-centered has-no-overflow' }, state.title || 'Not playing'),
             cr.p({ class: 'has-text-centered subtitle is-3 has-no-overflow hidden--to-desktop' }, cr.a({ id: 'home-album', href: '/album/' + state.artist + '/' + state.album, 'data-navigo': '' }, state.album || '')),
             cr.p({ class: 'has-text-centered subtitle is-3 has-no-overflow' }, cr.a({ id: 'home-artist', href: '/artist/' + state.artist, 'data-navigo': '' }, state.artist || '')),
-            cr.p({ class: 'has-text-centered' }, cr.span({ id: 'home-quality', class: 'tag is-small' + ((isLossless) ? '' : ' is-grey') }, getQuality(state)))
+            ((quality !== 'unknown') ? cr.p({ class: 'has-text-centered' }, cr.span({ id: 'home-quality', class: 'tag is-small' + ((isLossless) ? '' : ' is-grey') }, quality)) : null),
           ),
           cr.div({ id: 'mobile-controls', class: 'col-xs-12 mobile-controls hidden--for-desktop' },
             cr.span({ on: { click: action.toggleRandom } }, getSVG('shuffle', 'random is-small' + ((state.random) ? ' is-active' : ''))),
@@ -145,18 +147,6 @@ const page = {
       frag.appendChild(
         cr.div({ class: 'hidden--for-desktop', id: 'swipe-up-queue', on: { click: () => { document.querySelector('#queue-list').classList.add('is-active') } } }, getSVG('chevron-up'))
       )
-
-      /*
-      frag.appendChild(
-        cr.div({ id: 'queue-list' },
-          cr.div({ class: 'queue-header' },
-            cr.p({ class: 'is-3 is-hidden-desktop' }, 'Play queue')
-          ),
-          cr.div({ id: 'queue-items' })
-          // )
-        )
-      )
-      */
 
       // attach the elements to the main container
       main.appendChild(frag)
@@ -179,41 +169,43 @@ const page = {
       const frag = cr.div({ class: 'container-fluid' })
 
       // append the details and list of tracks to the fragment
-      frag.appendChild(
-        cr.div({ class: 'row' },
-          cr.div({ class: 'col-xs-12 col-md-5 has-text-centered-desktop' },
-            cr.div({ class: 'row album-detail' },
-              cr.div({ class: 'col-md-8 col-md-offset-2 col-xs-4 art' },
-                cr.figure({ class: 'image' },
-                  cr.img({ src: data.albumart, loading: 'lazy' })
-                )
-              ),
-              cr.div({ class: 'col-md-8 col-md-offset-2 col-xs-8' },
-                // cr.p({ class: 'is-5 hidden--to-desktop has-text-weight-normal' }, 'Album'),
-                cr.h1({ class: 'album-title' }, data.title),
-                cr.p({ class: 'subtitle is-1' }, cr.a({ 'data-navigo': '', href: '/artist/' + encodeURIComponent(data.artist) }, data.artist)),
-                ((data.songs[0].date) ? cr.p({ class: 'is-4 detail' }, data.songs[0].date) : null),
-                ((data.songs[0].genre !== undefined && data.songs[0].genre !== '') ? cr.p({ class: 'is-4' }, cr.a({ 'data-navigo': '', href: '/genres/' + encodeURIComponent(data.songs[0].genre) }, data.songs[0].genre)) : null),
-                ((format !== '') ? cr.p({ class: 'is-6 tag is-rounded detail' }, format) : null)
+      let mainRow = cr.div({ class: 'row' },
+        cr.div({ class: 'col-xs-12 col-md-5 has-text-centered-desktop' },
+          cr.div({ class: 'row album-detail' },
+            cr.div({ class: 'col-md-8 col-md-offset-2 col-xs-4 art' },
+              cr.figure({ class: 'image' },
+                cr.img({ src: data.albumart, loading: 'lazy' })
               )
-            )
-          ),
-          cr.div({ class: 'col-xs-12 col-md-7' },
-            cr.div({ class: 'row album-detail' },
-              cr.div({ class: 'col-xs-12 col-md-11' },
-                cr.h1({ class: 'hidden--to-tablet' }, 'Album Tracks'),
-                cr.table({ class: 'table songs' },
-                  cr.tbody(
-                    data.songs.map(function (song) {
-                      return buildTrack(song)
-                    })
-                  )
-                )
-              )
+            ),
+            cr.div({ class: 'col-md-8 col-md-offset-2 col-xs-8' },
+              // cr.p({ class: 'is-5 hidden--to-desktop has-text-weight-normal' }, 'Album'),
+              cr.h1({ class: 'album-title' }, data.title),
+              cr.p({ class: 'subtitle is-1' }, cr.a({ 'data-navigo': '', href: '/artist/' + encodeURIComponent(data.artist) }, data.artist)),
+              ((data.songs[0].date) ? cr.p({ class: 'is-4 detail' }, data.songs[0].date) : null),
+              ((data.songs[0].genre !== undefined && data.songs[0].genre !== '') ? cr.p({ class: 'is-4' }, cr.a({ 'data-navigo': '', href: '/genres/' + encodeURIComponent(data.songs[0].genre) }, data.songs[0].genre)) : null),
+              ((format !== '') ? cr.p({ class: 'is-6 tag is-rounded detail' }, format) : null)
             )
           )
         )
       )
+
+      const discKeys = Object.keys(data.discs)
+      const _col = cr.div({ class: 'col-xs-12 col-md-11' })
+      discKeys.forEach(key => {
+        _col.appendChild(cr.div({ class: 'row album-detail' },
+          cr.h1({ class: 'hidden--to-tablet' }, ((discKeys.length === 1) ? 'Album Tracks' : 'Disc ' + key)),
+          cr.table({ class: 'table songs' },
+            cr.tbody(
+              data.discs[key].map(function (song) {
+                return buildTrack(song)
+              })
+            )
+          )
+        ))
+      })
+      mainRow.appendChild(cr.div({ class: 'col-xs-12 col-md-7' }, _col))
+
+      frag.appendChild(mainRow)
 
       // append the main fragment to the page
       main.appendChild(frag)
