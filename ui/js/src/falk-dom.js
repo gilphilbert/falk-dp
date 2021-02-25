@@ -99,8 +99,8 @@ const page = {
       const state = getState()
       const isLossless = !(parseInt(state.bitrate) <= 320)
       const frag = cr.div({ class: 'container-fluid max' })
-
-      if (state.state === 'play') {
+      if (state.state !== 'stop') {
+        console.log(state.state)
         frag.appendChild(cr.div({ class: 'background-container hidden--to-desktop' },
           cr.figure({ class: 'image' },
             cr.img({ src: state.artistBgBlur })

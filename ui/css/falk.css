@@ -2770,7 +2770,7 @@ figure.is-40x40 {
     #content-container .container-fluid.max .background-container {
       position: absolute;
       width: 100%;
-      z-index: -1; }
+      z-index: 0; }
       #content-container .container-fluid.max .background-container img {
         object-fit: cover;
         object-position: top;
