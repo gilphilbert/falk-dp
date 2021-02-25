@@ -2840,10 +2840,11 @@ table.songs td {
 .art a:first-child p {
   margin-top: 6px; }
 
-@media screen and (max-height: 600px) {
-  #mobile-toolbar {
-    display: none; } }
-
+#mobile-toolbar {
+  display: flex; }
+  @media screen and (max-height: 600px) {
+    #mobile-toolbar {
+      display: none; } }
 body.no-controls #queue-list {
   right: 0; }
   @media (max-width: 768px) {

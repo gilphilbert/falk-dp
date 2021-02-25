@@ -100,7 +100,6 @@ const page = {
       const isLossless = !(parseInt(state.bitrate) <= 320)
       const frag = cr.div({ class: 'container-fluid max' })
       if (state.state !== 'stop') {
-        console.log(state.state)
         frag.appendChild(cr.div({ class: 'background-container hidden--to-desktop' },
           cr.figure({ class: 'image' },
             cr.img({ src: state.artistBgBlur })
@@ -123,7 +122,8 @@ const page = {
               cr.img({ loading: 'lazy', src: imgSrc })
             ),
             cr.div({ id: 'mobile-toolbar', class: 'has-text-centered' },
-              cr.div({ on: { click: (e) => { set.favorite(state.uri, (d) => { if (d) { e.target.closest('svg').classList.add('is-filled') } else { e.target.closest('svg').classList.remove('is-filled') } }) } } }, getSVG('heart', ((state.favorite) ? 'is-filled' : '')))
+              cr.div({ on: { click: (e) => { set.favorite(state.uri, (d) => { if (d) { e.target.closest('svg').classList.add('is-filled') } else { e.target.closest('svg').classList.remove('is-filled') } }) } } }, getSVG('heart', ((state.favorite) ? 'is-filled' : ''))),
+              cr.div(getSVG('plus', ((state.favorite) ? 'is-filled' : '')))
             )
           ),
           cr.div({ class: 'col-xs-10 col-xs-offset-1' },
