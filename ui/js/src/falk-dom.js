@@ -245,14 +245,13 @@ const page = {
       // create main fragment
       frag.appendChild(cr.div({ class: 'container-fluid' },
         cr.div({ class: 'row center' },
-          cr.div({ class: 'col-md-2 hidden--to-tablet' },
+          cr.div({ class: 'col-md-1 hidden--to-tablet' },
             cr.figure({ class: 'image is-rounded has-no-overflow' },
               cr.img({ src: data.artist.albumart })
             )
           ),
           cr.div({ class: 'col-xs-12 col-md-6' },
-            cr.h1(data.artist.title) // ,
-            // cr.p({ class: 'subtitle is-2' }, 'Albums')
+            cr.h1(data.artist.title)
           )
         ),
         cr.div({ class: 'row is-mobile art-container' },

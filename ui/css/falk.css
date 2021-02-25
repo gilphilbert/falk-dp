@@ -2807,9 +2807,15 @@ table.songs td {
     white-space: nowrap;
     padding-left: 4px;
     padding-right: 4px; }
+  table.songs td:first-child {
+    padding-left: 10px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px; }
   table.songs td:last-child {
     padding-left: 0;
-    padding-right: 0; }
+    padding-right: 0;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px; }
 
 .art-container .col-lg-2 {
   padding: 27px; }
