@@ -102,6 +102,9 @@ const get = {
   autoPlaylists: {
     mostPlayed: function() {
       server.send('getMostPlayed')
+    },
+    favorites: function() {
+      server.send('getFavorites')
     }
   },
   artists: function () {
@@ -143,9 +146,13 @@ const get = {
 }
 
 const set = {
-  // deviceName: function (name) {
-  //   sendData('setDeviceName', { name: name })
-  // }
+  favorite: function(uri, callback) {
+    callback = callback || null
+    if (callback !== null) {
+      server.bindOnce('pushFavorite', callback)
+    }
+    server.send('setFavorite', { uri: uri })
+  }
 }
 
 const action = {
@@ -278,6 +285,7 @@ const start = function () {
     .bind('pushMounts', mounts)
     .bind('database', database)
     .bind('pushMostPlayed', page.build)
+    .bind('pushFavorites', page.build)
   get.state()
 }
 

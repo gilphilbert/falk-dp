@@ -2464,10 +2464,7 @@ table {
 
 html {
   font-size: 15px;
-  font-weight: normal;
-  color: #FFFFFF;
-  background: #2A2A2A;
-  scrollbar-color: #646464 #333333; }
+  font-weight: normal; }
   @media (max-width: 768px) {
     html {
       font-size: 13px; } }
@@ -2475,7 +2472,10 @@ body {
   font-family: 'Lexend Deca', sans-serif;
   background-attachment: fixed;
   min-height: 100vh;
-  overflow-x: hidden; }
+  overflow-x: hidden;
+  color: #FFFFFF;
+  background: #2A2A2A;
+  scrollbar-color: #646464 #333333; }
 
 a {
   text-decoration: none; }
@@ -2703,6 +2703,8 @@ figure.is-40x40 {
   .feather.is-small {
     height: 20px;
     width: 20px; }
+  .feather.is-filled {
+    fill: #FFFFFF; }
 
 .delete {
   height: 18px;

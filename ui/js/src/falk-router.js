@@ -21,6 +21,10 @@ const initRouter = function () {
             page.setLoad('auto-mostPlayed')
             get.autoPlaylists.mostPlayed()
             break
+          case 'favorites':
+            page.setLoad('auto-favorites')
+            get.autoPlaylists.favorites()
+            break
         }
         control.show()
         hideMenu()

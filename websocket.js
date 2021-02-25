@@ -120,6 +120,8 @@ async function setup (server) {
     const currentSong = await mpdc.api.status.currentsong()
     if (status.song !== undefined) {
 
+      status.uri = currentSong.file
+
       status.title = currentSong.title
       status.artist = currentSong.artist
       status.album = currentSong.album
@@ -146,6 +148,7 @@ async function setup (server) {
         status.bits = 0
         status.channels = 0
       }
+      status.favorite = ((await mpdc.api.sticker.get(status.uri, 'favorite') === 'true') ? true : false)
       status.updating = 'updating_db' in status
       delete (status.updating_db)
       delete (status.playlist)
@@ -493,6 +496,16 @@ async function setup (server) {
       }
     })
 
+    disp.bind('setFavorite', async function (data) {
+      const uri = data.uri || null
+      if (uri !== null) {
+        let state = await mpdc.api.sticker.get(uri, 'favorite')
+        state = ((state === 'true') ? false : true)
+        await mpdc.api.sticker.set(uri, 'favorite', state)
+        disp.send('pushFavorite', state)
+      }
+    })
+
     // dynamic playlists
     disp.bind('getMostPlayed', function () {
       mpdc.api.sticker.find('playCount', '')
@@ -511,6 +524,26 @@ async function setup (server) {
             albumart: ((songList.length > 0) ? songList[0].albumart : '')
           }
           disp.send('pushMostPlayed', ret)
+        })
+    })
+
+    // dynamic playlists
+    disp.bind('getFavorites', function () {
+      mpdc.api.sticker.find('favorite', '', '=', 'true')
+        .then(async (data) => {
+          let songList = []
+          for (i in data) {
+            let song = await mpdc.api.db.songinfo(data[i].file)
+            song.track = parseInt(i) + 1
+            songList.push(getSongArt(song))
+          }
+          const ret = {
+            name: 'Favorites',
+            description: 'Your ' + songList.length + ' favorite song' + ((songList.length > 1) ? 's' : ''),
+            songs: songList,
+            albumart: ((songList.length > 0) ? songList[0].albumart : '')
+          }
+          disp.send('pushFavorites', ret)
         })
     })
 

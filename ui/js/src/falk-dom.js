@@ -114,6 +114,7 @@ const page = {
       }
 
       const quality = getQuality(state)
+      console.log(state)
 
       frag.appendChild(
         cr.div({ class: 'row' },
@@ -121,8 +122,8 @@ const page = {
             cr.figure({ id: 'home-albumart', class: 'image is-1by1' },
               cr.img({ loading: 'lazy', src: imgSrc })
             ),
-            cr.div({ id: 'mobile-toolbar', class: 'hidden--for-desktop' },
-              cr.span({}, getSVG('heart'))
+            cr.div({ id: 'mobile-toolbar', class: 'has-text-centered' },
+              cr.div({ on: { click: (e) => { set.favorite(state.uri, (d) => { if (d) { e.target.closest('svg').classList.add('is-filled') } else { e.target.closest('svg').classList.remove('is-filled') } }) } } }, getSVG('heart', ((state.favorite) ? 'is-filled' : '')))
             )
           ),
           cr.div({ class: 'col-xs-10 col-xs-offset-1' },
@@ -345,7 +346,11 @@ const page = {
       frag.appendChild(cr.h1({ class: 'is-capitalized' }, title))
 
       // create a tile for each
-      const auto = [{ name: 'Most Played', link: '/playlist/auto/most-played' }, { name: 'Added Recently', link: '/playlist/auto/most-recent' }]
+      const auto = [
+        { name: 'Favorites', link: '/playlist/auto/favorites' },
+        { name: 'Most Played', link: '/playlist/auto/most-played' },
+        { name: 'Added Recently', link: '/playlist/auto/most-recent' }
+      ]
       frag.appendChild(
         cr.div({ class: 'row playlist-list' },
           auto.map(function (playlist) {
