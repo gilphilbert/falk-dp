@@ -25,7 +25,6 @@ async function setup (server) {
             })
         }
       }).catch(e => {
-        // console.log('Not playing')
         // nothing to do here
       })
   }

@@ -234,7 +234,6 @@ const action = {
     server.send('rescanDB')
   },
   updateArt: function () {
-    console.log('here')
     server.send('updateArt')
   },
   regenerateArt: function () {

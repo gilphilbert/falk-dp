@@ -113,7 +113,6 @@ const page = {
       }
 
       const quality = getQuality(state)
-      console.log(state)
 
       frag.appendChild(
         cr.div({ class: 'row' },
@@ -750,9 +749,7 @@ const modals = {
     }, 250)
   },
   addToPlaylist: function (e) {
-    console.log(e)
     get.playlists((data) => {
-      console.log(data)
       const song = e.target.closest('tr').dataset
       const modal = cr.div({ class: 'modal is-small modal-fx-3dSignDown' },
         cr.div({ class: 'modal-content' },
