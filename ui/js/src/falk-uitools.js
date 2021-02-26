@@ -1,4 +1,4 @@
-import { action } from './falk-socket.js'
+import { action, set } from './falk-socket.js'
 import { getState } from './falk-datatools.js'
 
 let _title = ''
@@ -169,6 +169,11 @@ const _setListeners = function () {
   // user clicks "random"
   document.querySelector('.misc-controls .random').addEventListener('click', function (e) {
     action.toggleRandom()
+  })
+
+  // user clicks "random"
+  document.getElementById('control-favorite').addEventListener('click', function (e) {
+    set.favorite()
   })
 
   // hide dropdowns when they're clicked out of
