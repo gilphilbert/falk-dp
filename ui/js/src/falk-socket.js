@@ -151,7 +151,7 @@ const set = {
     if (callback !== null) {
       server.bindOnce('pushFavorite', callback)
     }
-    // if there's no URI, get it from getStatus() <-----------------===============================================================================================================
+    // if there's no URI, get it from getStatus() <-----------------=============================================================================================================== 
     server.send('setFavorite', { uri: uri })
   }
 }
