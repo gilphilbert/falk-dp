@@ -531,18 +531,25 @@
     function setBackground(el) {
       var result = null
       try {
-        result = ColorThief.getPalette(el, 3)
+        result = ColorThief.getPalette(el)
+        console.log(result)
       } catch(err) {
         console.log("couldn't get background")
       }
-        if (result !== null) {
-        if(getLightness(result[0]) < 60) {
+      if (result !== null) {
+        let _r = result[1]
+        console.log(getLightness(_r))
+        if (getLightness(_r) > 80) {
+          _r = result[2]
+        }
+        console.log(_r)
+        if (getLightness(_r) < 60) {
           document.body.classList.remove("light")
         } else {
           document.body.classList.add("light")
         }
-        document.body.style.backgroundColor = "rgb(" + result[0] + ")"
-        document.getElementById('quality').style.color = "rgb(" + result[0] + ")"
+        document.body.style.backgroundColor = "rgb(" + _r + ")"
+        document.getElementById('quality').style.color = "rgb(" + _r + ")"
       } else {
         document.body.style.backgroundColor = "#888"
         document.getElementById('quality').style.color = "#888"
@@ -634,12 +641,5 @@
    
     document.addEventListener("DOMContentLoaded", start);
 
-    const sty = getComputedStyle(document.body)
-    const el = document.createElement('div')
-    el.innerText = `${sty.width} x ${sty.height}`
-    el.style.position = 'absolute'
-    el.style.left = 0
-    el.style.top = 0
-    document.body.appendChild(el)
   </script>
 </html>
